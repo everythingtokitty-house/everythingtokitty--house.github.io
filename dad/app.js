@@ -240,7 +240,10 @@
     }
     if (typeof value === "object") {
       var out = [];
-      Object.keys(value).forEach(function (k) { out.push(textOf(value[k])); });
+      Object.keys(value).forEach(function (k) {
+        if (k === "t" || k === "level" || k === "depth" || k === "checked") return; // 구조용 키
+        out.push(textOf(value[k]));
+      });
       return out.join(" ");
     }
     return String(value);
