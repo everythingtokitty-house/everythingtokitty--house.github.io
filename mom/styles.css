@@ -152,7 +152,7 @@ button{font-family:inherit;font-size:inherit;color:inherit}
 .switch input:focus-visible + .track{outline:3px solid var(--coral);outline-offset:3px}
 
 /* ── 문제 카드 ─────────────────────────── */
-.qcard{padding:20px 18px 18px;scroll-margin-top:130px}
+.qcard{padding:20px 18px 18px;scroll-margin-top:170px}
 .qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .badge{
   display:inline-flex;align-items:center;gap:4px;
@@ -170,6 +170,12 @@ button{font-family:inherit;font-size:inherit;color:inherit}
   margin:4px 0 16px;
 }
 @media (max-width:420px){ .qtext{font-size:1.2rem} }
+@media (max-width:430px){
+  .roundbar{gap:6px}
+  .roundbar .roundbar-title{font-size:.82rem}
+  .roundbar .chip{padding:7px 10px;font-size:.88rem;min-height:40px}
+  .roundbar .chip .chip-sub{font-size:.68rem;margin-left:3px}
+}
 
 .choices{display:flex;flex-direction:column;gap:10px}
 .choice{
