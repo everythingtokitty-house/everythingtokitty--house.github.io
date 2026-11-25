@@ -1,0 +1,16 @@
+{
+  "name": "아빠 전용 투자 · 부동산 브리핑",
+  "short_name": "아빠 브리핑",
+  "description": "아버님을 위한 매일 코인·주식 시황과 매주 명지 부동산 리포트 — 우리집 시세, 경쟁 단지 비교, 3단계 매도 전략",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFBF9",
+  "theme_color": "#F2674F",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
