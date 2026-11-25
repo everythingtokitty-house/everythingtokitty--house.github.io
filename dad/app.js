@@ -596,12 +596,17 @@
         inline(li, t, []);
         ul.appendChild(li);
       });
-      item.appendChild(ul);
+      if (ul.childNodes.length) item.appendChild(ul);
       if (sub.table) {
-        var det = el("details", "diag-table");
-        det.appendChild(el("summary", null, "가격 비교표 보기"));
-        det.appendChild(renderTable(sub.table, []));
-        item.appendChild(det);
+        if (!ul.childNodes.length) {
+          // 불릿 없이 표만 있는 절(③ 가격)은 표를 그대로 펼쳐 보여 준다
+          item.appendChild(renderTable(sub.table, []));
+        } else {
+          var det = el("details", "diag-table");
+          det.appendChild(el("summary", null, "가격 비교표 보기"));
+          det.appendChild(renderTable(sub.table, []));
+          item.appendChild(det);
+        }
       }
       grid.appendChild(item);
     });
