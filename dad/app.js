@@ -85,7 +85,7 @@
   }
 
   function inline(parent, text, terms) {
-    var parts = String(text).split(/(\*\*[^*]+\*\*)/g);
+    var parts = String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
     for (var i = 0; i < parts.length; i++) {
       var part = parts[i];
       if (!part) continue;
@@ -93,6 +93,11 @@
         var strong = document.createElement("strong");
         appendText(strong, part.slice(2, -2), terms);
         parent.appendChild(strong);
+      } else if (part.length > 2 && part.charAt(0) === "*" && part.charAt(part.length - 1) === "*"
+                 && part.charAt(1) !== "*") {
+        var em = document.createElement("em");
+        appendText(em, part.slice(1, -1), terms);
+        parent.appendChild(em);
       } else {
         appendText(parent, part, terms);
       }
@@ -241,6 +246,24 @@
     return String(value);
   }
 
+  function readHash() {
+    try {
+      var h = String(window.location.hash || "").replace(/^#/, "");
+      for (var i = 0; i < CATS.length; i += 1) {
+        if (CATS[i].key === h) return h;
+      }
+    } catch (e) { /* location 없는 환경(테스트) */ }
+    return null;
+  }
+
+  function writeHash(key) {
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, "", "#" + key);
+      }
+    } catch (e) { /* noop */ }
+  }
+
   /* ---------------- header pieces ---------------- */
   function renderTabs() {
     els.tabs.textContent = "";
@@ -261,6 +284,7 @@
         state.q = "";
         els.searchInput.value = "";
         els.searchClear.hidden = true;
+        writeHash(cat.key);
         render();
       });
       els.tabs.appendChild(btn);
@@ -486,6 +510,20 @@
       chips.appendChild(li);
     });
     card.appendChild(chips);
+
+    var caveat = el("p", "home-caveat");
+    caveat.appendChild(document.createTextNode("※ 타입은 111A 추정 — 정확한 타입·향·조망 각도는 등기·관리사무소·배치도 확인이 필요합니다. "));
+    var limitsBtn = el("button", "home-caveat-link", "확인 한계 보기");
+    limitsBtn.type = "button";
+    limitsBtn.addEventListener("click", function () {
+      var node = document.getElementById("sec-re-9");
+      if (node) {
+        node.open = true;
+        node.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    caveat.appendChild(limitsBtn);
+    card.appendChild(caveat);
 
     // 가격 3단계 밴드
     var band = el("div", "price-band");
@@ -963,6 +1001,11 @@
 
     initTheme();
 
+    window.addEventListener("hashchange", function () {
+      var h = readHash();
+      if (h && h !== state.cat) { state.cat = h; render(); }
+    });
+
     var t = null;
     els.searchInput.addEventListener("input", function () {
       els.searchClear.hidden = !els.searchInput.value;
@@ -990,6 +1033,8 @@
       data = json;
       state.invDate = data.invest && data.invest[0] ? data.invest[0].date : null;
       state.reDate = data.realestate && data.realestate[0] ? data.realestate[0].date : null;
+      var fromHash = readHash();
+      if (fromHash) state.cat = fromHash;
       els.view.textContent = "";
       render();
     }).catch(function (err) {

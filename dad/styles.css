@@ -1569,3 +1569,29 @@ main:focus { outline: none; }
   .doc-fold { display: block; }
   .doc-fold > summary { display: none; }
 }
+
+/* hidden 속성이 display 규칙에 덮이지 않도록 */
+[hidden] { display: none !important; }
+
+.home-caveat {
+  margin: 9px 0 0;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--ink-3);
+}
+.home-caveat-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  font-weight: 800;
+  color: var(--accent-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.doc-list em, .doc-p em, .tbl em, .complex-rows em, .plan-rows em, .news-desc em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--ink-2);
+}
