@@ -3,7 +3,7 @@
 (function () {
   "use strict";
 
-  var LS_KEY = "momBakery.v2";
+  var LS_KEY = "momBakery.v3";
   var SUBJECTS = ["제과이론", "재료과학", "영양학", "식품위생학"];
   var CIRCLE = ["①", "②", "③", "④"];
   var PRACTICE_PAGE = 20;
@@ -70,14 +70,33 @@
   }
 
   /* ── 상태 저장 ────────────────────────── */
+  function examKeys() {
+    var keys = [];
+    if (DATA && DATA.mockExams) {
+      DATA.mockExams.forEach(function (m) { keys.push(String(m.id)); });
+    }
+    if (!keys.length) keys = ["1", "2", "3"];
+    return keys.concat(["random", "retry"]);
+  }
+  function emptyMap(keys) {
+    var o = {};
+    keys.forEach(function (k) { o[k] = {}; });
+    return o;
+  }
+  function zeroMap(keys) {
+    var o = {};
+    keys.forEach(function (k) { o[k] = 0; });
+    return o;
+  }
   function defaultState() {
+    var keys = examKeys();
     return {
-      v: 2,
+      v: 3,
       tab: "exam",
       instant: false,
       examId: "1",
-      answers: { "1": {}, "2": {}, "3": {}, random: {}, retry: {} },
-      index: { "1": 0, "2": 0, "3": 0, random: 0, retry: 0 },
+      answers: emptyMap(keys),
+      index: zeroMap(keys),
       graded: {},
       wrong: {},
       randomIds: null,
@@ -104,11 +123,11 @@
         }
       }
     } catch (e) { /* 저장값이 깨져도 새로 시작 */ }
-    ["1", "2", "3", "random", "retry"].forEach(function (k) {
+    ["random", "retry"].concat(examKeys()).forEach(function (k) {
       if (!s.answers[k] || typeof s.answers[k] !== "object") s.answers[k] = {};
       if (typeof s.index[k] !== "number") s.index[k] = 0;
     });
-    if (["1", "2", "3", "random", "retry"].indexOf(s.examId) < 0) s.examId = "1";
+    if (examKeys().indexOf(s.examId) < 0) s.examId = "1";
     if (["exam", "practice", "summary"].indexOf(s.tab) < 0) s.tab = "exam";
     return s;
   }
@@ -639,10 +658,21 @@
   }
 
   function nextTarget(examId) {
-    if (examId === "1") return { id: "2", top: "다음 모의고사를 풀까요?", sub: "제2회 새로운 60문제 풀기 →" };
-    if (examId === "2") return { id: "3", top: "다음 모의고사를 풀까요?", sub: "제3회 새로운 60문제 풀기 →" };
-    if (examId === "3") return { id: "random", random: true, top: "180문항 중 랜덤 60문제에 도전할까요?", sub: "1·2·3회와 겹치지 않는 새 조합으로 풀기 →" };
-    if (examId === "random") return { id: "1", top: "제1회부터 다시 풀까요?", sub: "제1회 60문제 풀기 →" };
+    var list = (DATA.mockExams || []).map(function (m) { return String(m.id); });
+    var i = list.indexOf(String(examId));
+    if (i >= 0 && i < list.length - 1) {
+      var n = list[i + 1];
+      return { id: n, top: "다음 모의고사를 풀까요?", sub: "제" + n + "회 새로운 60문제 풀기 →" };
+    }
+    if (i === list.length - 1) {
+      var total = (DATA.questions || []).length;
+      return {
+        id: "random", random: true,
+        top: total + "문항 중 랜덤 60문제에 도전할까요?",
+        sub: "1~" + list.length + "회차에서 골고루 섞어 새 조합으로 풀기 →"
+      };
+    }
+    if (examId === "random") return { id: list[0] || "1", top: "제1회부터 다시 풀까요?", sub: "제1회 60문제 풀기 →" };
     return null;
   }
 
