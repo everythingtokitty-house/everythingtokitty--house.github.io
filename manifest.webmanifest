@@ -1,0 +1,16 @@
+{
+  "name": "모닝 트렌드 브리핑",
+  "short_name": "모닝 브리핑",
+  "description": "국내 화제·마케터 뉴스·AI 정보를 매일 아침 한 장에 정리한 마케터 모닝 트렌드 AI 브리핑 아카이브",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFBF9",
+  "theme_color": "#F2674F",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
