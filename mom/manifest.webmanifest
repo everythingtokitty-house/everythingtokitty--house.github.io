@@ -1,0 +1,16 @@
+{
+  "name": "엄마의 제과기능사 필기 모의고사",
+  "short_name": "엄마 제과기능사",
+  "description": "제과기능사 필기 180문항 모의고사 3회분 · 과목별 연습 · 오답노트 · 핵심 요점 정리",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFF8F0",
+  "theme_color": "#FFF8F0",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

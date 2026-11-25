@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#FFF8F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="엄마 제과기능사">
+<title>🥐 엄마의 제과기능사 필기 모의고사</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%90%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./styles.css?v=1795617589">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 바로 가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-emoji" aria-hidden="true">🥐</span>
+      <div class="brand-text">
+        <h1>엄마의 제과기능사</h1>
+        <p>필기 모의고사 · 180문항 · 3회분</p>
+      </div>
+    </div>
+    <button type="button" class="reset-btn" id="resetBtn" data-act="reset">기록 초기화</button>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="화면 선택">
+    <button type="button" class="tab" id="tab-exam" data-act="tab" data-tab="exam">
+      <span class="tab-emoji" aria-hidden="true">📝</span><span class="tab-label">실전 모의고사</span>
+    </button>
+    <button type="button" class="tab" id="tab-practice" data-act="tab" data-tab="practice">
+      <span class="tab-emoji" aria-hidden="true">📚</span><span class="tab-label">과목별 연습 · 오답노트</span>
+    </button>
+    <button type="button" class="tab" id="tab-summary" data-act="tab" data-tab="summary">
+      <span class="tab-emoji" aria-hidden="true">📖</span><span class="tab-label">핵심 요점 정리</span>
+    </button>
+  </nav>
+</header>
+
+<main id="main" class="wrap">
+  <div id="loading" class="loading">문제를 불러오는 중이에요…</div>
+  <div id="app" hidden></div>
+  <div id="fatal" class="fatal" hidden></div>
+</main>
+
+<footer class="foot">
+  <p>엄마를 위한 제과기능사 필기 연습장 · 2010·2011년 공개 기출문제를 현행 기준으로 정리한 학습용 자료예요.</p>
+</footer>
+
+<script src="./data/questions.js?v=1795617589"></script>
+<script src="./app.js?v=1795617589"></script>
+</body>
+</html>
