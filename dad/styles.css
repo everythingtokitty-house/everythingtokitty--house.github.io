@@ -1602,3 +1602,7 @@ main:focus { outline: none; }
   font-weight: 700;
   color: var(--ink-2);
 }
+
+/* ol 안의 출처 보조 줄은 번호를 매기지 않는다 */
+.doc-list--ol li.is-sub { list-style: none; margin-left: 2px; }
+.doc-list li.is-sub::marker { content: ""; }

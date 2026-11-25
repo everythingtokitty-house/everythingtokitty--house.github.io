@@ -899,12 +899,12 @@
     var entries = collectEntries();
     var hits = [];
     entries.forEach(function (e) {
-      if (state.cat !== "all" && e.catKey !== state.cat) return;
+      // 검색은 탭과 무관하게 전체 브리핑을 훑는다(아버님이 어디 있는지 모르고 찾을 때가 많다)
       var hay = (e.title + " " + e.badge + " " + e.text).toLowerCase();
       if (terms.every(function (t) { return hay.indexOf(t) >= 0; })) hits.push(e);
     });
 
-    els.status.textContent = "‘" + state.q.trim() + "’ 검색 결과 " + hits.length + "건";
+    els.status.textContent = "‘" + state.q.trim() + "’ 전체 검색 결과 " + hits.length + "건";
 
     if (!hits.length) {
       var empty = el("div", "empty");
