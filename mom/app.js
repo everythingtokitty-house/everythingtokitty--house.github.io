@@ -289,7 +289,7 @@
         on: { click: function () { switchExam(String(m.id)); } }
       }, [
         h("span", { text: m.id + "회차" }),
-        h("span", { class: "chip-sub", text: solved ? solved + "/60" : "새로" })
+        h("span", { class: "chip-sub", text: solved + "/60" })
       ]));
     });
     if (examId === "random" || examId === "retry") {
@@ -411,6 +411,10 @@
     ]);
     details.addEventListener("toggle", function () { ui.mapOpen = !!details.open; });
     root.appendChild(details);
+
+    if (idx === 0) {
+      root.appendChild(h("p", { class: "kbd-hint", text: "💡 PC에서는 키보드 1~4로 답을 고르고, ← → 로 문제를 넘길 수 있어요." }));
+    }
     return root;
   }
 
@@ -884,11 +888,37 @@
       });
     }
     render();
+    document.addEventListener("keydown", function (e) { handleKey(e); });
     window.__MOM_BAKERY__ = {
       getState: function () { return state; },
       getData: function () { return DATA; },
       getUi: function () { return ui; }
     };
+  }
+
+  /* ── PC 키보드 ────────────────────────── */
+  function handleKey(e) {
+    if (!state || state.tab !== "exam" || state.showResult) return;
+    var t = e.target;
+    var tag = t && t.tagName ? String(t.tagName).toUpperCase() : "";
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var key = e.key;
+    var ids = idsOf(state.examId);
+    if (!ids.length) return;
+    var idx = state.index[state.examId] || 0;
+    if (key >= "1" && key <= "4") {
+      var qid = ids[idx];
+      if (!qid || !QMAP[qid]) return;
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      chooseExam(qid, Number(key) - 1);
+    } else if (key === "ArrowRight") {
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      go(idx + 1);
+    } else if (key === "ArrowLeft") {
+      if (typeof e.preventDefault === "function") e.preventDefault();
+      go(idx - 1);
+    }
   }
 
   function fatal(msg) {

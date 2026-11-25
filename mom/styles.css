@@ -373,3 +373,6 @@ button{font-family:inherit;font-size:inherit;color:inherit}
 @media print{
   .topbar,.tabs,.navrow,.gradebox,.reset-btn,.mapbox,.result-actions,.cta-wrap,.more-row{display:none!important}
 }
+
+.kbd-hint{margin-top:14px;text-align:center;font-size:.82rem;font-weight:700;color:var(--brown-300)}
+@media (hover:none){ .kbd-hint{display:none} }
