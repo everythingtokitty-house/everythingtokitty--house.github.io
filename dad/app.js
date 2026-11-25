@@ -417,8 +417,8 @@
       var h = re.home, lis = re.listing;
       var reLines = [];
       reLines.push("**" + h.name + "** · " + (h.pyeong || "") + " " + (h.exclusiveArea || "") + " · " + (h.floor || "") + (h.facing ? " " + h.facing : ""));
-      reLines.push("목표 **" + fmtWon(h.target) + "** / 최소 마지노선 **" + fmtWon(h.minValue) + "** · 12개월 중앙값 " + ((lis.market && lis.market["12개월 매매"]) ? lis.market["12개월 매매"].replace("14건, ", "") : "") + "");
-      reLines.push("매물 " + (re.summary[1] ? "34평 92건(24.7%) 경쟁 · " : "") + "조회 " + (lis.perf.views || "") + " · 관심 " + (lis.perf.interests || "") + " · 채팅 " + (lis.perf.chats || ""));
+      reLines.push("목표 **" + fmtWon(h.target) + "** / 최소 마지노선 **" + fmtWon(h.minValue) + "** · 12개월 실거래 " + ((lis.market && lis.market["12개월 매매"]) ? lis.market["12개월 매매"].replace("14건, ", "") : "") + "");
+      reLines.push("34평 매물 **" + (lis.listings34 || "92") + "건**(" + (lis.ratio34 || "24.7%") + ") 경쟁 중 · 조회 " + (lis.perf.views || "") + " · 관심 " + (lis.perf.interests || "") + " · 채팅 " + (lis.perf.chats || ""));
       panels.appendChild(summaryCard("우리집 부동산", "🏠", reLines, "realestate", "부동산 리포트 →"));
     }
     frag.appendChild(panels);
