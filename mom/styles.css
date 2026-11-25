@@ -375,4 +375,5 @@ button{font-family:inherit;font-size:inherit;color:inherit}
 }
 
 .kbd-hint{margin-top:14px;text-align:center;font-size:.82rem;font-weight:700;color:var(--brown-300)}
+@media (max-width:900px){ .kbd-hint{display:none} }
 @media (hover:none){ .kbd-hint{display:none} }
