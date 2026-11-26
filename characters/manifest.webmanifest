@@ -1,0 +1,15 @@
+{
+  "name": "캐릭터 콜라보 아카이브 · 8대 캐릭터 국내 콜라보",
+  "short_name": "캐릭터 콜라보",
+  "description": "산리오·디즈니·포켓몬·미피·짱구·몬치치·리락쿠마·스누피 2026년 국내 콜라보 30건 — 기간·가격·구성·방문 정보",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFBEF",
+  "theme_color": "#FFFBF9",
+  "lang": "ko",
+  "icons": [
+    { "src": "./assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

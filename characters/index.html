@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFBF9">
+<title>🎀 8대 캐릭터 국내 콜라보 최신 소식 · 캐릭터 콜라보 아카이브</title>
+<meta name="description" content="산리오·디즈니·포켓몬·미피·짱구·몬치치·리락쿠마·스누피 — 2026년 국내 콜라보 30건의 기간·가격·구성·방문 정보를 한 페이지에. 캐릭터·계정 필터와 키워드 검색, 캔바/블로그용 복사 버튼 제공.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8E%80%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="./styles.css?v=1795653858">
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 바로 가기</a>
+
+<header class="app-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">🎀</span>
+      <div class="brand-text">
+        <p class="brand-kicker">8대 캐릭터 · 국내 콜라보</p>
+        <h1 class="brand-title">캐릭터 콜라보 아카이브</h1>
+      </div>
+    </div>
+    <p class="asof" id="asof">기준일 확인 중…</p>
+  </div>
+</header>
+
+<div class="auto-bar">
+  <div class="wrap auto-inner">
+    <a class="auto-link" id="json-link" href="./data/collabs.json">
+      <span aria-hidden="true">🤖</span> 자동화용 JSON 데이터
+    </a>
+    <span class="auto-meta" id="auto-meta">collabs.json</span>
+  </div>
+</div>
+
+<section class="cal-bar" id="cal-bar" aria-labelledby="cal-title" hidden>
+  <div class="wrap">
+    <h2 class="cal-title" id="cal-title">🎄 연말 오픈 캘린더</h2>
+    <div class="cal-list" id="cal-list"></div>
+  </div>
+</section>
+
+<div class="filter-bar" id="filter-bar">
+  <div class="wrap">
+    <form class="search" id="search-form" role="search">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <label class="visually-hidden" for="search-input">콜라보 검색</label>
+      <input
+        type="search"
+        id="search-input"
+        name="q"
+        placeholder="콜라보명·브랜드·지역 검색 — 스타벅스, 부산, 성수…"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="search">
+      <button type="button" class="search-clear" id="search-clear" aria-label="검색어 지우기" hidden>✕</button>
+    </form>
+
+    <nav class="tabs" id="tabs" aria-label="캐릭터 필터"></nav>
+    <nav class="accounts" id="accounts" aria-label="활용 계정 필터"></nav>
+  </div>
+</div>
+
+<main id="main" class="wrap" tabindex="-1">
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <div id="results"></div>
+  <noscript>
+    <p class="noscript">이 페이지는 콜라보 데이터를 불러와 그립니다. 자바스크립트를 켜거나,
+      <a href="./data/collabs.json">collabs.json</a> 을 직접 열어 보세요.</p>
+  </noscript>
+</main>
+
+<footer class="app-footer wrap">
+  <p class="footer-meta" id="footer-meta">불러오는 중…</p>
+  <p class="footer-note">
+    2026년 국내 콜라보 중 최근(9~11월) 진행·출시 및 연말 예정 30건입니다. 모든 항목은 공식 페이지·보도를
+    직접 열어 확인했고, 확인되지 않은 값은 <strong>미확인</strong>으로 적었습니다. 가격·기간은 행사 중 바뀔 수 있으니
+    구매·방문 전에 공식 링크에서 다시 확인하세요.
+  </p>
+  <p class="footer-note footer-note--dim">
+    <a href="./data/collabs.json">collabs.json</a> · 카드 이미지는 원문 페이지를 불러오며, 막히면 캐릭터 배지로 대체됩니다.
+  </p>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- file:// 로 열 때 fetch 가 막히면 data/collabs.js 사본을 쓴다 (build_collabs.py 생성) -->
+<script src="./data/collabs.js" defer></script>
+<script src="./app.js?v=1795653858" defer></script>
+</body>
+</html>

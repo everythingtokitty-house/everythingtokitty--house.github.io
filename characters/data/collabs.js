@@ -1,0 +1,2291 @@
+/* 자동 생성 파일 — tools/build_collabs.py 가 data/collabs.json 으로부터 만든 오프라인 사본.
+   직접 고치지 말고 원본(work/character-collabs-*.json)을 고친 뒤 다시 빌드하세요. */
+window.__COLLABS__ = {
+ "meta": {
+  "title": "8대 캐릭터 국내 콜라보 최신 소식",
+  "as_of": "2026-11-26",
+  "timezone": "Asia/Seoul",
+  "scope": "2026년 국내 콜라보 중 최근(9~11월) 진행·출시 및 연말 예정 건",
+  "total_items": 30,
+  "characters": 8,
+  "verification_method": "web_fetch로 실제 페이지 확인 (검색 스니펫만으로 채운 값 없음)",
+  "price_currency": "KRW",
+  "unconfirmed_marker": "미확인",
+  "accounts": {
+   "방구석키티": "@everything_to_kitty — 브랜드 협업 뉴스·마케팅 관점",
+   "캐릭터모음집": "@characters_zip — 라인업·가격·구성 정보성 카드뉴스",
+   "애플트립": "@apple_spot_trip — 팝업·전시·지역 한정 등 방문형 소식"
+  },
+  "generated_from": "work/character-collabs-2026-11-26.json"
+ },
+ "characters": [
+  {
+   "id": "sanrio",
+   "name_ko": "산리오 (헬로키티 중심)",
+   "items": [
+    {
+     "id": "sanrio-01",
+     "collab_name": "스타벅스 코리아 × 헬로키티 '위드 헬로키티' 크리스마스 MD",
+     "brand": "스타벅스 코리아",
+     "sales_channels": [
+      "전국 스타벅스 매장(일부 미판매)",
+      "스타벅스 앱 온라인 스토어",
+      "카카오톡 선물하기",
+      "네이버 브랜드 스토어",
+      "무신사",
+      "29CM",
+      "W컨셉",
+      "SSG.COM",
+      "G마켓"
+     ],
+     "status": "진행중",
+     "period": {
+      "promotion": "2026-11-19 ~ 2026-12-31",
+      "phase1": "2026-11-19 (10종)",
+      "camp_mug": "2026-11-23 (캠프컵 텀블러 3종)",
+      "phase2": "2026-12-02 예정 (12종)",
+      "note": "총 22종. 초코 캠프컵은 온라인 전용. 1인 1회 품목당 최대 2개 제한은 11/20까지"
+     },
+     "official_urls": [
+      "https://www.shinsegaegroupnewsroom.com/starbucks-x-hello-kitty-christmas-promotion/",
+      "https://www.yna.co.kr/view/AKR20261119114800030"
+     ],
+     "image_urls": [
+      "https://img3.yna.co.kr/etc/inner/KR/2026/11/19/AKR20261119114800030_01_i_P4.jpg"
+     ],
+     "prices": [
+      {
+       "item": "SS 위드 헬로키티 모카 텀블러 355ml",
+       "krw": 38000
+      },
+      {
+       "item": "SS 위드 헬로키티 파인니 텀블러 473ml",
+       "krw": 48000
+      },
+      {
+       "item": "위드 헬로키티 컬러체인지 글라스 500ml",
+       "krw": 23000
+      },
+      {
+       "item": "위드 헬로키티 데일리 워크백",
+       "krw": 59000
+      },
+      {
+       "item": "위드 헬로키티 마켓백 키체인",
+       "krw": 35000
+      },
+      {
+       "item": "위드 헬로키티 미니 트리&오너먼트 세트",
+       "krw": 61000
+      },
+      {
+       "item": "SS 위드 헬로키티 캠프컵 텀블러 591ml (크림/레드/초코)",
+       "krw": 52000
+      },
+      {
+       "item": "위드 헬로키티 입체 머그 355ml",
+       "krw": 38000,
+       "note": "신세계몰 표시가 기준, 스타벅스 공지 가격표에는 미기재"
+      }
+     ],
+     "lineup": [
+      "머그",
+      "텀블러 5종",
+      "컬러체인지 글라스",
+      "데일리 워크백",
+      "마켓백 키체인",
+      "미니 트리&오너먼트 세트"
+     ],
+     "features": [
+      "협업 음료 '헬로키티 토피 초콜릿'(휘핑 위 빨간 리본 초콜릿)",
+      "헬로키티 마카롱, 헬로키티 애플시나몬 쿠키 틴 세트 동시 출시",
+      "출시일 오전 7시 온라인 오픈과 동시에 대기열 발생, 강남 일부 매장 오전 중 품절",
+      "리셀: 워크백 59,000원 → 99,000원, 글라스 23,000원 → 50,000원 호가"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 스타벅스 매장(일부 미판매 매장 있음)",
+      "address": "지점별 상이",
+      "period": "2026-11-19 ~ 2026-12-31 (재고 소진 시 조기 종료)",
+      "hours": "매장별 상이 (출시일 오전 7시 오픈 매장에 오픈런)",
+      "reservation": "없음(현장 구매)"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "1분 만에 품절…스타벅스 헬로키티, 뭐가 그렇게 잘 팔렸나",
+      "body_points": [
+       "11/19 1차 10종 오픈런",
+       "워크백 59,000원·글라스 23,000원이 리셀 2배",
+       "12/2 2차 12종 예고, 캠프컵 52,000원"
+      ]
+     },
+     "sources": [
+      "연합뉴스 2026-11-19",
+      "신세계그룹 뉴스룸 2026-11-16",
+      "스타벅스 공지 '11월19일, 헬로키티 Ph1 MD 출시'(2차 매체 인용)"
+     ],
+     "verification_note": "기간·구성은 공식 발표로 확인. 가격은 공지 가격표를 인용한 2차 매체 3곳이 동일. 입체 머그만 신세계몰 기준"
+    },
+    {
+     "id": "sanrio-02",
+     "collab_name": "소니코리아 × 헬로키티 한정판 헤드폰 컬렉션",
+     "brand": "소니코리아",
+     "sales_channels": [
+      "소니 온라인 스토어",
+      "소니스토어 압구정점",
+      "네이버 브랜드 스토어"
+     ],
+     "status": "판매중(한정 수량)",
+     "period": {
+      "start": "2026-10-14",
+      "note": "WH-1000XM6 10/14, WH-CH730N·WH-CH530 11/11"
+     },
+     "official_urls": [
+      "https://www.betanews.net/article/view/beta202610140097",
+      "https://www.cnet.co.kr/view/?no=20261014194744"
+     ],
+     "image_urls": [
+      "https://www.betanews.net/data/beta/image/2026/10/14/beta20261014000094.jpg"
+     ],
+     "prices": [
+      {
+       "item": "WH-1000XM6 한정판(굿즈 포함)",
+       "krw": 559000
+      },
+      {
+       "item": "WH-CH730N 한정판(굿즈 포함)",
+       "krw": 239000
+      },
+      {
+       "item": "WH-CH530 한정판(굿즈 포함)",
+       "krw": 119000
+      }
+     ],
+     "lineup": [
+      "WH-1000XM6",
+      "WH-CH730N",
+      "WH-CH530"
+     ],
+     "features": [
+      "헤드폰 3종 각각에 헬로키티 한정판 파우치 + 에코백(토트백) 동봉",
+      "헤드폰 본체 도색 변경 없음(색상은 일반 라인업과 동일, XM6 6색)",
+      "굿즈 단독 판매 없음, 한정 수량"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "소니스토어 압구정점",
+      "address": "서울 강남구(압구정)",
+      "period": "2026-10-14 ~ (한정 수량 소진 시)",
+      "hours": "미확인",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "헤드폰에 키티를 입혔다…55만 9천 원짜리 한정판",
+      "body_points": [
+       "XM6 559,000원 / CH730N 239,000원 / CH530 119,000원",
+       "파우치+에코백 동봉",
+       "3개 채널에서만 한정 판매"
+      ]
+     },
+     "sources": [
+      "베타뉴스 2026-10-14",
+      "씨넷코리아 2026-10-14",
+      "캠페인 인사이트 2026-10-14"
+     ],
+     "verification_note": "3개 매체 가격 일치. '본체에 키티 그래픽 없음'은 소니스토어 기획전 상품명 표기 기준"
+    },
+    {
+     "id": "sanrio-03",
+     "collab_name": "CJ온스타일 × K리그 × 산리오캐릭터즈 '2026 태닝에디션' 온라인 팝업",
+     "brand": "CJ온스타일",
+     "sales_channels": [
+      "CJ온스타일 앱"
+     ],
+     "status": "종료",
+     "period": {
+      "start": "2026-11-12T10:00:00+09:00",
+      "end": "2026-11-18",
+      "note": "최근 종료 건. 7월 더현대 서울 팝업(약 4만 8천 명)의 온라인 버전"
+     },
+     "official_urls": [
+      "https://corp.cjonstyle.com/ko/newsroom/press/180",
+      "https://cjnews.cj.net/cj%EC%98%A8%EC%8A%A4%ED%83%80%EC%9D%BC-k%EB%A6%AC%EA%B7%B8x%EC%82%B0%EB%A6%AC%EC%98%A4%EC%BA%90%EB%A6%AD%ED%84%B0%EC%A6%88-%EC%98%A8%EB%9D%BC%EC%9D%B8-%ED%8C%9D%EC%97%85/"
+     ],
+     "image_urls": [
+      "https://www.tpick.co.kr/storage/uploads/posts/2026/11/12/1794457245_6af53e9dc4c36.png"
+     ],
+     "prices": [
+      {
+       "item": "인형 키링 (무신사 정가 기준)",
+       "krw": 20000,
+       "sale_krw": 14000
+      },
+      {
+       "item": "인형 키링 (인천유나이티드 공식몰 사례)",
+       "krw": 25000
+      }
+     ],
+     "lineup": [
+      "인형 키링",
+      "투명 파우치",
+      "짐색",
+      "머플러",
+      "레디백",
+      "우양산",
+      "4단 방석",
+      "K리그1·2 랜덤 부적 키링"
+     ],
+     "features": [
+      "K리그1·2 29개 구단 전원 참여 153종",
+      "구단별 대표 캐릭터 배정: FC서울=헬로키티, 대구FC=마이멜로디, 포항=쿠로미 등",
+      "상품·구단별 수량 한정, 조기 품절"
+     ],
+     "offline": {
+      "visitable": false,
+      "venue": "온라인 단독(오프라인 팝업은 7월 더현대 서울·수원 타임빌라스·여의도 서울크루즈에서 종료)",
+      "address": null,
+      "period": null,
+      "hours": null,
+      "reservation": null
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "헬로키티가 FC서울 유니폼을 입었다 — 29개 구단 153종",
+      "body_points": [
+       "CJ온스타일 앱 7일 한정",
+       "인형 키링 20,000원",
+       "구단별 캐릭터 배정표가 구매 포인트"
+      ]
+     },
+     "sources": [
+      "CJ온스타일 보도자료 2026-11-12",
+      "무신사 상품 페이지",
+      "인천유나이티드 공식몰"
+     ],
+     "verification_note": "기간·규모는 공식 보도자료 확인. 153종 전체 가격표는 미공개로 개별 사례만 확인"
+    },
+    {
+     "id": "sanrio-04",
+     "collab_name": "젤라또 피케 × 산리오캐릭터즈 2탄 'BABY MOCO' 컬렉션 (+부산 팝업)",
+     "brand": "젤라또 피케",
+     "sales_channels": [
+      "젤라또 피케 공식몰",
+      "29CM",
+      "그랑 메종 한남",
+      "현대백화점 판교점·충청점",
+      "갤러리아백화점 명품관 WEST",
+      "롯데백화점 잠실점"
+     ],
+     "status": "판매중 / 팝업 예정",
+     "period": {
+      "start": "2026-11-12",
+      "popup_gangnam": "2026-11-12 ~ 2026-11-22 (종료)",
+      "popup_busan": "2026-12-04 ~ 2026-12-17 (예정)"
+     },
+     "official_urls": [
+      "https://www.diarypoint.com/news/articleView.html?idxno=7100"
+     ],
+     "image_urls": [
+      "https://www.diarypoint.com/media/96d11654-c1c5-467d-bbaf-b17f08b48ea4.jpg"
+     ],
+     "prices": [
+      {
+       "item": "BABY MOCO 자카드 풀오버 & 롱 팬츠 셋업",
+       "krw": 224000
+      },
+      {
+       "item": "숏 팬츠 셋업",
+       "krw": 217000
+      },
+      {
+       "item": "가디건",
+       "krw": 172000
+      },
+      {
+       "item": "원피스",
+       "krw": 139000
+      },
+      {
+       "item": "파우치",
+       "krw": 65000
+      }
+     ],
+     "lineup": [
+      "자카드 셋업(풀오버+롱팬츠)",
+      "숏 팬츠 셋업",
+      "가디건",
+      "원피스",
+      "티셔츠",
+      "캐미솔 원피스",
+      "반려동물용 풀오버",
+      "파우치"
+     ],
+     "features": [
+      "캐릭터 5종: 헬로키티·시나모롤·마이멜로디·쿠로미·리틀트윈스타",
+      "베개 위에서 잠든 캐릭터를 자카드로 표현한 가을·겨울 룸웨어",
+      "리틀트윈스타는 한국에서만 만나는 해외 판매 구성"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "신세계백화점 센텀시티점 (부산) / 신세계백화점 강남점(종료)",
+      "address": "부산 해운대구 센텀시티 (신세계百 센텀시티점)",
+      "period": "2026-12-04 ~ 2026-12-17",
+      "hours": "미확인(백화점 영업시간 준수)",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "잠든 키티를 입는다…젤라또 피케 22만 원 룸웨어",
+      "body_points": [
+       "11/12 출시, 5캐릭터",
+       "부산 센텀시티 팝업 12/4~17",
+       "12월 부산 나들이 코스로"
+      ]
+     },
+     "sources": [
+      "다이어리포인트 2026-11-12"
+     ],
+     "verification_note": "가격·판매처·팝업 일정 단일 보도로 확인. 팝업 운영시간은 별도 미기재"
+    },
+    {
+     "id": "sanrio-05",
+     "collab_name": "아이파크몰 용산점 × 산리오캐릭터즈 '물음표 상점: 크리스마스 기프트 숍'",
+     "brand": "아이파크몰",
+     "sales_channels": [
+      "현장 판매"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-13",
+      "end": "2026-12-27",
+      "note": "몰 연출·포토존 11/13~, '크리스마스 기프트 숍' 팝업은 11/25 개시(보도 기준). 매체별 기간 표기 상충"
+     },
+     "official_urls": [
+      "https://www.yna.co.kr/view/AKR20261113031300030",
+      "https://popply.co.kr/popup/6666"
+     ],
+     "image_urls": [
+      "https://img0.yna.co.kr/etc/inner/KR/2026/11/13/AKR20261113031300030_01_i_P4.jpg"
+     ],
+     "prices": [
+      {
+       "item": "입장",
+       "krw": 0,
+       "note": "무료. 캐릭터 상품 가격 미확인"
+      }
+     ],
+     "lineup": [
+      "산리오캐릭터즈 상품",
+      "4컷 사진 부스",
+      "포토부스",
+      "크리스마스 트리·솔나무길"
+     ],
+     "features": [
+      "4층 더 가든 대형 헬로키티 에어벌룬, 5층 연결통로 '솔나무길' 트리 장식",
+      "위시 온 더 스크린(새해 소망), 산리오 포토부스, 포토존 SNS 인증 추첨",
+      "10만 원 이상 구매 시 미니 파우치 키링 랜덤 증정(선착순 500명, 11/13~29), 매일 룰렛 이벤트",
+      "스탬프 6개 챌린지 12/11~27"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "용산 아이파크몰 6층 리빙파크 및 몰 곳곳",
+      "address": "서울 용산구 한강대로23길 55",
+      "period": "2026-11-13 ~ 2026-12-27",
+      "hours": "월~목 10:30-20:30 / 금~토 10:30-21:00 / 일 10:30-20:30",
+      "reservation": "없음(무료 입장, 현장 방문)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "용산에 헬로키티 크리스마스 마을이 생겼다 (입장 무료)",
+      "body_points": [
+       "아이파크몰 용산 11/13~12/27",
+       "대형 에어벌룬·포토부스·스탬프 챌린지",
+       "금·토는 21시까지"
+      ]
+     },
+     "sources": [
+      "연합뉴스 2026-11-13",
+      "서울경제 2026-11-13",
+      "팝플리 팝업 상세"
+     ],
+     "verification_note": "기간 표기가 매체별로 달라 몰 연출(11/13)과 기프트숍(11/25)을 병기"
+    }
+   ]
+  },
+  {
+   "id": "disney",
+   "name_ko": "디즈니",
+   "items": [
+    {
+     "id": "disney-01",
+     "collab_name": "카카오프렌즈 × 디즈니코리아 '미키와 친구들 I 카카오프렌즈'",
+     "brand": "카카오프렌즈",
+     "sales_channels": [
+      "카카오프렌즈 온라인 스토어",
+      "카카오톡 선물하기",
+      "무신사",
+      "29CM",
+      "전국 카카오프렌즈 오프라인 스토어"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-20",
+      "note": "도킹형 보조배터리는 11/20~22 카카오톡 선물하기 단독 선판매"
+     },
+     "official_urls": [
+      "https://www.kakaocorp.com/page/detail/12201"
+     ],
+     "image_urls": [
+      "https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/news/f14f4c7b01a100001.jpg?type=thumb&opt=C800x400"
+     ],
+     "prices": [
+      {
+       "item": "14종 전체",
+       "krw": null,
+       "note": "미확인(보도자료 가격 미기재). 릴 키링 인형·키캡 키링 인형 풀세트는 온라인 단독 5% 할인"
+      }
+     ],
+     "lineup": [
+      "미키·미니 코스튬 인형",
+      "릴 키링 인형",
+      "키캡 키링 인형",
+      "파자마",
+      "룸슬리퍼",
+      "도킹형 보조배터리"
+     ],
+     "features": [
+      "총 14종, 연말 선물 수요 겨냥",
+      "오프라인 매장을 '미키 마우스 팬인 춘식이의 방' 콘셉트로 연출 + 대형 트리 + 바닥 미키 발자국 그래픽",
+      "3만 원 이상 구매 시 빈티지 포스터 증정, 전용 춘식이 쇼핑태그 포장",
+      "카카오톡 선물하기 메시지 카드·카카오맵(12월)에 협업 아트워크 적용"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 카카오프렌즈 오프라인 스토어(대표: 홍대 플래그십 스토어) 외 카카오 판교아지트 외벽 장식",
+      "address": "서울 마포구 양화로 162 1~3층 (홍대 플래그십)",
+      "period": "2026-11-20 ~ (판교아지트 장식 11/16~연말)",
+      "hours": "매일 10:30-22:00 / 연중무휴 (02-6010-0104)",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "애플트립"
+     ],
+     "carousel": {
+      "cover_headline": "춘식이가 미키 옷을 입었다 — 카카오프렌즈 연말 14종",
+      "body_points": [
+       "11/20 출시",
+       "홍대 플래그십이 '춘식이의 방'으로 변신",
+       "3만 원 이상 구매 시 빈티지 포스터"
+      ]
+     },
+     "sources": [
+      "카카오 보도자료 2026-11-19",
+      "매일일보 2026-11-19",
+      "연합뉴스 2026-11-19",
+      "서울시 공식 관광정보(매장 운영시간)"
+     ],
+     "verification_note": "구성·일정 공식 확인. 가격 미공개"
+    },
+    {
+     "id": "disney-02",
+     "collab_name": "다이소 × 디즈니 조리·식사 시리즈 & '데일리모던' 펠트 바구니",
+     "brand": "아성다이소",
+     "sales_channels": [
+      "전국 다이소 매장",
+      "다이소몰"
+     ],
+     "status": "상시 판매 / 신상 사전예약 2026-11-26 09:00",
+     "period": {
+      "collab_start": "2026-08-18",
+      "basket_reservation": "2026-11-26T09:00:00+09:00"
+     },
+     "official_urls": [
+      "https://www.daisomall.co.kr/pd/pdr/SCR_PDR_0001?pdNo=1084976&recmYn=N",
+      "https://www.yna.co.kr/view/AKR20260818042500030"
+     ],
+     "image_urls": [
+      "https://cdn.daisomall.co.kr/file/PM/20261026/eoK7T4UVT8MCKKelhXhX1084976_00_00eoK7T4UVT8MCKKelhXhX.jpg"
+     ],
+     "prices": [
+      {
+       "item": "디즈니 데일리모던 펠트 바구니 소형(약 10x10x10cm)",
+       "krw": 1000
+      },
+      {
+       "item": "중형(약 18x13x13cm)",
+       "krw": 2000
+      },
+      {
+       "item": "대형(약 28x18x18cm)",
+       "krw": 3000
+      },
+      {
+       "item": "특대형(약 40x24x23cm)",
+       "krw": 5000
+      },
+      {
+       "item": "조리·식사 시리즈 40여 종",
+       "krw": null,
+       "note": "균일가 1,000~5,000원대, 개별 가격 미확인"
+      }
+     ],
+     "lineup": [
+      "위생백·지퍼백",
+      "뽑아쓰는 키친타월",
+      "일회용 도마",
+      "스펀지 수세미",
+      "극세사 행주",
+      "적층 수납 '말랑핏'",
+      "키즈 스텐 탈부착컵",
+      "위니더푸 멜라민 4칸 식판",
+      "펠트 바구니 4종"
+     ],
+     "features": [
+      "라인 2종: '모노'(화이트+블랙 체크·미키 실루엣) / '코지'(베이지)",
+      "2026년 다이소 디즈니 협업 신상품 약 700종(전년 300여 종)",
+      "균일가 1,000~5,000원대로 캐릭터 굿즈 가격 장벽 낮춤"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 다이소 매장",
+      "address": "지점별 상이",
+      "period": "상시(매장별 입고 상이)",
+      "hours": "매장별 상이",
+      "reservation": "펠트 바구니는 다이소몰 사전예약(11/26 09:00 오픈런)"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "1,000원 디즈니…다이소가 미키를 이렇게 많이 풀었다",
+      "body_points": [
+       "펠트 바구니 1,000/2,000/3,000/5,000원",
+       "11/26 09시 사전예약",
+       "주방용품까지 40여 종"
+      ]
+     },
+     "sources": [
+      "다이소몰 상품 페이지(소·중·대·특대)",
+      "연합뉴스 2026-08-18",
+      "브릿지경제 2026-08-18"
+     ],
+     "verification_note": "펠트 바구니 4종 가격 개별 확인(대형 페이지 직접 fetch). 시리즈 구성은 언론 보도 기준"
+    },
+    {
+     "id": "disney-03",
+     "collab_name": "매니어리틀 팝업 — 포켓몬 30주년 & 디즈니·스타워즈 50주년",
+     "brand": "매니어리틀",
+     "sales_channels": [
+      "KT&G 상상마당 디자인스퀘어 1F 팝업"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-10",
+      "end": "2026-12-20"
+     },
+     "official_urls": [
+      "https://www.sangsangmadang.com/display/detail/3207",
+      "https://oneulpop.com/index.php?id=c9284f74-b8fb-add6-75f5-8abe7d258841&page=event"
+     ],
+     "image_urls": [
+      "https://oneulpop.com/uploads/event-images/popup/seoul/c9284f74-b8fb-add6-75f5-8abe7d258841/01-3bf7d5d237ff71c124.jpg"
+     ],
+     "prices": [
+      {
+       "item": "입장",
+       "krw": null,
+       "note": "요금 미확인(플랫폼 '요금 확인 필요' 표기). 상품 가격 미확인"
+      }
+     ],
+     "lineup": [
+      "포켓몬 30주년 봉제인형·키링",
+      "디즈니 & 스타워즈 50주년 프리미엄 굿즈",
+      "마그넷워크 오리지널"
+     ],
+     "features": [
+      "캐릭터 IP 2개 축(포켓몬 30주년 / 디즈니·스타워즈 50주년)을 한 공간에 배치",
+      "자체 런칭 브랜드 마그넷워크 오리지널 컬렉션 병행"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "KT&G 상상마당 디자인스퀘어 1F",
+      "address": "서울 마포구 어울마당로 65",
+      "period": "2026-11-10 ~ 2026-12-20",
+      "hours": "매일 11:00-21:00",
+      "reservation": "없음(현장 대기)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "포켓몬 30주년 + 디즈니 50주년, 한 공간에 모였다",
+      "body_points": [
+       "서교동 상상마당 11/10~12/20",
+       "매일 11~21시",
+       "예약 없이 현장 입장"
+      ]
+     },
+     "sources": [
+      "오늘팝업 상세",
+      "상상마당 공식 전시 페이지"
+     ],
+     "verification_note": "기간·주소·운영시간·입장방식 확인. 요금·상품가 미확인"
+    }
+   ]
+  },
+  {
+   "id": "pokemon",
+   "name_ko": "포켓몬",
+   "items": [
+    {
+     "id": "pokemon-01",
+     "collab_name": "케이스티파이 × 포켓몬 30주년 픽셀 아트 컬렉션",
+     "brand": "CASETiFY",
+     "sales_channels": [
+      "케이스티파이 공식 홈페이지",
+      "CASETiFY Co-Lab 앱",
+      "국내 15개 오프라인 매장(도산 포함)"
+     ],
+     "status": "출시 예정",
+     "period": {
+      "waitlist": "2026-11-24",
+      "release": "2026-12-01T17:00:00+09:00",
+      "note": "글로벌 동시 출시"
+     },
+     "official_urls": [
+      "https://www.etnews.com/20261125000301",
+      "https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=01817126645649328"
+     ],
+     "image_urls": [
+      "https://img.etnews.com/news/article/2026/11/25/news-p.v1.20261125.dc71ab4227e145d586c523060ebc8a2c_P1.jpg"
+     ],
+     "prices": [
+      {
+       "item": "전 제품",
+       "krw": null,
+       "note": "미확인(국내 판매가 미공개). 일본 기준 케이스 7,150엔·액세서리 5,610엔부터"
+      }
+     ],
+     "lineup": [
+      "포켓몬 이어버드 케이스(3D 몬스터볼, 에어팟 프로 1·2 전용)",
+      "포켓몬 어드벤처 쉐이크쉐이크 케이스(아이폰17·18 프로/프로맥스)",
+      "피카츄 플래시 참",
+      "포켓몬 폰 스트랩"
+     ],
+     "features": [
+      "과거 인기 포켓몬 협업을 스페셜 에디션으로 재출시 + 신규 디자인",
+      "픽셀 아트 포켓몬 적용, 케이스 흔들면 내부 캐릭터·몬스터볼 이동",
+      "이어버드 케이스는 한정 수량, 스트랩은 피카츄·이상해씨·파이리·꼬부기"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "케이스티파이 도산 포함 국내 15개 오프라인 매장",
+      "address": "서울 강남구 도산대로(도산점) 외 매장별 상이",
+      "period": "2026-12-01 이후",
+      "hours": "미확인",
+      "reservation": "웨이팅리스트 등록(공식 홈페이지)"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "포켓몬 30주년, 케이스로 돌아온다 (12/1 오후 5시)",
+      "body_points": [
+       "몬스터볼 3D 에어팟 케이스",
+       "흔들면 움직이는 폰케이스",
+       "웨이팅리스트 지금 열려 있음"
+      ]
+     },
+     "sources": [
+      "전자신문 2026-11-25",
+      "이데일리 2026-11-25",
+      "위키트리 2026-11-25"
+     ],
+     "verification_note": "출시일·구성 3개 매체 일치. 국내 가격 미공개로 미확인 처리"
+    },
+    {
+     "id": "pokemon-02",
+     "collab_name": "롯데시네마 × 포켓몬스터 한정 굿즈 4종",
+     "brand": "롯데시네마",
+     "sales_channels": [
+      "롯데시네마 지정 지점 매점",
+      "롯데시네마 스토어",
+      "네이버 스마트스토어"
+     ],
+     "status": "진행중(수량 소진 시까지)",
+     "period": {
+      "presale": "2026-11-11 ~ 2026-11-15 23:59",
+      "store": "2026-11-20 ~"
+     },
+     "official_urls": [
+      "https://www.ggilbo.com/news/articleView.html?idxno=1192574",
+      "https://www.bntnews.co.kr/article/view/bnt202611200186"
+     ],
+     "image_urls": [
+      "https://cdn.ggilbo.com/news/photo/202611/1192574_1045778_06.jpg"
+     ],
+     "prices": [
+      {
+       "item": "랜덤 키링 파우치(5종 랜덤)",
+       "krw": 9000
+      },
+      {
+       "item": "태블릿·노트북 파우치(2종)",
+       "krw": 19900
+      },
+      {
+       "item": "크로스백(2종)",
+       "krw": 18900
+      },
+      {
+       "item": "쿠션담요(2종)",
+       "krw": 28900
+      },
+      {
+       "item": "굿즈 콤보(팝콘M+음료+굿즈 1종)",
+       "krw": null,
+       "note": "별도 가격, 팝콘·음료 변경 시 추가금"
+      }
+     ],
+     "lineup": [
+      "랜덤 키링 파우치 5종(메타몽·피카츄·이상해씨·파이리·꼬부기)",
+      "태블릿·노트북 파우치 2종(메타몽·꼬부기)",
+      "크로스백 2종(피카츄·메타몽)",
+      "쿠션담요 2종(잠만보·메타몽)"
+     ],
+     "features": [
+      "키링 파우치 5개 동시 구매 시 중복 없이 1세트",
+      "파우치·크로스백·담요 구매 시 몬스터볼 종이 쇼핑백 증정",
+      "할인 쿠폰 사용 불가, 지점별 입점 여부·품목 상이"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 롯데시네마 지정 지점 매점",
+      "address": "지점별 상이",
+      "period": "2026-11-20 ~ 재고 소진 시",
+      "hours": "지점별 상이",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "영화관에서 9,000원…롯데시네마 포켓몬 굿즈",
+      "body_points": [
+       "키링 파우치 9,000원",
+       "크로스백 18,900원·쿠션담요 28,900원",
+       "5개 사면 중복 없이 한 세트"
+      ]
+     },
+     "sources": [
+      "금강일보 2026-11-11",
+      "bntnews 2026-11-20"
+     ],
+     "verification_note": "4종 가격 전부 기사 본문에서 확인, 매장 판매 개시 별도 확인"
+    },
+    {
+     "id": "pokemon-03",
+     "collab_name": "설빙 × 포켓몬 '랜덤 라이트 피규어' (2차 굿즈)",
+     "brand": "설빙",
+     "sales_channels": [
+      "전국 설빙 매장(방문·포장)"
+     ],
+     "status": "진행중(한정 수량)",
+     "period": {
+      "start": "2026-11-11"
+     },
+     "official_urls": [
+      "https://www.inthenews.co.kr/news/article.html?no=94303",
+      "http://www.dailysmart.co.kr/news/articleView.html?idxno=132253"
+     ],
+     "image_urls": [
+      "https://www.inthenews.co.kr/data/photos/20261146/art_17943015707998_9962fc.jpg"
+     ],
+     "prices": [
+      {
+       "item": "포켓몬 랜덤 라이트 피규어",
+       "krw": 7900,
+       "note": "'포켓몬 설빙' 1개당 최대 1개"
+      }
+     ],
+     "lineup": [
+      "피카츄",
+      "꼬부기",
+      "메타몽",
+      "푸린",
+      "이브이",
+      "히든 대굴레오"
+     ],
+     "features": [
+      "총 6종 랜덤, 우유 얼음 형상 '눈구름'에 캐릭터 배치",
+      "눈구름 조명 기능 → 무드등·트리 장식·백꾸 활용",
+      "1차 굿즈 '랜덤 쉐이커 마그넷'은 사전예약 조기 소진, 11/4부터 매장 판매(히든 프리져)"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 설빙 매장",
+      "address": "지점별 상이",
+      "period": "2026-11-11 ~ (한정 수량)",
+      "hours": "매장별 상이",
+      "reservation": "없음(매장 방문·포장 주문에만 적용)"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "빙수 시키면 7,900원…설빙 포켓몬 무드등",
+      "body_points": [
+       "6종 랜덤",
+       "눈구름에 불이 들어온다",
+       "포켓몬 설빙 1개당 1개까지"
+      ]
+     },
+     "sources": [
+      "인더뉴스 2026-11-10",
+      "스마트경제 2026-11-09"
+     ],
+     "verification_note": "두 매체 7,900원 동일 확인"
+    },
+    {
+     "id": "pokemon-04",
+     "collab_name": "PLAY IN THE BOX 성수 — 포켓몬 30주년 팝업",
+     "brand": "플레이인더박스",
+     "sales_channels": [
+      "성수 팝업 현장"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-09-11",
+      "end": "2026-12-31"
+     },
+     "official_urls": [
+      "https://popply.co.kr/popup/6274",
+      "https://spotts.kr/f/popup-2026-play-in-the-box-seongsu"
+     ],
+     "image_urls": [
+      "https://d8nffddmkwqeq.cloudfront.net/store/628e4a24%2Cd5ff%2C403a%2Cb852%2C138353ae6094"
+     ],
+     "prices": [
+      {
+       "item": "입장",
+       "krw": 0,
+       "note": "무료. 상품 가격 미확인(방문 후기 기준 포켓볼 3개 세트 25,000원 사례)"
+      }
+     ],
+     "lineup": [
+      "포켓몬 30주년 '퍼스트 파트너' 피규어",
+      "포켓몬 카드",
+      "랜덤박스",
+      "가챠",
+      "에반게리온·디즈니·토이스토리 등 타 IP 굿즈"
+     ],
+     "features": [
+      "1세대~9세대 스타팅 포켓몬 27마리 디오라마",
+      "이브이 진화체 존, 피규어·랜덤박스·가챠 체험형 매장"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "PLAY IN THE BOX 성수 (핑크색 건물)",
+      "address": "서울 성동구 연무장길 27 (성수역 4번 출구 도보 약 4분)",
+      "period": "2026-09-11 ~ 2026-12-31",
+      "hours": "매일 10:30-20:30",
+      "reservation": "없음(무료 입장, 주차 불가)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "성수 핑크 건물에 포켓몬 27마리가 살고 있다",
+      "body_points": [
+       "9/11~12/31",
+       "매일 10:30~20:30",
+       "무료 입장 + 30주년 스타팅 27마리"
+      ]
+     },
+     "sources": [
+      "팝플리 2026-10-12",
+      "스팟츠",
+      "네이버 블로그 현장 후기"
+     ],
+     "verification_note": "2개 플랫폼에서 기간·주소·운영시간 일치"
+    }
+   ]
+  },
+  {
+   "id": "miffy",
+   "name_ko": "미피 (Miffy)",
+   "items": [
+    {
+     "id": "miffy-01",
+     "collab_name": "티머니 × 미피 '미피 티머니카드' 9종",
+     "brand": "티머니",
+     "sales_channels": [
+      "전국 GS25",
+      "세븐일레븐",
+      "이마트24",
+      "스토리웨이"
+     ],
+     "status": "판매중",
+     "period": {
+      "start": "2026-11-25"
+     },
+     "official_urls": [
+      "https://autodiary.kr/2026/11/4335718/",
+      "https://www.carmgz.kr/news/articleView.html?idxno=23461"
+     ],
+     "image_urls": [
+      "https://autodiary.kr/wp-content/uploads/2026/11/티머니-‘미피-티머니카드-9종-출시…편의점별-디자인-달리해-수집-재미-더해_1.webp"
+     ],
+     "prices": [
+      {
+       "item": "미피 티머니카드",
+       "krw": 5000,
+       "note": "장당"
+      }
+     ],
+     "lineup": [
+      "GS25 3종: 미피와 강아지 스피피 / 공놀이하는 미피와 친구 / 수영복을 입은 미피",
+      "세븐일레븐 2종: 달 위의 미피 / 곰 인형을 안고 있는 미피",
+      "이마트24 2종: 그림을 그리는 미피 친구들 / 실타래 놀이를 하는 미피",
+      "스토리웨이 2종: 풍선을 들고 있는 미피 / 꽃다발을 들고 있는 미피"
+     ],
+     "features": [
+      "티머니 최초 미피 캐릭터 교통카드",
+      "무광 배경 + 캐릭터 부분 UV 특수 인쇄(광택·입체감)",
+      "판매처별 디자인 분산 → 4개 브랜드를 돌아야 9종 완성"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 GS25·세븐일레븐·이마트24·스토리웨이",
+      "address": "지점별 상이",
+      "period": "2026-11-25 ~ (한정 수량)",
+      "hours": "매장별 상이(24시간 매장 다수)",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "5,000원으로 미피 9종 모으기 — 편의점 4곳을 가야 한다",
+      "body_points": [
+       "GS25 3종·세븐일레븐 2종·이마트24 2종·스토리웨이 2종",
+       "11/25 출시",
+       "장당 5,000원"
+      ]
+     },
+     "sources": [
+      "오토다이어리 2026-11-25",
+      "카매거진 2026-11-25"
+     ],
+     "verification_note": "두 매체 가격·구성 일치"
+    },
+    {
+     "id": "miffy-02",
+     "collab_name": "뚜레쥬르 × 미피 2027 수능 응원 시즌 제품 5종",
+     "brand": "CJ푸드빌 뚜레쥬르",
+     "sales_channels": [
+      "전국 주요 매장",
+      "뚜레쥬르 공식 앱"
+     ],
+     "status": "진행중",
+     "period": {
+      "launch": "2026-10-20",
+      "app_reservation": "2026-10-20 ~ 2026-10-31",
+      "pickup": "2026-11-17 ~ 2026-11-21",
+      "store_sale": "2026-11-17 ~"
+     },
+     "official_urls": [
+      "https://cjnews.cj.net/%eb%9a%9c%eb%a0%88%ec%a5%ac%eb%a5%b4-2027-%ec%88%98%eb%8a%a5-%ec%8b%9c%ec%a6%8c-%ec%8b%a0%ec%a0%9c%ed%92%88-%ec%84%a0%eb%b4%ac-%ec%ba%90%eb%a6%ad%ed%84%b0-%eb%af%b8%ed%94%bc/"
+     ],
+     "image_urls": [
+      "https://img.newspim.com/news/2026/10/20/2610200854440220_312_tc.jpg"
+     ],
+     "prices": [
+      {
+       "item": "미피 정답콕콕 초콜릿(7개)",
+       "krw": 18000,
+       "note": "공식 앱 기준 / 매장 18,000~25,000원"
+      },
+      {
+       "item": "미피 행운책가방 찹쌀떡 세트(6구)",
+       "krw": 15000,
+       "note": "매장 15,000~17,000원"
+      },
+      {
+       "item": "미피 행운가득 찹쌀떡 세트(9구)",
+       "krw": 22000,
+       "note": "매장 22,000~26,000원"
+      },
+      {
+       "item": "미피 달콤가득 선물세트",
+       "krw": 23000,
+       "note": "소 23,000~26,000 / 중 29,000~33,000 / 대 33,000~37,000원"
+      },
+      {
+       "item": "반짝! 소원의 별 미피 케이크",
+       "krw": 29000,
+       "note": "매장 29,000~34,000원"
+      },
+      {
+       "item": "2027 미피 월 캘린더",
+       "krw": 3900,
+       "note": "케이크 사전예약 고객 한정 추가 구매"
+      }
+     ],
+     "lineup": [
+      "반짝! 소원의 별 미피 케이크",
+      "미피 행운가득 찹쌀떡 세트(9구)",
+      "미피 행운책가방 찹쌀떡 세트(6구)",
+      "미피 달콤가득 선물세트",
+      "미피 정답콕콕 초콜릿"
+     ],
+     "features": [
+      "컨셉 '설레는 내일을 함께, The Day Is Yours'",
+      "케이크: 미피 아크릴 장식 + 별똥별 픽 반짝 연출",
+      "찹쌀떡 4가지 맛(고구마·흑임자·단팥·백앙금), 7색 초콜릿",
+      "가맹점 재량 가격이라 매장별 차이 큼(행사 전 가격 인상 논란 보도)"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 뚜레쥬르 주요 매장",
+      "address": "지점별 상이",
+      "period": "2026-11-17 ~ (재고 소진 시)",
+      "hours": "매장별 상이",
+      "reservation": "공식 앱 사전예약 후 매장 픽업"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "수능 선물은 미피로…찹쌀떡부터 37,000원 세트까지",
+      "body_points": [
+       "케이크 29,000~34,000원",
+       "초콜릿 18,000원",
+       "매장마다 가격 다르니 앱 가격 먼저 확인"
+      ]
+     },
+     "sources": [
+      "CJ 뉴스룸 2026-10-20",
+      "뉴스핌 2026-10-20",
+      "다이닝코드 매장 메뉴(가격 실측)"
+     ],
+     "verification_note": "제품·예약 일정 공식 확인. 금액은 매장별 상이라 범위로 표기"
+    },
+    {
+     "id": "miffy-03",
+     "collab_name": "두두스토리 × 미피 '두두 그림자극장 베이비 미피 에디션'",
+     "brand": "두두스토리(엘리시아)",
+     "sales_channels": [
+      "두두스토리 공식 채널"
+     ],
+     "status": "한정 수량 판매중",
+     "period": {
+      "start": "2026-10-13"
+     },
+     "official_urls": [
+      "https://www.newswire.co.kr/newsRead.php?no=1044410"
+     ],
+     "image_urls": [
+      "https://file.newswire.co.kr/data/datafile2/thumb_480/2026/10/3551205594_20261012121134_6544124392.jpg"
+     ],
+     "prices": [
+      {
+       "item": "세트",
+       "krw": null,
+       "note": "미확인(보도자료 가격 미기재)"
+      }
+     ],
+     "lineup": [
+      "미피 이야기 그림책 12종",
+      "그림자극장"
+     ],
+     "features": [
+      "미피 12가지 이야기를 그림책과 그림자극장으로 감상",
+      "흑백 그림자 + 음성 진행으로 수면 의식용",
+      "가족·친구·생일·동생 등 친숙한 소재"
+     ],
+     "offline": {
+      "visitable": false,
+      "venue": null,
+      "address": null,
+      "period": null,
+      "hours": null,
+      "reservation": null
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "미피가 그림자극장이 됐다 — 12가지 이야기",
+      "body_points": [
+       "한정 수량",
+       "그림책 + 그림자극장",
+       "잠들기 전 루틴용"
+      ]
+     },
+     "sources": [
+      "뉴스와이어 2026-10-13"
+     ],
+     "verification_note": "구성·한정 수량 확인, 가격 미공개"
+    },
+    {
+     "id": "miffy-04",
+     "collab_name": "제주 한정 미피 — 해녀·감귤 테마 지역 한정 컬렉션",
+     "brand": "서울머천다이징컴퍼니(SMC) / 에브리 제주",
+     "sales_channels": [
+      "제주 지역(에브리 제주 채널)"
+     ],
+     "status": "상시(지역 한정)",
+     "period": {
+      "note": "2026-08-27 소개, 상시 판매"
+     },
+     "official_urls": [
+      "https://www.mt.co.kr/industry/2026/08/27/2026082712163235511"
+     ],
+     "image_urls": [
+      "https://thumb.mt.co.kr/cdn-cgi/image/w=1200,h=1600,fit=cover,bg=white,f=auto,quality=high,sharpen=2,g=face/21/2026/08/2026082712163235511_1.jpg"
+     ],
+     "prices": [
+      {
+       "item": "랜덤 피규어·마켓백·엽서·키링",
+       "krw": null,
+       "note": "미확인"
+      }
+     ],
+     "lineup": [
+      "제주 한정 랜덤 피규어(해녀·감 테마)",
+      "리유저블 마켓백",
+      "엽서",
+      "'JEJU' 레터링 미피 인형 키링"
+     ],
+     "features": [
+      "제주 자연·문화 요소를 디자인에 반영한 지역 한정 컬렉션",
+      "관광 기념품 수요 겨냥, 제주에서만 구매 가능"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "제주 지역 판매처(에브리 제주)",
+      "address": "미확인",
+      "period": "상시",
+      "hours": "미확인",
+      "reservation": "미확인"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "제주에서만 미피가 해녀가 된다",
+      "body_points": [
+       "해녀·감귤 테마 랜덤 피규어",
+       "JEJU 키링·마켓백",
+       "제주 여행 기념품 리스트로"
+      ]
+     },
+     "sources": [
+      "머니투데이 2026-08-27"
+     ],
+     "verification_note": "상품 구성 확인. 매장·가격 미기재"
+    }
+   ]
+  },
+  {
+   "id": "shinchan",
+   "name_ko": "짱구 (크레용신짱)",
+   "items": [
+    {
+     "id": "shinchan-01",
+     "collab_name": "카카오프렌즈 × 짱구는 못말려 '고구마밭 대소동'",
+     "brand": "카카오프렌즈",
+     "sales_channels": [
+      "카카오프렌즈 온라인 스토어",
+      "전국 카카오프렌즈 오프라인 스토어",
+      "카카오톡 선물하기"
+     ],
+     "status": "판매중(재고 소진 시까지)",
+     "period": {
+      "start": "2026-09-18",
+      "event_end": "2026-09-30"
+     },
+     "official_urls": [
+      "https://www.kakaocorp.com/page/detail/12144",
+      "https://www.musinsa.com/content/1548892971976395875"
+     ],
+     "image_urls": [
+      "https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/news/b20bbb4e01a000001.jpg?type=thumb&opt=C800x400"
+     ],
+     "prices": [
+      {
+       "item": "20종 전체",
+       "krw": null,
+       "note": "미확인(가격 미기재). '랜덤 피규어 풀세트'는 온라인 스토어 단독"
+      }
+     ],
+     "lineup": [
+      "고구마 품은 키링 인형",
+      "중형 인형",
+      "랜덤 피규어",
+      "흰둥이·짱구 키링",
+      "파자마",
+      "대형 양털 담요",
+      "가습기",
+      "칫솔살균기",
+      "차량용 방향제",
+      "양말",
+      "젤펜",
+      "스티커"
+     ],
+     "features": [
+      "두 IP 주요 캐릭터 전원이 처음 만난 20종",
+      "춘식이가 고구마를 캐러 '농장주 라이언' 농장에 온 짱구와 친구들 세계관",
+      "9/30까지 고구마 캐기 게임 미션 → 모바일 배경화면 증정"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 카카오프렌즈 오프라인 스토어(대표: 홍대 플래그십)",
+      "address": "서울 마포구 양화로 162 1~3층",
+      "period": "2026-09-18 ~ (재고 소진 시)",
+      "hours": "매일 10:30-22:00 / 연중무휴",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "짱구가 라이언 농장에 놀러 왔다 — 20종",
+      "body_points": [
+       "고구마 키링 인형·랜덤 피규어",
+       "양털 담요·가습기까지",
+       "랜덤 피규어 풀세트는 온라인 단독"
+      ]
+     },
+     "sources": [
+      "카카오 보도자료 2026-09-18",
+      "무신사 콘텐츠"
+     ],
+     "verification_note": "라인업 공식·무신사 교차 확인. 가격 미공개"
+    },
+    {
+     "id": "shinchan-02",
+     "collab_name": "짱구는 못말려 전시 '놀자! 시공간 대모험' (성수)",
+     "brand": "짱구는 못말려 전시",
+     "sales_channels": [
+      "현장(전시장)"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-10-17",
+      "end": "2027-01-24"
+     },
+     "official_urls": [
+      "https://popga.co.kr/popup/8902"
+     ],
+     "image_urls": [
+      "https://cdn.popga.co.kr/spot/8902/main/d2498a75-b184-4368-9912-9b149773e50b_1788824642342_thumbnail_MAIN_W480.webp"
+     ],
+     "prices": [
+      {
+       "item": "입장권",
+       "krw": null,
+       "note": "미확인(플랫폼에 요금 없음)"
+      }
+     ],
+     "lineup": [
+      "인터랙티브 체험존",
+      "굿즈샵",
+      "포토존"
+     ],
+     "features": [
+      "국내 최초 상륙 짱구 인터랙티브 체험 전시",
+      "떡잎마을 방범대가 시공간에 휩쓸린 세계관",
+      "방문 시 티켓 증정 현장 이벤트"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "짱구는 못말려 전시장(성수)",
+      "address": "서울 성동구 연무장5길 9-29",
+      "period": "2026-10-17 ~ 2027-01-24",
+      "hours": "매일 11:00-20:00 / 입장 마감 19:00",
+      "reservation": "미확인(현장 방문)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "짱구가 성수에 나타났다 — 1월까지 하는 체험전",
+      "body_points": [
+       "10/17~2027.1.24",
+       "매일 11~20시(입장 마감 19시)",
+       "성수 나들이 코스로"
+      ]
+     },
+     "sources": [
+      "팝가 상세 페이지"
+     ],
+     "verification_note": "기간·주소·운영시간·입장 마감 확인. 입장료 미확인"
+    },
+    {
+     "id": "shinchan-03",
+     "collab_name": "52TOYS 팝업 @ 용산 아이파크몰 — 짱구·스티치·도라에몽",
+     "brand": "52TOYS",
+     "sales_channels": [
+      "용산 아이파크몰 리빙파크 6F 현장"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-10-09",
+      "end": "2026-12-31"
+     },
+     "official_urls": [
+      "https://popga.co.kr/content/magazine/532"
+     ],
+     "image_urls": [],
+     "prices": [
+      {
+       "item": "블라인드박스·피규어",
+       "krw": null,
+       "note": "미확인"
+      }
+     ],
+     "lineup": [
+      "52TOYS 블라인드박스",
+      "짱구 굿즈",
+      "스티치(디즈니) 굿즈",
+      "도라에몽 굿즈",
+      "하츠네 미쿠 등"
+     ],
+     "features": [
+      "여러 IP를 한 공간에 모은 블라인드박스·소장 피규어 팝업",
+      "짱구·스티치 수요를 함께 노린 구성"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "용산 아이파크몰 리빙파크 6층",
+      "address": "서울 용산구 한강대로23길 55",
+      "period": "2026-10-09 ~ 2026-12-31",
+      "hours": "월~목 10:30-20:30 / 금~일 10:30-21:00",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "용산에서 짱구·스티치 블라인드박스 뽑기",
+      "body_points": [
+       "10/9~12/31",
+       "아이파크몰 6층",
+       "금~일은 21시까지"
+      ]
+     },
+     "sources": [
+      "팝가 11월 용산 팝업 정리"
+     ],
+     "verification_note": "기간·장소·운영시간 확인. 상품 가격 미공개, 이미지 미확보"
+    }
+   ]
+  },
+  {
+   "id": "monchhichi",
+   "name_ko": "몬치치 (Monchhichi)",
+   "items": [
+    {
+     "id": "monchhichi-01",
+     "collab_name": "배스킨라빈스 × 몬치치 — 랜덤 파우치 키링 & 말랑 크로스백",
+     "brand": "배스킨라빈스",
+     "sales_channels": [
+      "전국 배스킨라빈스 매장",
+      "배라앱",
+      "해피오더",
+      "카카오톡 예약하기"
+     ],
+     "status": "종료(한정)",
+     "period": {
+      "pouch_reservation": "2026-09-28 ~ 2026-09-29",
+      "pouch_pickup": "2026-09-30 ~ 2026-10-02",
+      "bag_reservation": "2026-10-13 ~ 2026-10-15",
+      "bag_sale": "2026-10-16 ~ 2026-10-18"
+     },
+     "official_urls": [
+      "https://www.baskinrobbins.co.kr/information-center/press/view.php?findword=&page=1&seq=1488"
+     ],
+     "image_urls": [],
+     "prices": [
+      {
+       "item": "몬치치 랜덤 파우치 키링(4종 랜덤)",
+       "krw": 5900,
+       "note": "쿼터 이상 아이스크림 구매 시"
+      },
+      {
+       "item": "몬치치 말랑 크로스백(2종)",
+       "krw": 8900,
+       "note": "쿼터 이상 아이스크림 구매 시"
+      }
+     ],
+     "lineup": [
+      "랜덤 파우치 키링 4종",
+      "말랑 크로스백 2종(몬치치·치무탄)"
+     ],
+     "features": [
+      "파우치+키링 겸용 설계",
+      "실리콘 소재 크로스백 + 도트 패턴 스트랩",
+      "아이스크림 구매 조건형 굿즈, 한정 수량"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 배스킨라빈스 매장",
+      "address": "지점별 상이",
+      "period": "종료(2026-10-18)",
+      "hours": "매장별 상이",
+      "reservation": "사전예약 후 지정 매장 픽업(종료)"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "아이스크림 사면 5,900원…배스킨 몬치치 굿즈",
+      "body_points": [
+       "파우치 키링 5,900원",
+       "크로스백 8,900원",
+       "쿼터 이상 구매 조건"
+      ]
+     },
+     "sources": [
+      "배스킨라빈스 보도자료 2026-09-28, 2026-10-13"
+     ],
+     "verification_note": "공식 보도자료 2건에서 가격·일정 확인. 이미지는 공식 페이지가 공용 공유 이미지만 제공해 미확보"
+    },
+    {
+     "id": "monchhichi-02",
+     "collab_name": "디자인스킨 × 몬치치 스마트폰 액세서리 12종",
+     "brand": "디자인스킨",
+     "sales_channels": [
+      "무신사"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-16T10:00:00+09:00"
+     },
+     "official_urls": [
+      "https://www.luck-d.com/agit/news/3800",
+      "https://www.musinsa.com/curator/goods/OIpTQS"
+     ],
+     "image_urls": [
+      "https://static.luck-d.com/community/board/3800/thumbnail_1794804291722.webp"
+     ],
+     "prices": [
+      {
+       "item": "12종",
+       "krw": null,
+       "note": "미확인"
+      }
+     ],
+     "lineup": [
+      "그래픽 폰케이스(4가지 마감)",
+      "그래픽톡·구슬톡",
+      "카드 포켓·레더 포켓·에폭시 카드 포켓",
+      "아이패드 그래픽 클리어 케이스",
+      "에어팟 맥스용 PC 클리어 케이스",
+      "에어팟·버즈용 PC 클리어 케이스(키링 동봉)"
+     ],
+     "features": [
+      "몬치치 표정을 그래픽으로 풀어낸 빈티지 무드",
+      "케이스 마감 4종(기본·글라스·미러·에폭시)",
+      "무신사 단독 판매"
+     ],
+     "offline": {
+      "visitable": false,
+      "venue": "무신사 온라인",
+      "address": null,
+      "period": null,
+      "hours": null,
+      "reservation": null
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "폰케이스에 몬치치 — 12종, 무신사 단독",
+      "body_points": [
+       "11/16 10시 오픈",
+       "케이스 4가지 마감",
+       "에어팟·아이패드 케이스까지"
+      ]
+     },
+     "sources": [
+      "럭드 2026-11-16",
+      "무신사 기획전"
+     ],
+     "verification_note": "구성·판매처 확인. 가격 미표기"
+    },
+    {
+     "id": "monchhichi-03",
+     "collab_name": "헉슬리 × 몬치치 홀리데이 한정 핸드크림 기획세트",
+     "brand": "헉슬리",
+     "sales_channels": [
+      "CJ올리브영 온·오프라인"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-01",
+      "end": "2026-11-30",
+      "note": "'올영픽' 11월, 11/1~7 '오!블랙' 할인"
+     },
+     "official_urls": [
+      "https://www.seoul.co.kr/news/economy/2026/10/28/20261028500235",
+      "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A000000156811"
+     ],
+     "image_urls": [
+      "https://img.seoul.co.kr//img/upload/2026/10/28/SSC_20261028144201_O2.png.webp"
+     ],
+     "prices": [
+      {
+       "item": "퍼퓸 핸드크림 6종 택1(몬치치 에디션 포함)",
+       "krw": 15000,
+       "sale_krw": 13500,
+       "note": "올리브영 표시가. 기획세트 전용가는 미공개"
+      }
+     ],
+     "lineup": [
+      "모로칸 가드너 핸드크림 + 몬치치 레드 파우치",
+      "코튼 헤이즈 핸드크림 + 몬치치 레드 파우치"
+     ],
+     "features": [
+      "코튼 헤이즈는 퍼퓸 향을 핸드크림으로 처음 출시",
+      "11월 내 협업 포함 5만 원 이상 구매 시 몬치치 보조배터리 증정",
+      "기획세트 구매 시 몬치치 파우치 증정"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 올리브영 매장(취급 매장 상이)",
+      "address": "지점별 상이",
+      "period": "2026-11-01 ~ 2026-11-30",
+      "hours": "매장별 상이",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "연말 선물 1순위? 몬치치 파우치 붙은 핸드크림",
+      "body_points": [
+       "13,500원, 11월 한정",
+       "코튼 헤이즈 핸드크림 첫 출시",
+       "5만 원 이상 사면 몬치치 보조배터리"
+      ]
+     },
+     "sources": [
+      "서울신문 2026-10-28",
+      "한국경제TV 2026-10-30",
+      "올리브영 상품 페이지"
+     ],
+     "verification_note": "브랜드 보도 + 올리브영 표시가 확인. 세트 전용 가격 미공개"
+    },
+    {
+     "id": "monchhichi-04",
+     "collab_name": "애프터블로우 × 몬치치 스페셜 퍼퓸 기획세트 6종",
+     "brand": "애프터블로우",
+     "sales_channels": [
+      "CJ올리브영 온·오프라인"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-01",
+      "end": "2026-11-30",
+      "note": "11/1~7 블랙프라이데이 프로모션"
+     },
+     "official_urls": [
+      "http://www.e2news.com/news/articleView.html?idxno=335653",
+      "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?dispCatNo=100000100050013&goodsNo=A000000263474"
+     ],
+     "image_urls": [
+      "https://cdn.e2news.com/news/thumbnail/202610/335653_233872_1648_v150.jpg"
+     ],
+     "prices": [
+      {
+       "item": "헤어 퍼퓸 미스트 80ml 2종 택1",
+       "krw": 24000,
+       "sale_krw": 16300
+      },
+      {
+       "item": "오 드 퍼퓸 15종 택1",
+       "krw": 42000,
+       "sale_krw": 31760,
+       "note": "33,500원 표시 옵션 다수"
+      },
+      {
+       "item": "솔리드 퍼퓸 9종 택1",
+       "krw": 26900
+      }
+     ],
+     "lineup": [
+      "오 드 퍼퓸 + 베비치치 캡 커버",
+      "솔리드 퍼퓸 + 몬치치 얼굴 파우치",
+      "헤어 퍼퓸 미스트 + 치무탄/챠무 헤어 빗 키링"
+     ],
+     "features": [
+      "라인 3종 × 향 2종 = 기획세트 6종",
+      "캐릭터별 굿즈가 다름(베비치치·몬치치·치무탄·챠무)",
+      "일부 옵션 품절·품절 임박"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 올리브영 매장",
+      "address": "지점별 상이",
+      "period": "2026-11-01 ~ 2026-11-30",
+      "hours": "매장별 상이",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "몬치치 얼굴 파우치에 향수까지 — 올영 11월 한정",
+      "body_points": [
+       "미스트 16,300원",
+       "솔리드 26,900원",
+       "오드 31,760원부터"
+      ]
+     },
+     "sources": [
+      "이투뉴스 2026-11-01",
+      "올리브영 상품 페이지",
+      "넥스트유니온 가격 정리"
+     ],
+     "verification_note": "구성 공식 확인, 가격은 올리브영 표시가 + 2차 정리 교차"
+    }
+   ]
+  },
+  {
+   "id": "rilakkuma",
+   "name_ko": "리락쿠마 (Rilakkuma)",
+   "items": [
+    {
+     "id": "rilakkuma-01",
+     "collab_name": "산엑스 성수 미니스토어 '리락쿠마 스밋코구라시 PLUS' (+한복 리락쿠마)",
+     "brand": "산엑스(San-X)",
+     "sales_channels": [
+      "팝콘D스퀘어 성수 4F 산엑스 미니스토어",
+      "한국 공식 스토어(AK플라자 홍대·롯데백화점 잠실)"
+     ],
+     "status": "상시 운영",
+     "period": {
+      "grand_open": "2026-11-12",
+      "hanbok_first_sale": "2026-09-22"
+     },
+     "official_urls": [
+      "https://www.san-x.co.jp/ko/blog/2026-11-post-0234510/",
+      "https://www.san-x.co.jp/en/blog/2026-09-post-0554000/"
+     ],
+     "image_urls": [
+      "https://www.san-x.co.jp/uploads/1794440950240-gv2pxm7nl9/1110_banner.webp"
+     ],
+     "prices": [
+      {
+       "item": "한복 리락쿠마·스미코구라시 라인",
+       "krw": null,
+       "note": "미확인(가격 미공개). 5만 원 이상 구매 시 간판 마그넷 랜덤 증정"
+      }
+     ],
+     "lineup": [
+      "한복 리락쿠마 인형·참",
+      "한복 스미코구라시",
+      "매직 테마 해외 한정 상품",
+      "문구·잡화"
+     ],
+     "features": [
+      "한국 한정 '한복 리락쿠마' — 전통 장신구 모티브 리락쿠마 참 포함",
+      "성수점은 딸기 모티브 'Sky room' 인테리어",
+      "층 구성: 1F 카페(쿠라리에), 2F 이치방쿠지, 3F 모노샵, 4F 산엑스, 5~6F 팝업"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "팝콘D스퀘어 성수 4F",
+      "address": "서울 성동구 연무장길 37-29 (성수역 4번 출구 도보 약 4분)",
+      "period": "2026-11-12 ~ (상시)",
+      "hours": "매일 11:00-20:00",
+      "reservation": "없음(혼잡 시 번호표 배포 가능)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "성수에 산엑스 공식숍이 생겼다 — 한복 리락쿠마",
+      "body_points": [
+       "팝콘D스퀘어 성수 4층",
+       "매일 11~20시",
+       "한국 한정 한복 리락쿠마 + 매직 테마"
+      ]
+     },
+     "sources": [
+      "산엑스 공식 블로그 2026-11-12",
+      "산엑스 공식 블로그(한복 한정) 2026-09-18",
+      "팝콘D스퀘어 층별 안내"
+     ],
+     "verification_note": "주소·오픈일·운영시간·상품 공식 확인. 가격 미공개"
+    },
+    {
+     "id": "rilakkuma-02",
+     "collab_name": "리락쿠마 × 하이큐!! 콜라보 상품 판매 (서울 SMG CAFE)",
+     "brand": "Production I.G / 산엑스",
+     "sales_channels": [
+      "SMG AK플라자 홍대 3층 SMG CAFE 물판 코너"
+     ],
+     "status": "출시 예정",
+     "period": {
+      "start": "2026-12-03",
+      "end": "2027-01-13"
+     },
+     "official_urls": [
+      "https://www.igport-onlinestore.com/pages/rilakkuma-haikyu",
+      "https://www.san-x.co.jp/ko/blog/2026-10-post-0720240/"
+     ],
+     "image_urls": [
+      "https://www.san-x.co.jp/uploads/1793258423538-hk573gsv1m/gazo01.webp"
+     ],
+     "prices": [
+      {
+       "item": "한국 판매가",
+       "krw": null,
+       "note": "미확인. 일본 기준 행잉 봉제인형 21종 각 3,200엔"
+      }
+     ],
+     "lineup": [
+      "리락쿠마·코리락쿠마·키이로이토리·차이로이코구마 유니폼 디자인",
+      "행잉 봉제인형 21종(해외 매장 미판매)",
+      "기타 콜라보 상품"
+     ],
+     "features": [
+      "카라스노·아오바죠사이·네코마·후쿠로다니·이나리자키 5개 학교 유니폼",
+      "행잉 봉제인형 21종은 일본 외 매장에서 판매하지 않음 → 서울은 다른 라인업 중심",
+      "일본 팝업 구매 특전은 3,300엔당 엽서 13종 랜덤 1장(한국 특전 미확인)"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "SMG AK플라자 홍대 3층 SMG CAFE 물판 코너",
+      "address": "서울 마포구 양화로 188 (AK플라자 홍대)",
+      "period": "2026-12-03 ~ 2027-01-13",
+      "hours": "미확인(AK플라자 영업시간 기준 예상)",
+      "reservation": "미확인"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "리락쿠마가 배구 유니폼을 입었다 — 12/3 홍대",
+      "body_points": [
+       "12/3~2027.1.13",
+       "AK플라자 홍대 3층",
+       "5개 학교 유니폼 한정 디자인"
+      ]
+     },
+     "sources": [
+      "산엑스 공식 블로그 2026-10-30",
+      "IG Port 공식 콜라보 페이지"
+     ],
+     "verification_note": "서울 일정·장소 공식 확인. 한국 가격·특전 미확인"
+    },
+    {
+     "id": "rilakkuma-03",
+     "collab_name": "CGV × 리락쿠마 '리락쿠마 식빵 랜덤 키링'",
+     "brand": "CGV",
+     "sales_channels": [
+      "전국 CGV 62개 지정 지점 매점",
+      "네이버 CGV 브랜드스토어"
+     ],
+     "status": "재고 소진 시까지(1차·2차 대부분 소진 추정)",
+     "period": {
+      "first": "2026-09-03",
+      "second": "2026-09-09"
+     },
+     "official_urls": [
+      "https://fanplus.co.kr/community/misc/135078506",
+      "https://theqoo.net/square/4332640040"
+     ],
+     "image_urls": [],
+     "prices": [
+      {
+       "item": "식빵 랜덤 키링 단품",
+       "krw": 5500
+      },
+      {
+       "item": "콤보(팝콘M+탄산M+키링 1개)",
+       "krw": 11000
+      }
+     ],
+     "lineup": [
+      "리락쿠마 A·B",
+      "코리락쿠마",
+      "키이로이토리 A·B",
+      "리락쿠마&키이로이토리"
+     ],
+     "features": [
+      "약 50mm 미니 키링 6종 랜덤",
+      "1인 최대 8개(단품·세트 합산), 통신사 할인·쿠폰 불가",
+      "영화 미관람도 구매 가능, 포장 개봉 후 랜덤 특성상 교환·환불 불가"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 CGV 62개 지정 지점(서울 14·경기 16·인천 3·대전충청 8·대구경북 5·부산울산경남 7·광주전라강원제주 9)",
+      "address": "지점별 상이",
+      "period": "2026-09-03 ~ 재고 소진 시",
+      "hours": "지점별 상이",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "5,500원 식빵 키링 — CGV 62개 지점만 판다",
+      "body_points": [
+       "6종 랜덤",
+       "콤보 11,000원",
+       "1인 8개 제한, 소진 시 종료"
+      ]
+     },
+     "sources": [
+      "더쿠 공지 캡처 2026-09-02",
+      "팬플러스 정리",
+      "인포나눔(2차 판매)"
+     ],
+     "verification_note": "CGV 공식 페이지가 동적이라 직접 확인 불가 → 공지 캡처·2차 정리 교차. 이미지 미확보"
+    },
+    {
+     "id": "rilakkuma-04",
+     "collab_name": "스파오(SPAO) × 리락쿠마 FW 반집업 플리스 기획전",
+     "brand": "스파오",
+     "sales_channels": [
+      "스파오닷컴",
+      "전국 스파오 매장"
+     ],
+     "status": "진행중(2026 FW 시즌)",
+     "period": {
+      "note": "FW 시즌 기획전 'COLORFUL TOGETHER'"
+     },
+     "official_urls": [
+      "https://www.spao.com/p/planshop?exhibitionNo=202610004479"
+     ],
+     "image_urls": [
+      "https://spao-item.elandrs.com/r/image/display/2026-10-15/b4885e7b-4df9-4661-b1a3-39d86566c9c4.jpeg"
+     ],
+     "prices": [
+      {
+       "item": "반집업 플리스 라인",
+       "krw": null,
+       "note": "미확인(기획전 페이지 가격 미표기)"
+      }
+     ],
+     "lineup": [
+      "FW 반집업 플리스(리락쿠마 라인)",
+      "망그러진곰 라인 병행"
+     ],
+     "features": [
+      "가족 단위 컬러·개성 테마의 패밀리 기획전",
+      "리락쿠마 + 망그러진곰 동시 전개"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "전국 스파오 매장",
+      "address": "지점별 상이",
+      "period": "2026 FW 시즌",
+      "hours": "매장별 상이",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "캐릭터모음집",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "겨울 플리스에 리락쿠마 — 스파오 FW 콜라보",
+      "body_points": [
+       "반집업 플리스 기획전",
+       "온라인·매장 동시",
+       "가격은 스파오닷컴 확인"
+      ]
+     },
+     "sources": [
+      "스파오닷컴 기획전 페이지"
+     ],
+     "verification_note": "기획전 존재·테마 확인, 가격 미표기"
+    }
+   ]
+  },
+  {
+   "id": "snoopy",
+   "name_ko": "스누피 (피너츠 / Peanuts)",
+   "items": [
+    {
+     "id": "snoopy-01",
+     "collab_name": "2026 MAMA AWARDS × 피너츠 'Happiness is Music' 팝업 & 공식 MD",
+     "brand": "CJ ENM(Mnet) × 피너츠",
+     "sales_channels": [
+      "롯데백화점 에비뉴엘 월드타워점 B1 팝업(종료)",
+      "올리브영N 성수 2층 팝업(종료)",
+      "엠넷플러스머치 온라인(~11/29)"
+     ],
+     "status": "팝업 종료 / 온라인 2026-11-29까지",
+     "period": {
+      "jamsil": "2026-11-14 ~ 2026-11-22",
+      "seongsu": "2026-11-14 ~ 2026-11-23",
+      "online": "~2026-11-29"
+     },
+     "official_urls": [
+      "https://cjnews.cj.net/2026-mama-awards-%EC%84%B8%EA%B3%84%EC%A0%81-%EB%B8%8C%EB%9E%9C%EB%93%9C%EC%99%80%EC%9D%98-%EC%8A%A4%ED%8E%98%EC%85%9C-%EC%BB%AC%EB%9E%98%EB%B2%84%EB%B6%80%ED%84%B0-%EC%9C%A0%EB%8B%88%EB%B2%84/",
+      "https://popply.co.kr/popup/6720"
+     ],
+     "image_urls": [
+      "https://img.cjnews.cj.net/wp-content/uploads/2026/11/ENM_05_thumbnail.jpg"
+     ],
+     "prices": [
+      {
+       "item": "집업 후디",
+       "krw": 99000
+      },
+      {
+       "item": "후디",
+       "krw": 89000
+      },
+      {
+       "item": "티셔츠",
+       "krw": 55000
+      },
+      {
+       "item": "무드라이트",
+       "krw": 55000
+      },
+      {
+       "item": "캡",
+       "krw": 49000
+      },
+      {
+       "item": "봉제 인형",
+       "krw": 45000
+      },
+      {
+       "item": "토트백·콜드컵",
+       "krw": 39000
+      },
+      {
+       "item": "여권 케이스",
+       "krw": 29000
+      },
+      {
+       "item": "파우치·봉제 키링",
+       "krw": 27000
+      },
+      {
+       "item": "네임 태그",
+       "krw": 25000
+      },
+      {
+       "item": "스카프",
+       "krw": 23000
+      },
+      {
+       "item": "데코 피규어·마그넷",
+       "krw": 18000
+      },
+      {
+       "item": "아크릴 키링",
+       "krw": 15000
+      },
+      {
+       "item": "카드 스티커",
+       "krw": 12000
+      },
+      {
+       "item": "핀 배지",
+       "krw": 10000
+      },
+      {
+       "item": "북마크",
+       "krw": 8000
+      }
+     ],
+     "lineup": [
+      "피너츠 단독 MD('Happiness is Music')",
+      "MAMA × 피너츠 × 케이스티파이(테크)",
+      "MAMA × 피너츠 × 맨하탄 레코즈(의류)",
+      "2026 오리지널 MD·역대 MD"
+     ],
+     "features": [
+      "19품목 8,000~99,000원(엠넷플러스머치 온라인 표시가)",
+      "팝업 3존: 역대 MD 전시존 / 2026 오리지널 MD존 / 스누피 MD 전시존",
+      "레드카펫 초대 스크래치 복권(영수증 10만 원당 1장), 10만 원 이상 구매 시 기프트 패키지 선착순",
+      "잠실·오사카 부스는 현금 미수취, 온라인 주문은 12/21 이후 발송"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "롯데백화점 에비뉴엘 월드타워점 B1 / 올리브영N 성수 2층 K-TREND존",
+      "address": "서울 송파구 올림픽로 300 / 서울 성동구 연무장7길 13",
+      "period": "2026-11-14 ~ 2026-11-22(잠실) / ~2026-11-23(성수) — 종료",
+      "hours": "잠실: 월~목 10:00-20:00, 금~일 10:30-20:30 / 성수: 매일 10:00-22:30",
+      "reservation": "없음(무료 입장)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "방구석키티"
+     ],
+     "carousel": {
+      "cover_headline": "스누피가 MAMA 무대에 — 9일짜리 팝업에 사람이 몰렸다",
+      "body_points": [
+       "잠실 11/14~22, 성수 11/14~23",
+       "온라인 MD는 11/29까지",
+       "8,000원 북마크부터 99,000원 후디까지"
+      ]
+     },
+     "sources": [
+      "CJ 뉴스룸 2026-11-15",
+      "팝플리 팝업 상세",
+      "엠넷플러스머치 가격 정리(2차 블로그)"
+     ],
+     "verification_note": "기간·장소·이벤트는 공식 확인. 가격표는 엠넷플러스머치 화면 정리 기준으로, 공식 페이지 품목별 재확인은 실패"
+    },
+    {
+     "id": "snoopy-02",
+     "collab_name": "케이스티파이 × 2026 MAMA AWARDS × 피너츠 3자 협업 컬렉션",
+     "brand": "CASETiFY",
+     "sales_channels": [
+      "케이스티파이 공식 웹사이트",
+      "CASETiFY Co-Lab 앱",
+      "국내 15개 오프라인 매장(도산 포함)"
+     ],
+     "status": "진행중",
+     "period": {
+      "start": "2026-11-12",
+      "note": "'HAPPINESS IS MUSIC' 핑크 디자인은 11월 한정으로 케이스티파이 잠실점·성수점·오사카·LUCUA 오사카 4곳 단독"
+     },
+     "official_urls": [
+      "https://www.luck-d.com/agit/news/3821",
+      "https://www.newsbuzz.co.kr/news/articleView.html?idxno=26898"
+     ],
+     "image_urls": [
+      "https://static.luck-d.com/community/board/3821/thumbnail_1795068483878.webp"
+     ],
+     "prices": [
+      {
+       "item": "전 제품",
+       "krw": null,
+       "note": "미확인"
+      }
+     ],
+     "lineup": [
+      "폰케이스",
+      "테크 액세서리",
+      "바운스 캐리어",
+      "크로스바디 백",
+      "러기지 태그"
+     ],
+     "features": [
+      "스누피의 페르소나 '조 쿨(Joe Cool)' × 우주·음악 모티브",
+      "MAMA 메인 콘셉트 '뮤직 인터스텔라'에서 착안",
+      "트래블 라인업 포함(공연장 방문 팬 겨냥)"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "케이스티파이 잠실점·성수점 포함 국내 15개 매장",
+      "address": "지점별 상이",
+      "period": "2026-11-12 ~ (핑크 디자인 11월 한정)",
+      "hours": "미확인",
+      "reservation": "없음"
+     },
+     "recommended_accounts": [
+      "방구석키티",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "조 쿨이 우주로 — MAMA × 피너츠 × 케이스티파이",
+      "body_points": [
+       "11/12 출시",
+       "핑크 디자인은 잠실·성수에서만 11월 한정",
+       "트래블 라인업까지"
+      ]
+     },
+     "sources": [
+      "럭드 2026-11-19",
+      "뉴스버즈 2026-11-14",
+      "CJ 뉴스룸"
+     ],
+     "verification_note": "협업 사실·출시일·판매처 확인. 가격 미공개"
+    },
+    {
+     "id": "snoopy-03",
+     "collab_name": "스누피 플레이스 신세계백화점 강남점 — 공식 상설 스토어",
+     "brand": "신세계백화점 × 피너츠",
+     "sales_channels": [
+      "신세계백화점 강남점 10층 매장"
+     ],
+     "status": "상시 운영",
+     "period": {
+      "open": "2024-10-28",
+      "note": "국내 유통시설 내 첫 스누피 정규 매장"
+     },
+     "official_urls": [
+      "https://www.shinsegaegroupnewsroom.com/shinsegae-baek-gangnam-store-snoopy/",
+      "https://goods-route.com/shop/seunupi-peulreiseu-sinsegye-gangnamjeom"
+     ],
+     "image_urls": [
+      "https://images.shinsegaegroupnewsroom.com/wp-content/uploads/2025/08/shinsegae-baek-gangnam-store-snoopy_2.png"
+     ],
+     "prices": [
+      {
+       "item": "카페 음료",
+       "krw": 8000,
+       "note": "8,000원대(오픈 당시 안내)"
+      },
+      {
+       "item": "베이커리",
+       "krw": 7000,
+       "note": "7,000~9,000원(오픈 당시 안내). 굿즈 가격 미확인"
+      }
+     ],
+     "lineup": [
+      "피너츠 굿즈숍(강남점 단독 상품)",
+      "베이커리 카페",
+      "포토부스"
+     ],
+     "features": [
+      "약 40평(132㎡) 규모, 펜화 인테리어",
+      "스누피 만화 프레임 즉석사진 포토부스",
+      "식기·봉제인형 등 상시 취급"
+     ],
+     "offline": {
+      "visitable": true,
+      "venue": "신세계백화점 강남점 10층",
+      "address": "서울 서초구 신반포로 176",
+      "period": "상시",
+      "hours": "월~목 10:30-20:00 / 금~일 10:30-20:30 (백화점 휴무일 휴무)",
+      "reservation": "없음 (02-3479-1131)"
+     },
+     "recommended_accounts": [
+      "애플트립",
+      "캐릭터모음집"
+     ],
+     "carousel": {
+      "cover_headline": "스누피 상설 매장은 전국에 여기 하나 — 강남 신세계 10층",
+      "body_points": [
+       "매일 10:30~20:00(금~일 20:30)",
+       "카페 + 굿즈숍",
+       "강남점 단독 상품과 포토부스"
+      ]
+     },
+     "sources": [
+      "신세계그룹 뉴스룸 2024-10-28",
+      "굿즈루트 매장 정보",
+      "2026-10 방문 후기"
+     ],
+     "verification_note": "주소·전화·요일별 운영시간 확인. 굿즈 가격 미확인"
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "counts_by_character": {
+   "산리오 (헬로키티 중심)": 5,
+   "디즈니": 3,
+   "포켓몬": 4,
+   "미피 (Miffy)": 4,
+   "짱구 (크레용신짱)": 3,
+   "몬치치 (Monchhichi)": 4,
+   "리락쿠마 (Rilakkuma)": 4,
+   "스누피 (피너츠 / Peanuts)": 3
+  },
+  "visitable_items": [
+   "sanrio-01",
+   "sanrio-02",
+   "sanrio-04",
+   "sanrio-05",
+   "disney-01",
+   "disney-02",
+   "disney-03",
+   "pokemon-01",
+   "pokemon-02",
+   "pokemon-03",
+   "pokemon-04",
+   "miffy-01",
+   "miffy-02",
+   "miffy-04",
+   "shinchan-01",
+   "shinchan-02",
+   "shinchan-03",
+   "monchhichi-01",
+   "monchhichi-03",
+   "monchhichi-04",
+   "rilakkuma-01",
+   "rilakkuma-02",
+   "rilakkuma-03",
+   "rilakkuma-04",
+   "snoopy-01",
+   "snoopy-02",
+   "snoopy-03"
+  ],
+  "upcoming_december": [
+   {
+    "date": "2026-12-01",
+    "item": "케이스티파이 × 포켓몬 30주년 (17:00 KST)"
+   },
+   {
+    "date": "2026-12-02",
+    "item": "스타벅스 × 헬로키티 2차 MD 12종"
+   },
+   {
+    "date": "2026-12-03",
+    "item": "리락쿠마 × 하이큐!! (AK플라자 홍대 SMG CAFE)"
+   },
+   {
+    "date": "2026-12-04",
+    "item": "젤라또 피케 × 산리오 팝업 (신세계 센텀시티)"
+   }
+  ],
+  "image_url_coverage": {
+   "confirmed": 27,
+   "total": 30,
+   "missing": [
+    "shinchan-03",
+    "monchhichi-01",
+    "rilakkuma-03"
+   ]
+  },
+  "notes": [
+   "산리오 아이파크몰 팝업은 매체별 기간 표기가 달라 몰 연출(11/13)과 기프트숍(11/25)을 병기",
+   "스타벅스 헬로키티 입체 머그 가격은 공식 공지에 없어 신세계몰 기준으로 표기",
+   "뚜레쥬르 미피 제품은 가맹점 재량 가격이라 범위로 표기",
+   "연합뉴스 등 '재판매 및 DB금지' 이미지는 카드 제작 시 브랜드 공식 이미지로 대체 권장"
+  ]
+ }
+};
