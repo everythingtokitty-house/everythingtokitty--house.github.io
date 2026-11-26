@@ -5,7 +5,7 @@
 - 사이트: https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/berainbow/
 - 자동화 데이터: `./data/dashboard.json`
 - 데이터 생성: `python3 site/berainbow/tools/build_data.py` → `data/dashboard.json`, `data/dashboard.js`
-- 검수: `python3 tools/audit_berainbow.py`, `python3 tools/dom_smoke_test.py`
+- 검수: `python3 tools/audit_berainbow.py`, `python3 tools/dom_smoke_test.py` (신규 상품 등록 → 새로고침 유지 → 삭제 포함)
 - 배포: `bash scripts/deploy-berainbow.sh` (berainbow/ 밖 파일이 바뀌면 중단)
 
 ## 탭 구성
@@ -13,7 +13,7 @@
 2. 쿠팡·스마트스토어 SEO — 상품명 3안, 태그 20개, 대표이미지 정책, 배너 CTA
 3. 경쟁 계정 & 벤치마킹 — 7곳 + 공통 성공 공식
 4. 시즌별 마케팅 & 영상 기획 — 12~5월 로드맵, 릴스 30초 콘티 3종
-5. GPT 자동화 프롬프트 허브 — **대상 제품 선택/입력**(기본 프리셋 · 스토어 판매 중 · 단가 탭에 저장한 제품 · 직접 입력) 시 4종 프롬프트(블로그·배너·상세·릴스)의 [사실]·타깃·키워드가 즉시 치환 + JSON 사용법
+5. GPT 자동화 프롬프트 허브 — **대상 제품 선택/입력**(기본 프리셋 · 스토어 판매 중 · 단가 탭에 저장한 제품 · 직접 입력) 시 4종 프롬프트(블로그·배너·상세·릴스)의 [사실]·타깃·키워드가 즉시 치환 + JSON 사용법. 빠른 칩 5번째 **`+ 신규 상품`**은 입력칸 5개를 비우고 상품명으로 포커스를 옮기며, **`💾 신규 상품으로 등록`**을 누르면 `localStorage`(`berainbow.prompt.customProducts.v1`)에 저장돼 드롭다운 '내가 등록한 신규 상품' 그룹과 칩에 남는다(선택 시 `🗑 등록 상품 삭제`).
 6. 🧮 단가·마진 계산기 — 재료비·포장비·인건비 + 수수료·물류·세금 → 순마진·내 실수령, 적정 판매가 3단계, 제품별 저장 목록(localStorage)
 
 ## 채널 원칙

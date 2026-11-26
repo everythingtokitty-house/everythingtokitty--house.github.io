@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="./styles.css?v=1795662254">
+<link rel="stylesheet" href="./styles.css?v=1795667369">
 </head>
 <body>
 <a class="skip-link" href="#main">본문으로 바로 가기</a>
@@ -248,6 +248,12 @@
         </label>
       </div>
 
+      <div class="pt-actions" id="prompt-actions">
+        <button type="button" class="pt-register" id="prompt-register">💾 신규 상품으로 등록</button>
+        <button type="button" class="pt-delete" id="prompt-delete" hidden>🗑 등록 상품 삭제</button>
+        <p class="pt-register-hint" id="prompt-register-hint">상품명을 채운 뒤 등록하면 '내가 등록한 신규 상품' 그룹과 빠른 칩에 저장됩니다. 다음에도 클릭 한 번으로 불러와 4종 프롬프트를 만들 수 있습니다.</p>
+      </div>
+
       <p class="pt-note" id="prompt-note" hidden></p>
       <p class="pt-hint" id="prompt-hint"></p>
     </div>
@@ -367,7 +373,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="./data/dashboard.js?v=1795662254" defer></script>
-<script src="./app.js?v=1795662254" defer></script>
+<script src="./data/dashboard.js?v=1795667369" defer></script>
+<script src="./app.js?v=1795667369" defer></script>
 </body>
 </html>

@@ -747,6 +747,8 @@
 
   /* ---------- 대상 제품 선택 · 프롬프트 실시간 치환 ---------- */
   var KEY_PROMPT_TARGET = "berainbow.prompt.target.v1";
+  /* + 신규 상품 — 직접 등록한 상품(이 브라우저에 영구 저장) */
+  var KEY_CUSTOM_PRODUCTS = "berainbow.prompt.customProducts.v1";
   var PROMPT_FIELD_KEYS = ["name", "spec", "price", "target", "keyword"];
   var PROMPT_VALUE_KEYS = ["name", "spec", "price", "target", "keyword", "options", "shipping", "faq", "theme"];
   var promptTarget = null;
@@ -791,7 +793,38 @@
       };
     });
   }
-  function allPromptItems() { return presetPromptItems().concat(savedPromptItems()); }
+  /* '+ 신규 상품'으로 직접 등록한 제품 — localStorage 에 영구 저장 */
+  function customProductList() {
+    var raw = load(KEY_CUSTOM_PRODUCTS, []);
+    if (!raw || typeof raw !== "object" || !raw.length) return [];
+    return raw.filter(function (p) { return p && p.id && String(p.name || "").trim(); });
+  }
+  function saveCustomProductList(list) { save(KEY_CUSTOM_PRODUCTS, list); }
+  function customPromptItem(p) {
+    return {
+      id: "mine:" + p.id,
+      group: "mine",
+      chip: true,
+      badge: "내 상품",
+      label: p.name,
+      chip_label: p.name,
+      name: p.name,
+      spec: p.spec || "",
+      price: p.price || "",
+      target: p.target || "",
+      keyword: p.keyword || "",
+      options: p.options || "",
+      shipping: p.shipping || "",
+      faq: p.faq || "",
+      theme: p.theme || "",
+      note: (promptData() && promptData().registered_note) || ""
+    };
+  }
+  function customPromptItems() { return customProductList().map(customPromptItem); }
+  function isMineId(id) { return String(id || "").indexOf("mine:") === 0; }
+  function allPromptItems() {
+    return presetPromptItems().concat(customPromptItems()).concat(savedPromptItems());
+  }
   function findPromptItem(id) {
     var list = allPromptItems(), i;
     for (i = 0; i < list.length; i++) { if (list[i].id === id) return list[i]; }
@@ -833,8 +866,10 @@
     if (!promptTarget) return;
     if (promptTarget.id === "custom") {
       var values = {};
-      PROMPT_VALUE_KEYS.forEach(function (k) { values[k] = promptTarget[k]; });
-      save(KEY_PROMPT_TARGET, { id: "custom", values: values });
+      PROMPT_VALUE_KEYS.forEach(function (k) {
+        values[k] = (promptTarget[k] === undefined || promptTarget[k] === null) ? "" : String(promptTarget[k]);
+      });
+      save(KEY_PROMPT_TARGET, { id: "custom", values: values, draft: !!promptTarget.draft });
     } else {
       save(KEY_PROMPT_TARGET, { id: promptTarget.id });
     }
@@ -842,18 +877,36 @@
   function loadPromptTarget() {
     var saved = load(KEY_PROMPT_TARGET, null);
     if (saved && saved.id) {
-      if (saved.id === "custom" && saved.values) return resolvePromptTarget(saved.values);
+      if (saved.id === "custom" && saved.values) {
+        /* '+ 신규 상품'으로 시작한 빈 칸은 빈 칸 그대로 복원 */
+        if (saved.draft) {
+          var draft = { id: "custom", group: "custom", label: customLabel(), note: newPromptNote(), draft: true };
+          PROMPT_VALUE_KEYS.forEach(function (k) {
+            var v = saved.values[k];
+            draft[k] = (v === undefined || v === null) ? "" : String(v);
+          });
+          return draft;
+        }
+        return resolvePromptTarget(saved.values);
+      }
       var item = findPromptItem(saved.id);
       if (item) return resolvePromptTarget(item);
     }
     return resolvePromptTarget(null);
   }
 
+  /* 빈 값이면 안내 문구로 채워 보여 줄 때 쓰는 현재 대상 이름 */
+  function promptDisplayName() {
+    var t = promptTarget || {};
+    var name = (t.name === undefined || t.name === null) ? "" : String(t.name).trim();
+    return name || (promptDefaults().name || "새 제품");
+  }
   function setPromptFieldValues() {
-    var t = resolvePromptTarget();
+    var t = promptTarget || {};
     PROMPT_FIELD_KEYS.forEach(function (k) {
       var n = $("prompt-" + k);
-      if (n && n.value !== t[k]) n.value = t[k];
+      var v = (t[k] === undefined || t[k] === null) ? "" : String(t[k]);
+      if (n && n.value !== v) n.value = v;
     });
     var note = $("prompt-note");
     if (note) {
@@ -861,7 +914,27 @@
       else { note.textContent = ""; note.hidden = true; }
     }
     var cur = $("prompt-current");
-    if (cur) cur.textContent = "지금 대상 · " + t.name;
+    if (cur) cur.textContent = "지금 대상 · " + promptDisplayName();
+    updatePromptActions();
+  }
+  /* 직접 등록한 상품을 고른 상태에서만 [삭제] 버튼 노출 */
+  function updatePromptActions() {
+    var del = $("prompt-delete");
+    if (!del) return;
+    var mine = !!(promptTarget && isMineId(promptTarget.id));
+    del.hidden = !mine;
+    if (mine) del.textContent = (promptData() && promptData().delete_label) || "🗑 등록 상품 삭제";
+  }
+
+  function promptChip(id, label, badge) {
+    var b = el("button", "pt-chip");
+    b.type = "button";
+    b.setAttribute("data-prompt-chip", id);
+    if (promptTarget && promptTarget.id === id) b.className = "pt-chip is-active";
+    b.appendChild(el("span", "pt-chip-label", label));
+    b.appendChild(el("span", "pt-chip-badge", badge));
+    b.addEventListener("click", function () { applyPromptItem(id); });
+    return b;
   }
 
   function renderPromptChips() {
@@ -870,15 +943,21 @@
     clear(root);
     presetPromptItems().forEach(function (it) {
       if (!it.chip) return;
-      var b = el("button", "pt-chip");
-      b.type = "button";
-      b.setAttribute("data-prompt-chip", it.id);
-      if (promptTarget && promptTarget.id === it.id) b.className = "pt-chip is-active";
-      b.appendChild(el("span", "pt-chip-label", it.chip_label || it.label));
-      b.appendChild(el("span", "pt-chip-badge", it.badge || "프리셋"));
-      b.addEventListener("click", function () { applyPromptItem(it.id); });
-      root.appendChild(b);
+      root.appendChild(promptChip(it.id, it.chip_label || it.label, it.badge || "프리셋"));
     });
+    /* 내가 등록한 신규 상품 — 저장한 순서대로 칩에 나열 */
+    customPromptItems().forEach(function (it) {
+      root.appendChild(promptChip(it.id, it.chip_label || it.label, it.badge || "내 상품"));
+    });
+    /* 5번째 버튼 — 직접 입력 초기화 */
+    var d = promptData() || {};
+    var nb = el("button", "pt-chip pt-chip--new");
+    nb.type = "button";
+    nb.setAttribute("data-prompt-new", "1");
+    nb.appendChild(el("span", "pt-chip-label", d.new_chip_label || "+ 신규 상품"));
+    nb.appendChild(el("span", "pt-chip-badge", d.new_badge || "직접 입력"));
+    nb.addEventListener("click", startNewPrompt);
+    root.appendChild(nb);
   }
 
   function renderPromptSelect() {
@@ -933,7 +1012,98 @@
     renderPromptSelect();
     setPromptFieldValues();
     renderPrompts();
-    toast("프롬프트 4종을 '" + promptTarget.name + "' 기준으로 바꿨어요.");
+    toast("프롬프트 4종을 '" + promptDisplayName() + "' 기준으로 바꿨어요.");
+  }
+
+  /* ---------- + 신규 상품 : 빈 칸으로 시작 · 등록 · 삭제 ---------- */
+  function newPromptNote() {
+    var d = promptData();
+    return (d && d.new_note) || "";
+  }
+  function blankPromptTarget() {
+    var t = { id: "custom", group: "custom", label: customLabel(), note: newPromptNote(), draft: true };
+    PROMPT_VALUE_KEYS.forEach(function (k) { t[k] = ""; });
+    return t;
+  }
+  function focusPromptName() {
+    var n = $("prompt-name");
+    if (n && n.focus) { try { n.focus(); } catch (e) { /* 구형 브라우저 */ } }
+  }
+  /* '+ 신규 상품' 칩 — 입력칸 5개를 비우고 직접 입력으로 전환 */
+  function startNewPrompt() {
+    promptTarget = blankPromptTarget();
+    persistPromptTarget();
+    renderPromptChips();
+    renderPromptSelect();
+    setPromptFieldValues();
+    renderPrompts();
+    focusPromptName();
+    toast("새 상품 입력을 시작했어요. 상품명부터 채우고 [💾 신규 상품으로 등록]을 눌러 주세요.");
+  }
+  /* 입력칸 5개 + 숨은 값(선택 기준·배송 등)을 합친 현재 값 */
+  function currentPromptValues() {
+    var t = promptTarget || {};
+    var out = {};
+    PROMPT_VALUE_KEYS.forEach(function (k) {
+      out[k] = (t[k] === undefined || t[k] === null) ? "" : String(t[k]);
+    });
+    PROMPT_FIELD_KEYS.forEach(function (k) {
+      var n = $("prompt-" + k);
+      if (n) out[k] = String(n.value === undefined || n.value === null ? "" : n.value);
+    });
+    return out;
+  }
+  /* [💾 신규 상품으로 등록] — 상품명이 있으면 localStorage 에 저장 후 바로 선택 */
+  function registerCustomProduct() {
+    var values = currentPromptValues();
+    var name = String(values.name || "").trim();
+    if (!name) {
+      toast("상품명을 먼저 입력해 주세요.");
+      focusPromptName();
+      return;
+    }
+    values.name = name;
+    var list = customProductList();
+    var found = null, i;
+    for (i = 0; i < list.length; i++) {
+      if (String(list[i].name || "").trim() === name) { found = list[i]; break; }
+    }
+    var updated = !!found;
+    if (!found) {
+      found = { id: "cp" + Date.now().toString(36) + Math.floor(Math.random() * 46656).toString(36) };
+      list.push(found);
+    }
+    PROMPT_VALUE_KEYS.forEach(function (k) { found[k] = values[k]; });
+    found.name = name;
+    saveCustomProductList(list);
+    promptTarget = resolvePromptTarget(customPromptItem(found));
+    persistPromptTarget();
+    renderPromptChips();
+    renderPromptSelect();
+    setPromptFieldValues();
+    renderPrompts();
+    toast(updated
+      ? "같은 이름의 상품을 새 내용으로 업데이트했어요 — 목록과 칩에 반영했습니다."
+      : "'" + name + "'을(를) 신규 상품으로 등록했어요 — 목록과 칩에서 다시 불러올 수 있습니다.");
+  }
+  /* [삭제] — 지금 고른 등록 상품만 목록에서 제거 */
+  function deleteCustomProduct() {
+    if (!promptTarget || !isMineId(promptTarget.id)) return;
+    var id = promptTarget.id.slice("mine:".length);
+    var list = customProductList();
+    var target = null, i;
+    for (i = 0; i < list.length; i++) { if (list[i].id === id) { target = list[i]; break; } }
+    if (!target) return;
+    var msg = "'" + target.name + "'을(를) 등록 목록에서 삭제할까요?";
+    if (typeof window.confirm === "function" && !window.confirm(msg)) return;
+    saveCustomProductList(list.filter(function (p) { return p.id !== id; }));
+    promptTarget = resolvePromptTarget(presetPromptItems()[0] || null);
+    persistPromptTarget();
+    renderPromptChips();
+    renderPromptSelect();
+    setPromptFieldValues();
+    renderPrompts();
+    toast("등록한 신규 상품을 삭제했어요.");
   }
 
   /* 단가 탭에서 제품을 저장·삭제하면 대상 목록을 다시 맞춥니다. */
@@ -1019,31 +1189,39 @@
     if ($("prompt-weekly") && d && d.weekly_notice) {
       $("prompt-weekly").textContent = "🗓 " + d.weekly_notice;
     }
+    if ($("prompt-register")) $("prompt-register").textContent = (d && d.register_label) || "💾 신규 상품으로 등록";
+    if ($("prompt-register-hint")) $("prompt-register-hint").textContent = (d && d.register_hint) || "";
+    updatePromptActions();
     var sel = $("prompt-product");
     if (sel) {
       sel.addEventListener("change", function () { applyPromptItem(sel.value); });
     }
+    var reg = $("prompt-register");
+    if (reg) reg.addEventListener("click", registerCustomProduct);
+    var del = $("prompt-delete");
+    if (del) del.addEventListener("click", deleteCustomProduct);
     PROMPT_FIELD_KEYS.forEach(function (k) {
       var n = $("prompt-" + k);
       if (!n) return;
       n.addEventListener("input", function () {
         if (!promptTarget) promptTarget = resolvePromptTarget(null);
+        var wasDraft = !!promptTarget.draft;
         promptTarget[k] = n.value;
         promptTarget.id = "custom";
         promptTarget.group = "custom";
         promptTarget.label = customLabel();
-        promptTarget.note = customNote();
+        promptTarget.note = wasDraft ? newPromptNote() : customNote();
         persistPromptTarget();
         renderPromptChips();
         renderPromptSelect();
         renderPrompts();
         var note = $("prompt-note");
         if (note) {
-          var noteText = customNote();
-          note.textContent = noteText;
-          note.hidden = !noteText;
+          note.textContent = promptTarget.note;
+          note.hidden = !promptTarget.note;
         }
-        if ($("prompt-current")) $("prompt-current").textContent = "지금 대상 · " + resolvePromptTarget().name;
+        if ($("prompt-current")) $("prompt-current").textContent = "지금 대상 · " + promptDisplayName();
+        updatePromptActions();
       });
     });
     renderPromptChips();
@@ -1557,6 +1735,9 @@
     applyPromptItem: applyPromptItem,
     promptTarget: function () { return resolvePromptTarget(); },
     savedPromptItems: savedPromptItems,
+    customPromptItems: customPromptItems,
+    startNewPrompt: startNewPrompt,
+    registerCustomProduct: registerCustomProduct,
     refreshPromptOptions: refreshPromptOptions
   };
 
