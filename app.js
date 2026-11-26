@@ -10,10 +10,17 @@
     { key: "trend", label: "국내 화제", emoji: "🔥" },
     { key: "marketing", label: "마케터 뉴스", emoji: "📊" },
     { key: "ai", label: "AI 정보", emoji: "🤖" },
-    { key: "kitty", label: "키티·콜라보", emoji: "🎀" }
+    { key: "kitty", label: "키티·콜라보", emoji: "🎀" },
+    { key: "rainbow", label: "비더레인보우", emoji: "🌈" }
   ];
-  var CAT_BY_KEY = { trend: CATS[1], marketing: CATS[2], ai: CATS[3], kitty: CATS[4] };
+  var CAT_BY_KEY = { trend: CATS[1], marketing: CATS[2], ai: CATS[3], kitty: CATS[4], rainbow: CATS[5] };
   var CHARACTERS_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/";
+  var RAINBOW_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/berainbow/";
+  var RAINBOW_POINTS = [
+    { label: "품절 7 / 14 정리", body: "등록 14개 중 7개가 품절 — 판매 중 상품부터 재고·상품명을 손봅니다." },
+    { label: "페를레 로켓그로스 단독", body: "쿠팡은 악세사리 전용, 로켓그로스는 페를레 웨딩 세트만. 키티는 네이버 스마트스토어 단독." },
+    { label: "매주 금요일 업데이트", body: "품절·리뷰·가격 진단과 마진 지표를 매주 금요일에 갱신합니다." }
+  ];
   var WEEKDAYS = { 월: "월요일", 화: "화요일", 수: "수요일", 목: "목요일", 금: "금요일", 토: "토요일", 일: "일요일" };
   var THEME_KEY = "morning-brief-theme";
   var CLAMP_LENGTH = 480;
@@ -505,6 +512,40 @@
     return view;
   }
 
+  /* ---------- 🌈 비더레인보우 ---------- */
+  function rainbowSection() {
+    var view = el("div", "rainbow-view");
+    var hero = el("section", "rainbow-hero");
+
+    hero.appendChild(el("p", "rainbow-kicker", "🌈 비더레인보우 · 사업 대시보드"));
+    hero.appendChild(el("h2", "rainbow-title", "비더레인보우 운영 현황"));
+    hero.appendChild(el("p", "rainbow-desc",
+      "품절·리뷰·가격 진단부터 쿠팡 로켓그로스·스마트스토어 SEO, 단가·마진 계산기까지 한 화면에 정리한 운영 대시보드입니다."));
+
+    hero.appendChild(el("p", "rainbow-label", "핵심 현황 3줄 요약"));
+    var list = el("ul", "rainbow-points");
+    RAINBOW_POINTS.forEach(function (point) {
+      var li = document.createElement("li");
+      li.appendChild(el("strong", null, point.label));
+      li.appendChild(document.createTextNode(point.body));
+      list.appendChild(li);
+    });
+    hero.appendChild(list);
+
+    var cta = el("a", "rainbow-cta");
+    cta.href = RAINBOW_URL;
+    cta.target = "_blank";
+    cta.rel = "noopener noreferrer";
+    cta.appendChild(el("span", "rainbow-cta-text", "비더레인보우 운영 대시보드 열기 →"));
+    hero.appendChild(cta);
+
+    hero.appendChild(el("p", "rainbow-note",
+      "기준일 2026-11-26 · 스마트스토어·인스타그램·주문 시트 실측값 · 매주 금요일 업데이트"));
+
+    view.appendChild(hero);
+    return view;
+  }
+
   function metaBlock(day) {
     if (!day.meta || !day.meta.length) return null;
     var details = el("details", "day-meta");
@@ -594,7 +635,9 @@
       btn.type = "button";
       btn.setAttribute("aria-pressed", String(state.cat === cat.key));
       btn.appendChild(el("span", null, (cat.emoji ? cat.emoji + " " : "") + cat.label));
-      btn.appendChild(el("span", "count", String(counts[cat.key] || 0)));
+      // 🌈 비더레인보우는 링크 탭이라 개수 대신 화살표를 붙임
+      if (cat.key === "rainbow") btn.appendChild(el("span", "count", "↗"));
+      else btn.appendChild(el("span", "count", String(counts[cat.key] || 0)));
       btn.addEventListener("click", function () {
         if (state.cat === cat.key) return;
         state.cat = cat.key;
@@ -755,6 +798,13 @@
     });
 
     renderTabs(counts);
+    if (state.cat === "rainbow") {
+      els.dates.hidden = true;
+      els.results.textContent = "";
+      els.status.textContent = "🌈 비더레인보우 · 사업 대시보드 바로가기";
+      els.results.appendChild(rainbowSection());
+      return;
+    }
     if (state.cat === "kitty" && kittyItems.length) {
       els.dates.hidden = true;
       els.results.textContent = "";

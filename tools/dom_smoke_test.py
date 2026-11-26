@@ -271,6 +271,7 @@ def tab_text(counts, kitty_count):
         counts["all"], counts["trend"], counts["marketing"], counts["ai"])
     if KITTY_ITEMS:
         expected += "|🎀 키티·콜라보%d" % kitty_count
+    expected += "|🌈 비더레인보우↗"
     return expected
 
 
@@ -316,7 +317,7 @@ check("insight box present", ctx.eval("__byClass('insight').length"),
 check("why box present", ctx.eval("__byClass('why').length"),
       sum(1 for i in latest_items if i.get("whyHot")))
 check("clamped summary", ctx.eval("__byClass('is-clamped').length > 0"), True)
-check("kitty tab shown", ctx.eval("__tabs().length"), 5 if KITTY_ITEMS else 4)
+check("kitty tab shown", ctx.eval("__tabs().length"), 6 if KITTY_ITEMS else 5)
 
 print("[2] '전체 날짜' 클릭 · 카테고리 필터")
 ALL_ITEMS = sum(len(b["items"]) for b in BRIEFS)
@@ -443,6 +444,31 @@ if KITTY_ITEMS:
     check("dates visible again", ctx.eval("document.getElementById('dates').hidden"), False)
 else:
     print("  - kittyCollabs 데이터가 없어 건너뜀")
+
+print("[7] 🌈 비더레인보우 연결 칸")
+RAINBOW_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/berainbow/"
+rainbow_idx = ctx.eval(
+    "__tabs().findIndex(function(t){ return __text(t).indexOf('비더레인보우') >= 0; })")
+check("rainbow tab exists", rainbow_idx >= 0, True)
+check("rainbow tab label", ctx.eval("__text(__tabs()[%d])" % rainbow_idx), "🌈 비더레인보우↗")
+ctx.eval("__tabs()[%d].dispatch('click')" % rainbow_idx)
+check("rainbow tab pressed", ctx.eval("__tabs()[%d].getAttribute('aria-pressed')" % rainbow_idx), "true")
+check("rainbow hides date chips", ctx.eval("document.getElementById('dates').hidden"), True)
+check("rainbow status", ctx.eval("__textOf('status')"), "🌈 비더레인보우 · 사업 대시보드 바로가기")
+check("rainbow 3줄 요약", ctx.eval("__byClass('rainbow-points')[0].childNodes.length"), 3)
+rainbow_text = ctx.eval("__textOf('results')")
+for needle in ["품절 7 / 14 정리", "페를레 로켓그로스 단독", "매주 금요일 업데이트"]:
+    check("rainbow summary: " + needle, needle in rainbow_text, True)
+cta_href = ctx.eval("__byClass('rainbow-cta')[0].getAttribute('href')")
+check("rainbow CTA url", cta_href, RAINBOW_URL)
+check("rainbow CTA label", "비더레인보우 운영 대시보드 열기" in ctx.eval("__text(__byClass('rainbow-cta')[0])"), True)
+check("rainbow CTA new tab",
+      ctx.eval("__byClass('rainbow-cta')[0].getAttribute('target') === '_blank' && "
+               "__byClass('rainbow-cta')[0].getAttribute('rel').indexOf('noopener') === 0"), True)
+check("rainbow no briefing cards", ctx.eval("__cards().length"), 0)
+ctx.eval("__tabs()[0].dispatch('click')")
+check("leave rainbow -> dates visible", ctx.eval("document.getElementById('dates').hidden"), False)
+check("leave rainbow -> cards back", ctx.eval("__cards().length"), len(latest_items))
 
 if "--dump" in sys.argv:
     ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")

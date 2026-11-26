@@ -972,6 +972,119 @@ main:focus { outline: none; }
 .kitty-foot-title { margin: 0; font-size: 14px; font-weight: 800; }
 .kitty-foot-desc { margin: 6px 0 0; font-size: 11.5px; line-height: 1.65; color: var(--ink-3); }
 
+/* ---------- 🌈 비더레인보우 연결 ---------- */
+.rainbow-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.rainbow-hero {
+  border-radius: 22px;
+  padding: 20px 18px 18px;
+  background:
+    radial-gradient(420px 190px at 92% -12%, rgba(125, 211, 252, 0.24), transparent 70%),
+    radial-gradient(320px 160px at 0% 0%, rgba(56, 189, 248, 0.10), transparent 64%),
+    linear-gradient(160deg, #171b22 0%, #111318 58%, #0b0d11 100%);
+  border: 1px solid rgba(125, 211, 252, 0.34);
+  color: #eaf2f9;
+  box-shadow: 0 14px 30px -22px rgba(11, 13, 17, 0.9);
+}
+.rainbow-kicker {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #7dd3fc;
+}
+.rainbow-title {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #f4faff;
+  text-wrap: pretty;
+}
+.rainbow-desc {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.68;
+  color: rgba(226, 236, 246, 0.76);
+}
+.rainbow-label {
+  margin: 16px 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #bae6fd;
+}
+.rainbow-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rainbow-points li {
+  position: relative;
+  padding: 11px 13px 11px 30px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  font-size: 12.5px;
+  line-height: 1.62;
+  color: rgba(230, 240, 248, 0.86);
+}
+.rainbow-points li::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 17px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #7dd3fc;
+}
+.rainbow-points strong {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.rainbow-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7dd3fc, #38bdf8 72%);
+  color: #0b1220;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  box-shadow: 0 12px 24px -16px rgba(56, 189, 248, 0.95);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.rainbow-cta:hover { color: #0b1220; filter: brightness(1.04); box-shadow: 0 16px 28px -16px rgba(56, 189, 248, 1); }
+.rainbow-cta:active { transform: scale(0.99); }
+.rainbow-cta-text { text-align: center; }
+
+.rainbow-note {
+  margin: 10px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgba(226, 236, 246, 0.6);
+}
+
 /* ---------- states ---------- */
 .empty {
   margin: 34px auto;
