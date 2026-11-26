@@ -9,9 +9,11 @@
     { key: "all", label: "전체", emoji: "" },
     { key: "trend", label: "국내 화제", emoji: "🔥" },
     { key: "marketing", label: "마케터 뉴스", emoji: "📊" },
-    { key: "ai", label: "AI 정보", emoji: "🤖" }
+    { key: "ai", label: "AI 정보", emoji: "🤖" },
+    { key: "kitty", label: "키티·콜라보", emoji: "🎀" }
   ];
-  var CAT_BY_KEY = { trend: CATS[1], marketing: CATS[2], ai: CATS[3] };
+  var CAT_BY_KEY = { trend: CATS[1], marketing: CATS[2], ai: CATS[3], kitty: CATS[4] };
+  var CHARACTERS_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/";
   var WEEKDAYS = { 월: "월요일", 화: "화요일", 수: "수요일", 목: "목요일", 금: "금요일", 토: "토요일", 일: "일요일" };
   var THEME_KEY = "morning-brief-theme";
   var CLAMP_LENGTH = 480;
@@ -126,6 +128,21 @@
     ];
     (item.sources || []).forEach(function (s) { parts.push(s.label, s.url); });
     return plain(parts.join(" ")).toLowerCase();
+  }
+
+  function kittyHay(item) {
+    var visit = item.visit || {};
+    var parts = [item.title, item.brand, item.status, item.priceLine, item.priceNote,
+      item.headline, item.visit, visit.venue, visit.address, visit.period, visit.hours];
+    (item.schedule || []).forEach(function (line) { parts.push(line); });
+    (item.points || []).forEach(function (line) { parts.push(line); });
+    (item.links || []).forEach(function (s) { parts.push(s.label, s.url); });
+    return plain(parts.join(" ")).toLowerCase();
+  }
+
+  function matchKitty(item, terms) {
+    if (!terms.length) return true;
+    return hitText(kittyHay(item), terms);
   }
 
   function extraHay(extra) {
@@ -365,6 +382,130 @@
     return details;
   }
 
+  /* ---------- 🎀 키티·콜라보 ---------- */
+  function kittyStatusClass(status) {
+    var s = String(status || "");
+    if (s.indexOf("종료") === 0) return "is-ended";
+    if (s.indexOf("예정") >= 0) return "is-soon";
+    return "is-live";
+  }
+
+  function kittyRow(label, lines, dim) {
+    var row = el("div", "kitty-row" + (dim ? " kitty-row--dim" : ""));
+    row.appendChild(el("span", "kitty-label", label));
+    var body = el("div", "kitty-value");
+    lines.forEach(function (line) {
+      body.appendChild(el("div", null, line));
+    });
+    row.appendChild(body);
+    return row;
+  }
+
+  function kittyCta(site) {
+    var a = el("a", "kitty-cta");
+    a.href = (site && site.siteUrl) || CHARACTERS_URL;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.appendChild(el("span", "kitty-cta-emoji", "🎀"));
+    a.appendChild(el("span", "kitty-cta-text", (site && site.siteTitle) || "8대 캐릭터 콜라보 전체 사이트 보기 →"));
+    return a;
+  }
+
+  function kittyCard(item, terms) {
+    var article = el("article", "card card--kitty");
+    var head = el("div", "card-head");
+    head.appendChild(el("span", "badge badge--kitty", "🎀 " + (item.brand || "산리오")));
+    head.appendChild(el("span", "kitty-status " + kittyStatusClass(item.status), item.status));
+    article.appendChild(head);
+
+    var title = el("h3", "card-title");
+    inline(title, item.title, terms);
+    article.appendChild(title);
+
+    var meta = el("div", "kitty-meta");
+    if (item.schedule && item.schedule.length) {
+      meta.appendChild(kittyRow("일정", item.schedule));
+    }
+    if (item.priceLine) {
+      var priceLines = [item.priceLine];
+      if (item.priceNote) priceLines.push(item.priceNote);
+      meta.appendChild(kittyRow("가격", priceLines, Boolean(item.priceNote)));
+    }
+    if (item.visit) {
+      var visitLines = [item.visit.venue, item.visit.address, item.visit.hours].filter(Boolean);
+      if (visitLines.length) meta.appendChild(kittyRow("방문", visitLines));
+    }
+    if (meta.childNodes.length) article.appendChild(meta);
+
+    if (item.headline) {
+      var summary = el("div", "kitty-summary");
+      summary.appendChild(el("span", "kitty-summary-label", "한 줄 요약"));
+      var text = el("p", "kitty-summary-text");
+      inline(text, item.headline, terms);
+      summary.appendChild(text);
+      article.appendChild(summary);
+    }
+
+    if (item.points && item.points.length) {
+      var list = el("ul", "kitty-points");
+      item.points.forEach(function (point) {
+        var li = document.createElement("li");
+        inline(li, point, terms);
+        list.appendChild(li);
+      });
+      article.appendChild(list);
+    }
+
+    if (item.links && item.links.length) {
+      article.appendChild(el("span", "kitty-links-label", "공식 링크"));
+      article.appendChild(sourceChips(item.links));
+    }
+    return article;
+  }
+
+  function kittySection(terms, shown) {
+    var site = data.kittyCollabs || {};
+    var all = site.items || [];
+    var items = all.filter(function (item) { return matchKitty(item, terms); });
+
+    var view = el("div", "kitty-view");
+
+    var hero = el("section", "kitty-hero");
+    hero.appendChild(el("p", "kitty-kicker", "🩷 산리오 · 헬로키티 콜라보"));
+    hero.appendChild(el("h2", "kitty-hero-title", site.title || "산리오(헬로키티) 콜라보 최신 소식"));
+    var brands = [];
+    all.forEach(function (item) {
+      if (item.brand && brands.indexOf(item.brand) < 0) brands.push(item.brand);
+    });
+    var desc = (site.asOf ? site.asOf + " 기준 · " : "") + all.length + "건";
+    if (brands.length) desc += " · " + brands.join(" · ");
+    hero.appendChild(el("p", "kitty-hero-desc", desc));
+    hero.appendChild(kittyCta(site));
+    hero.appendChild(el("p", "kitty-hero-note",
+      "스타벅스·소니처럼 매장에서 만나는 굿즈부터 부산 팝업까지, 최근 진행·출시된 헬로키티 콜라보를 모았습니다."));
+    view.appendChild(hero);
+
+    if (items.length) {
+      var cards = el("div", "cards kitty-cards");
+      items.forEach(function (item) { cards.appendChild(kittyCard(item, terms)); });
+      view.appendChild(cards);
+    } else {
+      view.appendChild(emptyState(terms));
+    }
+
+    var foot = el("section", "kitty-foot");
+    foot.appendChild(el("p", "kitty-foot-title", "🎀 8대 캐릭터 콜라보 전체 사이트"));
+    foot.appendChild(el("p", "kitty-foot-desc",
+      "디즈니 · 포켓몬 · 미피 · 짱구 · 몬치치 · 리락쿠마 · 스누피까지 한 화면에서 봐요."));
+    if (shown !== all.length) {
+      foot.appendChild(el("p", "kitty-foot-desc",
+        "지금은 검색어에 맞는 " + shown + "건만 보이고 있어요. 전체 " + all.length + "건은 사이트에서 볼 수 있습니다."));
+    }
+    foot.appendChild(kittyCta(site));
+    view.appendChild(foot);
+    return view;
+  }
+
   function metaBlock(day) {
     if (!day.meta || !day.meta.length) return null;
     var details = el("details", "day-meta");
@@ -447,7 +588,9 @@
   /* ---------- chrome (tabs / dates / status) ---------- */
   function renderTabs(counts) {
     els.tabs.textContent = "";
+    var hasKitty = Boolean(data && data.kittyCollabs && (data.kittyCollabs.items || []).length);
     CATS.forEach(function (cat) {
+      if (cat.key === "kitty" && !hasKitty) return;
       var btn = el("button", "tab");
       btn.type = "button";
       btn.setAttribute("aria-pressed", String(state.cat === cat.key));
@@ -505,6 +648,13 @@
       var centered = active.offsetLeft - (els.dates.clientWidth - active.offsetWidth) / 2;
       els.dates.scrollLeft = Math.max(0, centered);
     }
+  }
+
+  function setKittyStatus(terms, shown) {
+    var site = data.kittyCollabs || {};
+    var scope = site.asOf ? site.asOf + " 기준" : "산리오 콜라보";
+    var label = terms.length ? "검색 결과 " : "콜라보 ";
+    els.status.textContent = scope + " · 🎀 산리오(헬로키티) · " + label + shown + "건";
   }
 
   function setStatus(days, terms, expanded) {
@@ -592,7 +742,7 @@
       }
     }
 
-    var counts = { all: 0, trend: 0, marketing: 0, ai: 0 };
+    var counts = { all: 0, trend: 0, marketing: 0, ai: 0, kitty: 0 };
     days.forEach(function (day) {
       day.items.forEach(function (item) {
         if (terms.length && !hitText(itemHay(item), terms)) return;
@@ -600,12 +750,25 @@
         counts[item.category] += 1;
       });
     });
+    var kittyItems = (data.kittyCollabs && data.kittyCollabs.items) || [];
+    kittyItems.forEach(function (item) {
+      if (matchKitty(item, terms)) counts.kitty += 1;
+    });
 
     renderTabs(counts);
+    if (state.cat === "kitty" && kittyItems.length) {
+      els.dates.hidden = true;
+      els.results.textContent = "";
+      setKittyStatus(terms, counts.kitty);
+      els.results.appendChild(kittySection(terms, counts.kitty));
+      return;
+    }
+    if (state.cat === "kitty") state.cat = "all";
+    els.dates.hidden = false;
+    els.results.textContent = "";
+
     renderDates(terms);
     setStatus(days, terms, expandedNote);
-
-    els.results.textContent = "";
 
     if (expandedNote) {
       var banner = el("div", "banner");
@@ -661,7 +824,8 @@
       els.results.textContent = "";
       els.footerMeta.textContent = data.counts.days + "일치 · 이슈 " + data.counts.items +
         "건 · 짧은 소식 " + data.counts.extras + "건 · 기획 아이디어 " + data.counts.ideas +
-        "개 — " + data.updatedAt;
+        "개" + (data.counts.kitty ? " · 🎀 콜라보 " + data.counts.kitty + "건" : "") +
+        " — " + data.updatedAt;
       render();
     }).catch(function (err) {
       els.results.textContent = "";

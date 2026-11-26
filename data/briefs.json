@@ -5,7 +5,8 @@
   "days": 6,
   "items": 60,
   "extras": 44,
-  "ideas": 21
+  "ideas": 21,
+  "kitty": 5
  },
  "briefs": [
   {
@@ -2344,5 +2345,173 @@
     "부캉이 관련 '9월 상어 출몰' 시점·경위는 기사 서술만 확인했고 별도 사실검증은 하지 않았다."
    ]
   }
- ]
+ ],
+ "kittyCollabs": {
+  "asOf": "2026-11-26",
+  "title": "산리오(헬로키티) 콜라보 최신 소식",
+  "characterName": "산리오 (헬로키티 중심)",
+  "sourceFile": "character-collabs-2026-11-26.json",
+  "siteUrl": "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/",
+  "siteTitle": "🎀 8대 캐릭터 콜라보 전체 사이트 보기 →",
+  "items": [
+   {
+    "id": "sanrio-01",
+    "title": "스타벅스 코리아 × 헬로키티 '위드 헬로키티' 크리스마스 MD",
+    "brand": "스타벅스 코리아",
+    "status": "진행중",
+    "schedule": [
+     "행사 기간 2026-11-19 ~ 2026-12-31",
+     "1차 출시 2026-11-19 (10종)",
+     "캠프컵 출시 2026-11-23 (캠프컵 텀블러 3종)",
+     "2차 출시 2026-12-02 예정 (12종)"
+    ],
+    "priceLine": "23,000~61,000원 · 8개 품목",
+    "priceNote": "신세계몰 표시가 기준, 스타벅스 공지 가격표에는 미기재",
+    "headline": "1분 만에 품절…스타벅스 헬로키티, 뭐가 그렇게 잘 팔렸나",
+    "points": [
+     "11/19 1차 10종 오픈런",
+     "워크백 59,000원·글라스 23,000원이 리셀 2배",
+     "12/2 2차 12종 예고, 캠프컵 52,000원"
+    ],
+    "visit": {
+     "venue": "전국 스타벅스 매장(일부 미판매 매장 있음)",
+     "period": "2026-11-19 ~ 2026-12-31 (재고 소진 시 조기 종료)",
+     "hours": "매장별 상이 (출시일 오전 7시 오픈 매장에 오픈런)"
+    },
+    "links": [
+     {
+      "label": "신세계그룹 뉴스룸",
+      "url": "https://www.shinsegaegroupnewsroom.com/starbucks-x-hello-kitty-christmas-promotion/"
+     },
+     {
+      "label": "연합뉴스",
+      "url": "https://www.yna.co.kr/view/AKR20261119114800030"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-02",
+    "title": "소니코리아 × 헬로키티 한정판 헤드폰 컬렉션",
+    "brand": "소니코리아",
+    "status": "판매중(한정 수량)",
+    "schedule": [
+     "시작 2026-10-14"
+    ],
+    "priceLine": "119,000~559,000원 · 3개 품목",
+    "priceNote": "",
+    "headline": "헤드폰에 키티를 입혔다…55만 9천 원짜리 한정판",
+    "points": [
+     "XM6 559,000원 / CH730N 239,000원 / CH530 119,000원",
+     "파우치+에코백 동봉",
+     "3개 채널에서만 한정 판매"
+    ],
+    "visit": {
+     "venue": "소니스토어 압구정점",
+     "address": "서울 강남구(압구정)",
+     "period": "2026-10-14 ~ (한정 수량 소진 시)"
+    },
+    "links": [
+     {
+      "label": "베타뉴스",
+      "url": "https://www.betanews.net/article/view/beta202610140097"
+     },
+     {
+      "label": "씨넷코리아",
+      "url": "https://www.cnet.co.kr/view/?no=20261014194744"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-04",
+    "title": "젤라또 피케 × 산리오캐릭터즈 2탄 'BABY MOCO' 컬렉션 (+부산 팝업)",
+    "brand": "젤라또 피케",
+    "status": "판매중 / 팝업 예정",
+    "schedule": [
+     "시작 2026-11-12",
+     "강남 팝업 2026-11-12 ~ 2026-11-22 (종료)",
+     "부산 팝업 2026-12-04 ~ 2026-12-17 (예정)"
+    ],
+    "priceLine": "65,000~224,000원 · 5개 품목",
+    "priceNote": "",
+    "headline": "잠든 키티를 입는다…젤라또 피케 22만 원 룸웨어",
+    "points": [
+     "11/12 출시, 5캐릭터",
+     "부산 센텀시티 팝업 12/4~17",
+     "12월 부산 나들이 코스로"
+    ],
+    "visit": {
+     "venue": "신세계백화점 센텀시티점 (부산) / 신세계백화점 강남점(종료)",
+     "address": "부산 해운대구 센텀시티 (신세계百 센텀시티점)",
+     "period": "2026-12-04 ~ 2026-12-17"
+    },
+    "links": [
+     {
+      "label": "다이어리포인트",
+      "url": "https://www.diarypoint.com/news/articleView.html?idxno=7100"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-05",
+    "title": "아이파크몰 용산점 × 산리오캐릭터즈 '물음표 상점: 크리스마스 기프트 숍'",
+    "brand": "아이파크몰",
+    "status": "진행중",
+    "schedule": [
+     "2026-11-13 ~ 2026-12-27"
+    ],
+    "priceLine": "입장 무료",
+    "priceNote": "무료. 캐릭터 상품 가격 미확인",
+    "headline": "용산에 헬로키티 크리스마스 마을이 생겼다 (입장 무료)",
+    "points": [
+     "아이파크몰 용산 11/13~12/27",
+     "대형 에어벌룬·포토부스·스탬프 챌린지",
+     "금·토는 21시까지"
+    ],
+    "visit": {
+     "venue": "용산 아이파크몰 6층 리빙파크 및 몰 곳곳",
+     "address": "서울 용산구 한강대로23길 55",
+     "period": "2026-11-13 ~ 2026-12-27",
+     "hours": "월~목 10:30-20:30 / 금~토 10:30-21:00 / 일 10:30-20:30"
+    },
+    "links": [
+     {
+      "label": "연합뉴스",
+      "url": "https://www.yna.co.kr/view/AKR20261113031300030"
+     },
+     {
+      "label": "팝플리",
+      "url": "https://popply.co.kr/popup/6666"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-03",
+    "title": "CJ온스타일 × K리그 × 산리오캐릭터즈 '2026 태닝에디션' 온라인 팝업",
+    "brand": "CJ온스타일",
+    "status": "종료",
+    "schedule": [
+     "2026-11-12 10:00 ~ 2026-11-18"
+    ],
+    "priceLine": "20,000~25,000원 · 2개 품목",
+    "priceNote": "",
+    "headline": "헬로키티가 FC서울 유니폼을 입었다 — 29개 구단 153종",
+    "points": [
+     "CJ온스타일 앱 7일 한정",
+     "인형 키링 20,000원",
+     "구단별 캐릭터 배정표가 구매 포인트"
+    ],
+    "visit": null,
+    "links": [
+     {
+      "label": "CJ온스타일",
+      "url": "https://corp.cjonstyle.com/ko/newsroom/press/180"
+     },
+     {
+      "label": "CJ 뉴스룸",
+      "url": "https://cjnews.cj.net/cj%EC%98%A8%EC%8A%A4%ED%83%80%EC%9D%BC-k%EB%A6%AC%EA%B7%B8x%EC%82%B0%EB%A6%AC%EC%98%A4%EC%BA%90%EB%A6%AD%ED%84%B0%EC%A6%88-%EC%98%A8%EB%9D%BC%EC%9D%B8-%ED%8C%9D%EC%97%85/"
+     }
+    ]
+   }
+  ]
+ }
 }

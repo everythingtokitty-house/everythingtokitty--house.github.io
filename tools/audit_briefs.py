@@ -99,8 +99,89 @@ for brief in data["briefs"]:
 if total_items != data["counts"]["items"]:
     fail(f"counts.items({data['counts']['items']}) != 실제({total_items})")
 
+
+# ---- 🎀 키티·콜라보 섹션 (원본 work/character-collabs-*.json 대조) ----
+COLLAB_SOURCES = sorted(glob.glob(os.path.join(ROOT, "work", "character-collabs-*.json")))
+kitty = data.get("kittyCollabs")
+kitty_urls = set()
+
+
+def check_kitty(kitty):
+    for key in ("asOf", "title", "characterName", "sourceFile", "siteUrl", "items"):
+        if not kitty.get(key):
+            fail(f"kittyCollabs: 키가 없거나 비었음 ({key})")
+    site_url = kitty.get("siteUrl", "")
+    if not re.match(r"^https://[\w.-]+/", site_url):
+        fail(f"kittyCollabs: 전체 사이트 링크 형식 오류 {site_url!r}")
+    if "/characters/" not in site_url:
+        fail(f"kittyCollabs: 전체 사이트 링크가 /characters/ 가 아님 {site_url}")
+
+    seen = set()
+    for item in kitty["items"]:
+        iid = item.get("id", "?")
+        for key in ("id", "title", "brand", "status", "priceLine", "headline", "links"):
+            if not item.get(key):
+                fail(f"kittyCollabs {iid}: 필드 없음/비었음 ({key})")
+        if not item.get("schedule"):
+            fail(f"kittyCollabs {iid}: 일정 없음")
+        if not item.get("points"):
+            fail(f"kittyCollabs {iid}: 핵심 포인트 없음")
+        if len(item.get("points") or []) > 3:
+            fail(f"kittyCollabs {iid}: 핵심 포인트가 3개를 넘음")
+        if iid in seen:
+            fail(f"kittyCollabs: 중복 id {iid}")
+        seen.add(iid)
+        for link in item.get("links") or []:
+            kitty_urls.add(link.get("url", ""))
+            if not link.get("label", "").strip():
+                fail(f"kittyCollabs {iid}: 링크 라벨 없음 {link.get('url')}")
+
+
+def check_kitty_source(kitty):
+    src_path = os.path.join(ROOT, "work", kitty.get("sourceFile") or "")
+    if not os.path.isfile(src_path):
+        if not COLLAB_SOURCES:
+            fail("kittyCollabs: 대조할 character-collabs 원본이 없음")
+            return
+        src_path = COLLAB_SOURCES[-1]
+    payload = json.load(open(src_path, encoding="utf-8"))
+    sanrio = next((c for c in payload.get("characters", []) if c.get("id") == "sanrio"), None)
+    if not sanrio:
+        fail(f"{os.path.basename(src_path)}: 산리오(sanrio) 항목 없음")
+        return
+    src_items = {it.get("id"): it for it in sanrio.get("items", [])}
+    built = {it.get("id"): it for it in kitty["items"]}
+    missing = sorted(set(src_items) - set(built))
+    extra = sorted(set(built) - set(src_items))
+    if missing:
+        fail(f"kittyCollabs: 원본 산리오 {len(missing)}건 누락 {missing}")
+    if extra:
+        fail(f"kittyCollabs: 원본에 없는 항목 {extra}")
+    for iid, src in src_items.items():
+        item = built.get(iid)
+        if not item:
+            continue
+        if item["title"] != src.get("collab_name"):
+            fail(f"kittyCollabs {iid}: 콜라보명 불일치")
+        src_urls = {u.rstrip(TRAIL) for u in src.get("official_urls") or []}
+        got_urls = {l.get("url") for l in item.get("links") or []}
+        if src_urls - got_urls:
+            fail(f"kittyCollabs {iid}: 공식 링크 누락 {sorted(src_urls - got_urls)}")
+        if got_urls - src_urls:
+            fail(f"kittyCollabs {iid}: 원본에 없는 링크 {sorted(got_urls - src_urls)}")
+    print(f"🎀 키티·콜라보 {len(kitty['items'])}건 · 원본 {os.path.basename(src_path)} 대조 완료")
+
+
+if kitty:
+    check_kitty(kitty)
+    check_kitty_source(kitty)
+    if data["counts"].get("kitty", 0) != len(kitty["items"]):
+        fail(f"counts.kitty({data['counts'].get('kitty')}) != 실제({len(kitty['items'])})")
+elif COLLAB_SOURCES:
+    fail("kittyCollabs 없음 — character-collabs 원본은 있는데 키티·콜라보 탭 데이터가 없습니다")
+
 # URL 형식
-for url in sorted(all_urls):
+for url in sorted(all_urls | kitty_urls):
     p = urlparse(url)
     if p.scheme not in ("http", "https") or not p.netloc:
         fail(f"URL 형식 오류: {url}")

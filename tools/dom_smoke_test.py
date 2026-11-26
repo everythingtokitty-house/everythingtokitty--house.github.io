@@ -7,12 +7,15 @@
   3) 키워드 검색 · 선택 날짜에 결과가 없을 때 전체 날짜 자동 확장
   4) 검색어에 HTML/스크립트를 넣어도 텍스트로만 그려지는지(XSS)
   5) 출처 칩 target/rel, '더 보기' 토글, 빈 결과/에러 화면
+  6) 🎀 키티·콜라보 탭 — 카드·전체 사이트 CTA·날짜 숨김·탭 안 검색
 
+기대값은 data/briefs.json 에서 계산한다(브리핑이 하루 늘어도 깨지지 않게).
 사용법: python3 site/morning-brief/tools/dom_smoke_test.py
 필요: pip install quickjs
 """
 import json
 import os
+import re
 import sys
 
 import quickjs
@@ -212,6 +215,9 @@ globalThis.__dateChips = function () {
 globalThis.__textOf = function (id) {
   return globalThis.__text(document.getElementById(id));
 };
+globalThis.__byClass = function (cls) {
+  return globalThis.__find(document.getElementById("results"), function (n) { return globalThis.__hasClass(n, cls); });
+};
 """
 
 
@@ -235,10 +241,6 @@ def new_context(fetch_mode):
     return ctx
 
 
-def textof(ctx, expr):
-    return ctx.eval(expr)
-
-
 results = []
 
 
@@ -248,50 +250,137 @@ def check(name, got, want):
     print(("  ✓ " if ok else "  ✗ ") + name + ("" if ok else f"  (got {got!r}, want {want!r})"))
 
 
+def plain(text):
+    return str(text or "").replace("**", "")
+
+
+# ---- 기대값은 실제 데이터에서 계산한다 ----
+BRIEFS = DATA["briefs"]                      # 최신순
+LATEST_DATE = DATA["latestDate"]
+LATEST = next(b for b in BRIEFS if b["date"] == LATEST_DATE)
+KITTY = DATA.get("kittyCollabs") or {"items": []}
+KITTY_ITEMS = KITTY.get("items") or []
+
+
+def fmt_date(date):
+    return date[5:].replace("-", ".")
+
+
+def tab_text(counts, kitty_count):
+    expected = "전체%d|🔥 국내 화제%d|📊 마케터 뉴스%d|🤖 AI 정보%d" % (
+        counts["all"], counts["trend"], counts["marketing"], counts["ai"])
+    if KITTY_ITEMS:
+        expected += "|🎀 키티·콜라보%d" % kitty_count
+    return expected
+
+
+def count_cat(days, cat):
+    return sum(1 for d in days for i in d["items"] if i["category"] == cat)
+
+
+def kitty_hay(item):
+    visit = item.get("visit") or {}
+    parts = [item.get("title"), item.get("brand"), item.get("status"), item.get("priceLine"),
+             item.get("priceNote"), item.get("headline"),
+             visit.get("venue"), visit.get("address"), visit.get("period"), visit.get("hours")]
+    parts += list(item.get("schedule") or [])
+    parts += list(item.get("points") or [])
+    for link in item.get("links") or []:
+        parts += [link.get("label"), link.get("url")]
+    return plain(" ".join(str(p) for p in parts if p)).lower()
+
+
 print("[1] fetch 경로 · 기본 진입(최신 날짜)")
 ctx = new_context("ok")
-check("latest view cards", ctx.eval("__cards().length"), 9)
-check("status", ctx.eval("__textOf('status')"), "11.25 수 · 전체 카테고리 · 이슈 9건")
-check("headline rendered", ctx.eval("__textOf('results').indexOf('어제의 랠리는') >= 0"), True)
+latest_items = LATEST["items"]
+check("latest view cards", ctx.eval("__cards().length"), len(latest_items))
+check("status", ctx.eval("__textOf('status')"),
+      f"{fmt_date(LATEST_DATE)} {LATEST['weekday']} · 전체 카테고리 · 이슈 {len(latest_items)}건")
+check("headline rendered",
+      ctx.eval("__textOf('results').indexOf(%s) >= 0" % json.dumps(plain(LATEST["headline"])[:12], ensure_ascii=False)),
+      True)
 check("tab counts (선택 날짜 기준)", ctx.eval("__tabs().map(function(t){return __text(t)}).join('|')"),
-      "전체9|🔥 국내 화제3|📊 마케터 뉴스3|🤖 AI 정보3")
-check("date chips", ctx.eval("__dateChips().length"), 6)
-check("first card title", ctx.eval("__cards()[0].querySelector ? __text(__find(__cards()[0], function(n){return __hasClass(n,'card-title')})[0]) : ''"),
-      "'남의 결혼식 버진로드' — 유튜브 폭로 하루 만에 당사자 사과, 하객 브이로그가 증거가 됐다")
+      tab_text({"all": len(latest_items),
+                "trend": count_cat([LATEST], "trend"),
+                "marketing": count_cat([LATEST], "marketing"),
+                "ai": count_cat([LATEST], "ai")},
+               len(KITTY_ITEMS)))
+check("date chips", ctx.eval("__dateChips().length"), len(BRIEFS) + 1)
+check("first card title",
+      ctx.eval("__text(__find(__cards()[0], function(n){return __hasClass(n,'card-title')})[0])"),
+      plain(latest_items[0]["title"]))
 check("chips target blank", ctx.eval("__chips().every(function(c){return c.getAttribute('target')==='_blank' && c.getAttribute('rel').indexOf('noopener')===0;})"), True)
 check("chips have href", ctx.eval("__chips().every(function(c){return /^https:\\/\\//.test(c.getAttribute('href')||'');})"), True)
-check("insight box present", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'insight')}).length"), 9)
-check("why box present (11.25는 3건)", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'why')}).length"), 3)
-check("clamped summary", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'is-clamped')}).length > 0"), True)
+check("insight box present", ctx.eval("__byClass('insight').length"),
+      sum(1 for i in latest_items if i.get("insight")))
+check("why box present", ctx.eval("__byClass('why').length"),
+      sum(1 for i in latest_items if i.get("whyHot")))
+check("clamped summary", ctx.eval("__byClass('is-clamped').length > 0"), True)
+check("kitty tab shown", ctx.eval("__tabs().length"), 5 if KITTY_ITEMS else 4)
 
 print("[2] '전체 날짜' 클릭 · 카테고리 필터")
+ALL_ITEMS = sum(len(b["items"]) for b in BRIEFS)
 ctx.eval("__dateChips()[0].dispatch('click')")
-check("all dates cards", ctx.eval("__cards().length"), 51)
-check("tab counts (전체 날짜)", ctx.eval("__tabs().map(function(t){return __text(t)}).join('|')"), "전체51|🔥 국내 화제16|📊 마케터 뉴스19|🤖 AI 정보16")
-check("all dates status", ctx.eval("__textOf('status')"), "5일 전체 · 전체 카테고리 · 이슈 51건")
-check("5 day sections", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'day')}).length"), 5)
+check("all dates cards", ctx.eval("__cards().length"), ALL_ITEMS)
+check("tab counts (전체 날짜)", ctx.eval("__tabs().map(function(t){return __text(t)}).join('|')"),
+      tab_text({"all": ALL_ITEMS,
+                "trend": count_cat(BRIEFS, "trend"),
+                "marketing": count_cat(BRIEFS, "marketing"),
+                "ai": count_cat(BRIEFS, "ai")},
+               len(KITTY_ITEMS)))
+check("all dates status", ctx.eval("__textOf('status')"),
+      f"{len(BRIEFS)}일 전체 · 전체 카테고리 · 이슈 {ALL_ITEMS}건")
+check("day sections", ctx.eval("__byClass('day').length"), len(BRIEFS))
 ctx.eval("__tabs()[3].dispatch('click')")
-check("AI tab cards", ctx.eval("__cards().length"), 16)
-check("AI tab status", ctx.eval("__textOf('status')"), "5일 전체 · 🤖 AI 정보 · 이슈 16건")
-check("AI tab hides extras/ideas", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'extras')||__hasClass(n,'ideas')}).length"), 0)
+check("AI tab cards", ctx.eval("__cards().length"), count_cat(BRIEFS, "ai"))
+check("AI tab status", ctx.eval("__textOf('status')"),
+      f"{len(BRIEFS)}일 전체 · 🤖 AI 정보 · 이슈 {count_cat(BRIEFS, 'ai')}건")
+check("AI tab hides extras/ideas", ctx.eval("__byClass('extras').length + __byClass('ideas').length"), 0)
 ctx.eval("__tabs()[1].dispatch('click')")
-check("trend tab cards", ctx.eval("__cards().length"), 16)
+check("trend tab cards", ctx.eval("__cards().length"), count_cat(BRIEFS, "trend"))
 
 print("[3] 검색 · 날짜 자동 확장")
 ctx.eval("__tabs()[0].dispatch('click')")
-ctx.eval("__dateChips()[1].dispatch('click')")  # 11.25
-check("back to 11.25", ctx.eval("__cards().length"), 9)
-ctx.eval("var i=document.getElementById('search-input'); i.value='배민'; i.dispatch('input');")
-check("search 배민 cards", ctx.eval("__cards().length"), 1)
-check("search 배민 has mark", ctx.eval("__find(document.getElementById('results'), function(n){return n.tagName==='MARK'}).length > 0"), True)
-check("search status", ctx.eval("__textOf('status')"), "11.25 수 · 전체 카테고리 · 검색 결과 1건")
+ctx.eval("__dateChips()[1].dispatch('click')")  # 최신 날짜
+check("back to latest", ctx.eval("__cards().length"), len(latest_items))
+
+latest_blob = plain(json.dumps(LATEST, ensure_ascii=False)).lower()
+# 최신 날짜에 있는 키워드
+kw_in_latest = next(
+    tok for item in latest_items
+    for tok in re.findall(r"[가-힣]{2,}", item["title"])
+    if tok.lower() in latest_blob)
+ctx.eval("var i=document.getElementById('search-input'); i.value=%s; i.dispatch('input');"
+         % json.dumps(kw_in_latest, ensure_ascii=False))
+check("search cards > 0", ctx.eval("__cards().length") > 0, True)
+check("search has mark", ctx.eval("__find(document.getElementById('results'), function(n){return n.tagName==='MARK'}).length > 0"), True)
+check("search status", ctx.eval("__textOf('status')"),
+      f"{fmt_date(LATEST_DATE)} {LATEST['weekday']} · 전체 카테고리 · 검색 결과 {ctx.eval('__cards().length')}건")
 check("clear button shown", ctx.eval("document.getElementById('search-clear').hidden"), False)
-ctx.eval("var i=document.getElementById('search-input'); i.value='리만'; i.dispatch('input');")
-check("auto expand banner", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'banner')}).length"), 1)
-check("auto expand cards", ctx.eval("__cards().length"), 1)
-check("expanded status scope", "5일 전체" in ctx.eval("__textOf('status')"), True)
+
+# 최신 날짜에는 없고 다른 날짜에만 있는 키워드 (자동 확장 확인용)
+kw_elsewhere = None
+for brief in BRIEFS[1:]:
+    for item in brief["items"]:
+        for tok in re.findall(r"[가-힣]{3,}", item["title"]):
+            if tok not in latest_blob:
+                kw_elsewhere = tok
+                break
+        if kw_elsewhere:
+            break
+    if kw_elsewhere:
+        break
+if kw_elsewhere:
+    ctx.eval("var i=document.getElementById('search-input'); i.value=%s; i.dispatch('input');"
+             % json.dumps(kw_elsewhere, ensure_ascii=False))
+    check("auto expand banner", ctx.eval("__byClass('banner').length"), 1)
+    check("auto expand finds items", ctx.eval("__cards().length") > 0, True)
+    check("expanded status scope", ctx.eval("__textOf('status')").startswith(f"{len(BRIEFS)}일 전체"), True)
+else:
+    print("  - 자동 확장 검사 건너뜀(다른 날짜에만 있는 키워드 없음)")
+
 ctx.eval("var i=document.getElementById('search-input'); i.value='없는키워드zzz'; i.dispatch('input');")
-check("empty state", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'empty')}).length"), 1)
+check("empty state", ctx.eval("__byClass('empty').length"), 1)
 check("empty state text", ctx.eval("__textOf('results').indexOf('검색 결과가 없습니다') >= 0"), True)
 
 print("[4] XSS — 검색어/데이터가 텍스트로만 렌더")
@@ -305,44 +394,65 @@ check("payload kept as text", ctx.eval("__textOf('results').indexOf('onerror=ale
 print("[5] '더 보기' 토글 · fallback · 에러 화면")
 ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")
 ctx.eval("__dateChips()[1].dispatch('click')")
-before = ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'is-clamped')}).length")
+before = ctx.eval("__byClass('is-clamped').length")
 check("clamped before", before > 0, True)
-ctx.eval("var b=__find(document.getElementById('results'), function(n){return __hasClass(n,'more-btn')})[0]; b.dispatch('click');")
-after = ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'is-clamped')}).length")
+ctx.eval("var b=__byClass('more-btn')[0]; b.dispatch('click');")
+after = ctx.eval("__byClass('is-clamped').length")
 check("clamp toggles one card open", after, before - 1)
-check("button label flipped", ctx.eval("__text(__find(document.getElementById('results'), function(n){return __hasClass(n,'more-btn')})[0]).indexOf('접기') >= 0"), True)
-ctx.eval("var b=__find(document.getElementById('results'), function(n){return __hasClass(n,'more-btn')})[0]; b.dispatch('click');")
-check("clamp toggles back", ctx.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'is-clamped')}).length"), before)
+check("button label flipped", ctx.eval("__text(__byClass('more-btn')[0]).indexOf('접기') >= 0"), True)
+ctx.eval("var b=__byClass('more-btn')[0]; b.dispatch('click');")
+check("clamp toggles back", ctx.eval("__byClass('is-clamped').length"), before)
 
 ctx2 = new_context("fallback")
-check("fallback cards", ctx2.eval("__cards().length"), 9)
-check("fallback footer", ctx2.eval("__textOf('footer-meta')").startswith("5일치 · 이슈 51건"), True)
+check("fallback cards", ctx2.eval("__cards().length"), len(latest_items))
+check("fallback footer",
+      ctx2.eval("__textOf('footer-meta')").startswith(f"{len(BRIEFS)}일치 · 이슈 {ALL_ITEMS}건"), True)
 
 ctx3 = new_context("fail")
-check("error state", ctx3.eval("__find(document.getElementById('results'), function(n){return __hasClass(n,'error')}).length"), 1)
+check("error state", ctx3.eval("__byClass('error').length"), 1)
 check("error mentions path", ctx3.eval("__textOf('results').indexOf('briefs.json') >= 0"), True)
 check("error status", ctx3.eval("__textOf('status')"), "데이터 없음")
+
+print("[6] 🎀 키티·콜라보 탭")
+if KITTY_ITEMS:
+    ctx.eval("__tabs()[4].dispatch('click')")
+    check("kitty cards", ctx.eval("__cards().length"), len(KITTY_ITEMS))
+    check("dates hidden", ctx.eval("document.getElementById('dates').hidden"), True)
+    check("kitty status", ctx.eval("__textOf('status')"),
+          f"{KITTY.get('asOf', '')} 기준 · 🎀 산리오(헬로키티) · 콜라보 {len(KITTY_ITEMS)}건")
+    check("kitty titles", ctx.eval("__byClass('card-title').map(function(n){return __text(n)}).join('|')"),
+          "|".join(plain(i["title"]) for i in KITTY_ITEMS))
+    check("kitty has price rows", ctx.eval("__byClass('kitty-row').length >= %d" % (len(KITTY_ITEMS) * 2)), True)
+    check("kitty status pills", ctx.eval("__byClass('kitty-status').length"), len(KITTY_ITEMS))
+    check("kitty two CTAs", ctx.eval("__byClass('kitty-cta').length"), 2)
+    check("kitty CTA url", ctx.eval("__byClass('kitty-cta').every(function(a){return a.getAttribute('href')===%s;})"
+                                    % json.dumps(KITTY.get("siteUrl"), ensure_ascii=False)), True)
+    check("kitty CTA label", ctx.eval("__text(__byClass('kitty-cta')[0]).indexOf('8대 캐릭터 콜라보 전체 사이트') >= 0"), True)
+    check("kitty CTA new tab", ctx.eval("__byClass('kitty-cta').every(function(a){return a.getAttribute('target')==='_blank' && a.getAttribute('rel').indexOf('noopener')===0;})"), True)
+
+    kitty_kw = "스타벅스"
+    ctx.eval("var i=document.getElementById('search-input'); i.value=%s; i.dispatch('input');" % json.dumps(kitty_kw, ensure_ascii=False))
+    matched = [i for i in KITTY_ITEMS if kitty_kw.lower() in kitty_hay(i)]
+    check("kitty search cards", ctx.eval("__cards().length"), len(matched))
+    check("kitty search status", ctx.eval("__textOf('status')").endswith(f"검색 결과 {len(matched)}건"), True)
+    check("kitty search keeps CTA", ctx.eval("__byClass('kitty-cta').length"), 2)
+
+    ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")
+    ctx.eval("__tabs()[0].dispatch('click')")
+    check("back to brief tab", ctx.eval("__cards().length"), len(latest_items))
+    check("dates visible again", ctx.eval("document.getElementById('dates').hidden"), False)
+else:
+    print("  - kittyCollabs 데이터가 없어 건너뜀")
 
 if "--dump" in sys.argv:
     ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")
     ctx.eval("__dateChips()[1].dispatch('click')")
-    print("\n=== 11.25 렌더 텍스트 (앞부분) ===")
-    text = ctx.eval("__textOf('results')")
-    print(text[:3000])
-    print("\n=== 첫 카드 태그 구조 ===")
-    print(ctx.eval("""(function(){
-      var out = [];
-      (function walk(n, d) {
-        for (var i = 0; i < n.childNodes.length; i++) {
-          var c = n.childNodes[i];
-          if (c.nodeType === 3) continue;
-          out.push(new Array(d + 1).join("  ") + "<" + c.tagName.toLowerCase() +
-            (c.getAttribute("class") ? " class=" + c.getAttribute("class") : "") + ">");
-          walk(c, d + 1);
-        }
-      })(__cards()[0], 0);
-      return out.join(String.fromCharCode(10));
-    })()"""))
+    print("\n=== 최신 날짜 렌더 텍스트 (앞부분) ===")
+    print(ctx.eval("__textOf('results')")[:3000])
+    if KITTY_ITEMS:
+        ctx.eval("__tabs()[4].dispatch('click')")
+        print("\n=== 키티·콜라보 렌더 텍스트 ===")
+        print(ctx.eval("__textOf('results')")[:4000])
 
 print()
 if all(results):

@@ -68,10 +68,23 @@ DOMAIN_LABELS = {
     "shinsegaegroupnewsroom.com": "신세계그룹 뉴스룸", "theguardian.com": "The Guardian",
     "bbc.com": "BBC News 코리아", "leanprover-community.github.io": "Lean 커뮤니티",
     "math.mit.edu": "MIT", "theverge.com": "The Verge", "ft.com": "FT",
+    "diarypoint.com": "다이어리포인트", "betanews.net": "베타뉴스", "cnet.co.kr": "씨넷코리아",
+    "cjonstyle.com": "CJ온스타일", "cjnews.cj.net": "CJ 뉴스룸", "cjonstyle.co.kr": "CJ온스타일",
 }
 
 URL_RE = re.compile(r"https?://[^\s,]+")
 TRAIL = ".,;:)]}'\","  # URL 끝에 붙은 문장부호 제거용
+
+# 🎀 키티·콜라보 탭 — work/character-collabs-YYYY-MM-DD.json 의 산리오(헬로키티 중심) 항목을 옮긴다.
+CHARACTERS_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/"
+KITTY_CHARACTER_ID = "sanrio"
+PERIOD_LABELS = {
+    "promotion": "행사 기간", "start": "시작", "end": "종료",
+    "phase1": "1차 출시", "camp_mug": "캠프컵 출시", "phase2": "2차 출시",
+    "popup_gangnam": "강남 팝업", "popup_busan": "부산 팝업",
+    "collab_start": "협업 시작", "release": "출시", "store": "매장 판매",
+    "note": "비고",
+}
 
 
 def host_label(url: str) -> str:
@@ -344,6 +357,115 @@ def parse_file(path):
     }
 
 
+def pretty_dt(value):
+    """'2026-11-12T10:00:00+09:00' → '2026-11-12 10:00'."""
+    text = str(value)
+    if "T" in text:
+        text = text.replace("T", " ")[:16]
+    return text.replace("+09:00", "").strip()
+
+
+def kitty_schedule(period):
+    """period 딕셔너리를 카드에 그대로 읽을 수 있는 짧은 줄 목록으로 바꾼다(최대 4줄)."""
+    if not isinstance(period, dict):
+        return []
+    lines, used = [], set()
+    start, end = period.get("start"), period.get("end")
+    if start and end:
+        lines.append(f"{pretty_dt(start)} ~ {pretty_dt(end)}")
+        used.update({"start", "end"})
+    for key, value in period.items():
+        if key in used or key == "note" or value in (None, ""):
+            continue
+        label = PERIOD_LABELS.get(key, key)
+        text = pretty_dt(value)
+        lines.append(f"{label} {text}" if text.lower() != "none" else label)
+    return lines[:4]
+
+
+def kitty_price(prices):
+    """가격 목록을 '최저~최고원 · n개 품목' 형태의 한 줄과 비고로 요약한다."""
+    prices = prices or []
+    if not prices:
+        return "미확인", ""
+    values = [p.get("krw") for p in prices if isinstance(p.get("krw"), int)]
+    notes = []
+    for p in prices:
+        note = (p.get("note") or "").strip()
+        if note and note not in notes:
+            notes.append(note)
+    price_note = " / ".join(notes)
+
+    if not values:
+        return "미확인", price_note
+    if max(values) == 0:
+        return "입장 무료", price_note
+    paid = [v for v in values if v > 0]
+    low, high = min(paid), max(paid)
+    line = f"{high:,}원" if low == high else f"{low:,}~{high:,}원"
+    if len(prices) > 1:
+        line += f" · {len(prices)}개 품목"
+    if len(values) < len(prices):
+        line += " · 일부 미확인"
+    return line, price_note
+
+
+def kitty_item(item):
+    schedule = kitty_schedule(item.get("period"))
+    price_line, price_note = kitty_price(item.get("prices"))
+    offline = item.get("offline") or {}
+    visit = None
+    if offline.get("visitable"):
+        fields = {k: offline.get(k) for k in ("venue", "address", "period", "hours")}
+        fields = {k: v for k, v in fields.items()
+                  if v and v != "지점별 상이" and not (k == "hours" and str(v).startswith("미확인"))}
+        if fields:
+            visit = fields
+    carousel = item.get("carousel") or {}
+    return {
+        "id": item.get("id", ""),
+        "title": item.get("collab_name", ""),
+        "brand": item.get("brand", ""),
+        "status": item.get("status", ""),
+        "schedule": schedule,
+        "priceLine": price_line,
+        "priceNote": price_note,
+        "headline": carousel.get("cover_headline", ""),
+        "points": [p for p in (carousel.get("body_points") or []) if p],
+        "visit": visit,
+        "links": sources_of(item.get("official_urls") or []),
+    }
+
+
+def load_kitty_collabs(src_dir):
+    """work/character-collabs-*.json 중 최신 파일의 산리오(헬로키티) 항목을 카드 데이터로 만든다."""
+    paths = sorted(glob.glob(os.path.join(src_dir, "character-collabs-*.json")))
+    for path in reversed(paths):
+        try:
+            payload = json.load(open(path, encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as err:
+            print(f"경고: 콜라보 원본을 읽지 못했습니다 {path} ({err})", file=sys.stderr)
+            continue
+        sanrio = next((c for c in payload.get("characters", [])
+                       if c.get("id") == KITTY_CHARACTER_ID), None)
+        if not sanrio or not sanrio.get("items"):
+            continue
+        meta = payload.get("meta", {})
+        items = [kitty_item(it) for it in sanrio["items"]]
+        # 종료된 건은 목록 맨 뒤로(그 외 순서는 원본 유지)
+        items.sort(key=lambda it: 1 if it["status"].strip().startswith("종료") else 0)
+        return {
+            "asOf": meta.get("as_of", ""),
+            "title": "산리오(헬로키티) 콜라보 최신 소식",
+            "characterName": sanrio.get("name_ko", "산리오"),
+            "sourceFile": os.path.relpath(path, src_dir),
+            "siteUrl": CHARACTERS_URL,
+            "siteTitle": "🎀 8대 캐릭터 콜라보 전체 사이트 보기 →",
+            "items": items,
+        }
+    return None
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     ap = argparse.ArgumentParser()
@@ -360,6 +482,7 @@ def main():
     briefs.sort(key=lambda b: b["date"], reverse=True)
 
     latest = briefs[0]["date"]
+    kitty = load_kitty_collabs(args.src_dir)
     payload = {
         "updatedAt": f"{latest} 08:00 KST 기준",
         "latestDate": latest,
@@ -368,9 +491,15 @@ def main():
             "items": sum(len(b["items"]) for b in briefs),
             "extras": sum(len(b["extras"]) for b in briefs),
             "ideas": sum(len(b["ideas"]) for b in briefs),
+            "kitty": len(kitty["items"]) if kitty else 0,
         },
         "briefs": briefs,
     }
+    if kitty:
+        payload["kittyCollabs"] = kitty
+    else:
+        print("경고: character-collabs-*.json 에서 산리오 항목을 찾지 못해 키티·콜라보 탭 데이터를 넣지 않았습니다",
+              file=sys.stderr)
 
     os.makedirs(args.out_dir, exist_ok=True)
     json_path = os.path.join(args.out_dir, "briefs.json")
@@ -392,6 +521,8 @@ def main():
               f" AI={sum(1 for i in b['items'] if i['category']=='ai')}"
               f" 단신={len(b['extras'])} 아이디어={len(b['ideas'])} 주의={len(b['caveats'])}")
     print(f"합계: {payload['counts']}")
+    if kitty:
+        print(f"🎀 키티·콜라보: {len(kitty['items'])}건 ({kitty['sourceFile']}, {kitty['asOf']} 기준)")
     print(f"저장: {json_path}")
 
 
