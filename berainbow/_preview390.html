@@ -7,19 +7,17 @@
 <style>
   html, body { margin: 0; padding: 0; background: #2A2A2E; }
   .frame-wrap { width: 390px; margin: 0; background: #FBF8F3; }
-  iframe { display: block; width: 390px; height: 2400px; border: 0; }
+  iframe { display: block; width: 390px; height: 6900px; border: 0; }
 </style>
 </head>
 <body>
 <div class="frame-wrap"><iframe id="f" src="./index.html" title="비더레인보우 대시보드 390px 미리보기"></iframe></div>
 <script>
-  // 같은 출처라 iframe 내부를 스크롤할 수 있다. ?y=1200 으로 위치 지정.
+  // 같은 출처라 iframe 내부 상태를 읽을 수 있다. ?y=1200 이면 그 위치부터 보여준다.
   (function () {
     var f = document.getElementById("f");
     var y = parseInt((location.search.match(/y=(\d+)/) || [])[1] || "0", 10);
-    f.addEventListener("load", function () {
-      try { f.contentWindow.scrollTo(0, y); } catch (e) {}
-    });
+    f.addEventListener("load", function () { window.scrollTo(0, y); });
   })();
 </script>
 </body>
