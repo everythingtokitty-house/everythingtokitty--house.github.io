@@ -520,7 +520,7 @@
       media.appendChild(img);
     }
     var visitable = Boolean((item.offline || {}).visitable);
-    var flagText = item.region === "JP" ? "🇯🇵 일본 한정" : (visitable ? "🗺 방문형" : "💻 온라인");
+    var flagText = item.region === "JP" ? "🇯🇵 일본" : (visitable ? "🗺 방문형" : "💻 온라인");
     var flag = el("span", "card-flag" + (visitable ? " card-flag--visit" : "") +
       (item.region === "JP" ? " card-flag--jp" : ""), flagText);
     media.appendChild(flag);
