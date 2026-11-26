@@ -1037,6 +1037,12 @@
         renderPromptChips();
         renderPromptSelect();
         renderPrompts();
+        var note = $("prompt-note");
+        if (note) {
+          var noteText = customNote();
+          note.textContent = noteText;
+          note.hidden = !noteText;
+        }
         if ($("prompt-current")) $("prompt-current").textContent = "지금 대상 · " + resolvePromptTarget().name;
       });
     });
