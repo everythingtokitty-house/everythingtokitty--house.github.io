@@ -910,12 +910,17 @@
     });
     var note = $("prompt-note");
     if (note) {
-      if (t.note) { note.textContent = t.note; note.hidden = false; }
+      if (t.note) { note.textContent = t.note; note.hidden = false; note.className = promptNoteClass(); }
       else { note.textContent = ""; note.hidden = true; }
     }
     var cur = $("prompt-current");
     if (cur) cur.textContent = "지금 대상 · " + promptDisplayName();
     updatePromptActions();
+  }
+  /* 빈 칸 시작·내가 등록한 상품 안내는 차분한 색, 경고성 안내는 주황색 */
+  function promptNoteClass() {
+    var info = !!(promptTarget && (promptTarget.draft || isMineId(promptTarget.id)));
+    return info ? "pt-note pt-note--info" : "pt-note";
   }
   /* 직접 등록한 상품을 고른 상태에서만 [삭제] 버튼 노출 */
   function updatePromptActions() {
@@ -1219,6 +1224,7 @@
         if (note) {
           note.textContent = promptTarget.note;
           note.hidden = !promptTarget.note;
+          note.className = promptNoteClass();
         }
         if ($("prompt-current")) $("prompt-current").textContent = "지금 대상 · " + promptDisplayName();
         updatePromptActions();
