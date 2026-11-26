@@ -866,7 +866,6 @@ main:focus { outline: none; }
 }
 .kitty-cta:hover { color: #fff; filter: brightness(1.03); box-shadow: 0 14px 26px -14px rgba(224, 69, 123, 1); }
 .kitty-cta:active { transform: scale(0.99); }
-.kitty-cta-emoji { font-size: 16px; }
 .kitty-cta-text { text-align: center; }
 
 .kitty-cards { gap: 14px; }

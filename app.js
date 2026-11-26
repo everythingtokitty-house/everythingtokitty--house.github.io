@@ -406,8 +406,7 @@
     a.href = (site && site.siteUrl) || CHARACTERS_URL;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.appendChild(el("span", "kitty-cta-emoji", "🎀"));
-    a.appendChild(el("span", "kitty-cta-text", (site && site.siteTitle) || "8대 캐릭터 콜라보 전체 사이트 보기 →"));
+    a.appendChild(el("span", "kitty-cta-text", (site && site.siteTitle) || "🎀 8대 캐릭터 콜라보 전체 사이트 보기 →"));
     return a;
   }
 
@@ -494,7 +493,7 @@
     }
 
     var foot = el("section", "kitty-foot");
-    foot.appendChild(el("p", "kitty-foot-title", "🎀 8대 캐릭터 콜라보 전체 사이트"));
+    foot.appendChild(el("p", "kitty-foot-title", "다른 캐릭터 콜라보도 보고 싶다면"));
     foot.appendChild(el("p", "kitty-foot-desc",
       "디즈니 · 포켓몬 · 미피 · 짱구 · 몬치치 · 리락쿠마 · 스누피까지 한 화면에서 봐요."));
     if (shown !== all.length) {
