@@ -57,7 +57,7 @@
   }
 
   function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
-  function won(n) { return comma(n) + "원"; }
+  function won(n) { return n === 0 ? "무료" : comma(n) + "원"; }
   function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
   function plain(s) { return String(s == null ? "" : s); }
   function firstKey(obj, skip) {
@@ -167,7 +167,12 @@
     if (p.promotion) return p.promotion;
     if (p.start && p.end) return p.start + " ~ " + p.end;
     var k = firstKey(p, ["note"]);
-    return k ? p[k] : "일정 미확인";
+    if (k) return p[k];
+    if (p.note) {
+      var note = plain(p.note);
+      return note.length > 42 ? note.slice(0, 42) + "…" : note;
+    }
+    return "일정 미확인";
   }
 
   function priceSummary(item) {
@@ -188,9 +193,9 @@
     return (item.prices || []).map(function (p) {
       var txt = p.item;
       if (typeof p.sale_krw === "number" && typeof p.krw === "number") {
-        txt += " " + comma(p.sale_krw) + "원(정가 " + comma(p.krw) + "원)";
+        txt += " " + won(p.sale_krw) + "(정가 " + won(p.krw) + ")";
       } else if (typeof p.krw === "number") {
-        txt += " " + comma(p.krw) + "원";
+        txt += " " + won(p.krw);
       } else {
         txt += " → " + (p.note || "미확인");
       }
