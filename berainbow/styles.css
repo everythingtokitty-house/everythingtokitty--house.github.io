@@ -477,7 +477,9 @@ main { padding: 34px 0 60px; }
   position: relative; padding-left: 24px; font-size: 12.5px; color: var(--ink-2)
 }
 .check-list li::before {
-  content: "✓"; position: absolute; left: 0; top: 0; color: var(--gold); font-weight: 700;
+  content: ""; position: absolute; left: 2px; top: 7px;
+  width: 9px; height: 5px; border-left: 2px solid var(--gold); border-bottom: 2px solid var(--gold);
+  transform: rotate(-45deg);
 }
 
 .inline-warn {

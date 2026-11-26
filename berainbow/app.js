@@ -157,7 +157,7 @@
       var a = new Date(m.asof + "T00:00:00");
       var b = new Date(m.next_update + "T00:00:00");
       var diff = Math.round((b - a) / 86400000);
-      dday = diff > 0 ? " (D-" + diff + ")" : diff === 0 ? " (오늘)" : "";
+      dday = diff > 0 ? " · D-" + diff : diff === 0 ? " · 오늘" : "";
     } catch (e) { dday = ""; }
     if ($("next-update")) $("next-update").textContent = "다음 업데이트 " + m.next_update_label + dday;
     if ($("json-link")) $("json-link").setAttribute("href", m.json_path);
@@ -342,7 +342,7 @@
       mark.setAttribute("aria-hidden", "true");
       label.appendChild(input);
       label.appendChild(mark);
-      label.appendChild(el("span", "visually-hidden", c.title + " 확인"));
+      label.appendChild(el("span", "visually-hidden", c.title));
       var body = el("div", "risk-check-body");
       body.appendChild(el("p", "risk-check-title", c.title));
       body.appendChild(el("p", "risk-check-detail", c.detail));
