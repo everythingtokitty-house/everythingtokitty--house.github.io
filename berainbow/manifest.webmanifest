@@ -1,0 +1,11 @@
+{
+  "name": "비더레인보우 사업 대시보드",
+  "short_name": "비더레인보우",
+  "description": "B.the rainbow 1인 사업자 운영·마케팅 대시보드 — 매주 금요일 업데이트",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF8F3",
+  "theme_color": "#0E1B32"
+}
