@@ -24,6 +24,14 @@
     { key: "캐릭터모음집", label: "캐릭터모음집", emoji: "🧩", sub: "" }
   ];
 
+  // 지역 필터 — 국내(KR)와 일본 한정(JP)을 나눠 본다.
+  var REGION_META = [
+    { key: "all", label: "전체", emoji: "🌏" },
+    { key: "KR", label: "국내", emoji: "🇰🇷" },
+    { key: "JP", label: "일본 한정", emoji: "🇯🇵" }
+  ];
+  var REGION_LABELS = { KR: "🇰🇷 국내", JP: "🇯🇵 일본 한정" };
+
   var PERIOD_LABELS = {
     promotion: "프로모션", phase1: "1차", phase2: "2차", camp_mug: "캠프컵",
     start: "시작", end: "종료", open: "오픈", note: "참고",
@@ -42,7 +50,7 @@
   var els = {};
   var data = null;
   var items = [];
-  var state = { char: "all", acct: "all", q: "" };
+  var state = { char: "all", acct: "all", region: "all", q: "" };
   var toastTimer = null;
   var lastCopied = "";
 
@@ -121,6 +129,8 @@
         item.charName = c.name_ko;
         item.charLabel = meta.label;
         item.charEmoji = meta.emoji;
+        item.region = raw.region === "JP" ? "JP" : "KR";
+        item.regionLabel = REGION_LABELS[item.region];
         item.hay = haystack(item);
         out.push(item);
       });
@@ -144,21 +154,23 @@
     for (var k in p) {
       if (Object.prototype.hasOwnProperty.call(p, k)) parts.push(p[k]);
     }
+    parts.push(item.regionLabel, item.region === "JP" ? "일본 한정 일본 산리오 해외" : "국내 한국");
     return parts.filter(Boolean).join(" \n ").toLowerCase();
   }
 
-  function matchItem(item, charKey, acctKey, tms) {
+  function matchItem(item, charKey, acctKey, regionKey, tms) {
     if (charKey !== "all" && item.charId !== charKey) return false;
     if (acctKey !== "all" && (item.recommended_accounts || []).indexOf(acctKey) < 0) return false;
+    if (regionKey && regionKey !== "all" && item.region !== regionKey) return false;
     for (var i = 0; i < tms.length; i++) {
       if (item.hay.indexOf(tms[i]) < 0) return false;
     }
     return true;
   }
 
-  function filterItems(charKey, acctKey, q) {
+  function filterItems(charKey, acctKey, regionKey, q) {
     var tms = String(q || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
-    return items.filter(function (item) { return matchItem(item, charKey, acctKey, tms); });
+    return items.filter(function (item) { return matchItem(item, charKey, acctKey, regionKey, tms); });
   }
 
   /* ---------- summary helpers ---------- */
@@ -175,10 +187,21 @@
     return "일정 미확인";
   }
 
+  function yen(n) { return "¥" + comma(n); }
+
   function priceSummary(item) {
     var ps = item.prices || [];
     var priced = ps.filter(function (p) { return typeof p.krw === "number"; });
-    if (!priced.length) return "가격 미확인";
+    if (!priced.length) {
+      var jpriced = ps.filter(function (p) { return typeof p.jpy === "number"; });
+      if (!jpriced.length) return "가격 미확인";
+      var jl = null, jh = null;
+      jpriced.forEach(function (p) {
+        if (jl === null || p.jpy < jl) jl = p.jpy;
+        if (jh === null || p.jpy > jh) jh = p.jpy;
+      });
+      return jl === jh ? yen(jl) : yen(jl) + " ~ " + yen(jh);
+    }
     var low = null, high = null;
     priced.forEach(function (p) {
       var v = typeof p.sale_krw === "number" ? p.sale_krw : p.krw;
@@ -196,10 +219,12 @@
         txt += " " + won(p.sale_krw) + "(정가 " + won(p.krw) + ")";
       } else if (typeof p.krw === "number") {
         txt += " " + won(p.krw);
+      } else if (typeof p.jpy === "number") {
+        txt += " " + yen(p.jpy);
       } else {
         txt += " → " + (p.note || "미확인");
       }
-      if (p.note && typeof p.krw === "number") txt += " (" + p.note + ")";
+      if (p.note && (typeof p.krw === "number" || typeof p.jpy === "number")) txt += " (" + p.note + ")";
       return "- " + txt;
     });
   }
@@ -221,6 +246,7 @@
     L.push("[내지 1 · 제목]");
     L.push(item.collab_name);
     L.push("· 브랜드: " + item.brand);
+    L.push("· 지역: " + (item.regionLabel || "🇰🇷 국내") + (item.region === "JP" ? " (일본에서만 판매)" : ""));
     L.push("· 상태: " + plain(item.status));
     L.push("· 판매처: " + ((item.sales_channels || []).join(", ") || "미확인"));
     L.push("");
@@ -338,9 +364,11 @@
     if (els.jsonLink) els.jsonLink.setAttribute("href", "./data/collabs.json");
     if (els.footerMeta) {
       var cov = summary.image_url_coverage || {};
-      els.footerMeta.textContent = "총 " + items.length + "건 · " + (data.characters || []).length +
-        "캐릭터 · 방문형 " + (summary.visitable_items || []).length + "건 · 제품 사진 " +
-        (cov.confirmed || 0) + "/" + (cov.total || items.length) + " · 기준일 " + (meta.as_of || "—");
+      var jpCount = items.filter(function (it) { return it.region === "JP"; }).length;
+      els.footerMeta.textContent = "총 " + items.length + "건(🇯🇵 일본 한정 " + jpCount + "건) · " +
+        (data.characters || []).length + "캐릭터 · 방문형 " + (summary.visitable_items || []).length +
+        "건 · 제품 사진 " + (cov.confirmed || 0) + "/" + (cov.total || items.length) +
+        " · 기준일 " + (meta.as_of || "—");
     }
   }
 
@@ -353,16 +381,21 @@
       var date = plain(entry.date);
       var md = date.slice(5).replace("-", "/");
       var target = null;
-      items.forEach(function (item) {
-        if (target) return;
-        var p = item.period || {};
-        for (var k in p) {
-          if (Object.prototype.hasOwnProperty.call(p, k) && String(p[k]).indexOf(date) >= 0) {
-            target = item;
-            break;
+      if (entry.item_id) {
+        items.forEach(function (item) { if (item.id === entry.item_id) target = item; });
+      }
+      if (!target) {
+        items.forEach(function (item) {
+          if (target) return;
+          var p = item.period || {};
+          for (var k in p) {
+            if (Object.prototype.hasOwnProperty.call(p, k) && String(p[k]).indexOf(date) >= 0) {
+              target = item;
+              break;
+            }
           }
-        }
-      });
+        });
+      }
       var node = el(target ? "button" : "div", "cal-item");
       if (target) {
         node.setAttribute("type", "button");
@@ -377,6 +410,7 @@
         node.addEventListener("click", function () {
           state.char = "all";
           state.acct = "all";
+          state.region = "all";
           state.q = "";
           if (els.search) els.search.value = "";
           render();
@@ -400,7 +434,7 @@
     allBtn.setAttribute("data-char", "all");
     allBtn.setAttribute("aria-pressed", state.char === "all" ? "true" : "false");
     allBtn.appendChild(el("span", null, "전체"));
-    var allCount = items.filter(function (it) { return matchItem(it, "all", state.acct, tms); }).length;
+    var allCount = items.filter(function (it) { return matchItem(it, "all", state.acct, state.region, tms); }).length;
     allBtn.appendChild(el("span", "count", "(" + allCount + ")"));
     allBtn.addEventListener("click", function () { state.char = "all"; render(); });
     els.tabs.appendChild(allBtn);
@@ -412,7 +446,7 @@
 
     order.forEach(function (key) {
       var meta = charMeta(key);
-      var n = items.filter(function (it) { return matchItem(it, key, state.acct, tms); }).length;
+      var n = items.filter(function (it) { return matchItem(it, key, state.acct, state.region, tms); }).length;
       var btn = el("button", "tab ch-" + key);
       btn.setAttribute("type", "button");
       btn.setAttribute("data-char", key);
@@ -431,8 +465,8 @@
     els.accounts.replaceChildren();
     ACCT_META.forEach(function (meta) {
       var n = meta.key === "all"
-        ? items.filter(function (it) { return matchItem(it, state.char, "all", tms); }).length
-        : items.filter(function (it) { return matchItem(it, state.char, meta.key, tms); }).length;
+        ? items.filter(function (it) { return matchItem(it, state.char, "all", state.region, tms); }).length
+        : items.filter(function (it) { return matchItem(it, state.char, meta.key, state.region, tms); }).length;
       var btn = el("button", "acct");
       btn.setAttribute("type", "button");
       btn.setAttribute("data-acct", meta.key);
@@ -442,6 +476,23 @@
       btn.appendChild(el("span", "count", "(" + n + ")"));
       btn.addEventListener("click", function () { state.acct = meta.key; render(); });
       els.accounts.appendChild(btn);
+    });
+  }
+
+  function renderRegions(tms) {
+    if (!els.regions) return;
+    els.regions.replaceChildren();
+    REGION_META.forEach(function (meta) {
+      var n = items.filter(function (it) { return matchItem(it, state.char, state.acct, meta.key, tms); }).length;
+      var btn = el("button", "acct region" + (meta.key === "JP" ? " region--jp" : ""));
+      btn.setAttribute("type", "button");
+      btn.setAttribute("data-region", meta.key);
+      btn.setAttribute("aria-pressed", state.region === meta.key ? "true" : "false");
+      if (meta.emoji) btn.appendChild(el("span", "emoji", meta.emoji));
+      btn.appendChild(el("span", null, meta.label));
+      btn.appendChild(el("span", "count", "(" + n + ")"));
+      btn.addEventListener("click", function () { state.region = meta.key; render(); });
+      els.regions.appendChild(btn);
     });
   }
 
@@ -468,8 +519,10 @@
       img.setAttribute("src", urls[0]);
       media.appendChild(img);
     }
-    var flag = el("span", "card-flag" + ((item.offline || {}).visitable ? " card-flag--visit" : ""),
-      (item.offline || {}).visitable ? "🗺 방문형" : "💻 온라인");
+    var visitable = Boolean((item.offline || {}).visitable);
+    var flagText = item.region === "JP" ? "🇯🇵 일본 한정" : (visitable ? "🗺 방문형" : "💻 온라인");
+    var flag = el("span", "card-flag" + (visitable ? " card-flag--visit" : "") +
+      (item.region === "JP" ? " card-flag--jp" : ""), flagText);
     media.appendChild(flag);
     return media;
   }
@@ -531,6 +584,8 @@
         } else {
           li.appendChild(el("span", "price-val", won(typeof p.krw === "number" ? p.krw : p.sale_krw)));
         }
+      } else if (typeof p.jpy === "number") {
+        li.appendChild(el("span", "price-val price-val--jpy", yen(p.jpy)));
       } else {
         li.appendChild(el("span", "price-val is-unknown", "미확인"));
       }
@@ -642,6 +697,9 @@
     var sb = el("span", "badge" + (st.cls ? " " + st.cls : ""), st.label);
     badges.appendChild(sb);
     badges.appendChild(el("span", "badge badge--char", item.charEmoji + " " + item.charLabel));
+    if (item.region === "JP") {
+      badges.appendChild(el("span", "badge badge--jp", "🇯🇵 일본 한정"));
+    }
     (item.recommended_accounts || []).forEach(function (a) {
       var meta = ACCT_META.filter(function (m) { return m.key === a; })[0];
       badges.appendChild(el("span", "badge badge--acct", (meta ? meta.emoji + " " : "") + a));
@@ -696,8 +754,9 @@
     var tms = terms();
     renderTabs(tms);
     renderAccounts(tms);
+    renderRegions(tms);
 
-    var shown = filterItems(state.char, state.acct, state.q);
+    var shown = filterItems(state.char, state.acct, state.region, state.q);
     if (els.results) els.results.replaceChildren();
 
     var counts = { 진행중: 0, 예정: 0, 종료: 0, 상시: 0 };
@@ -717,6 +776,7 @@
         parts.push(charMeta(state.char).label + "만");
       }
       if (state.acct !== "all") parts.push(state.acct + " 추천만");
+      if (state.region !== "all") parts.push((REGION_LABELS[state.region] || state.region) + "만");
       if (state.q.trim()) parts.push("'" + state.q.trim() + "' 검색");
       els.status.replaceChildren();
       var strong = el("strong", null, shown.length + "건");
@@ -729,12 +789,13 @@
       var empty = el("div", "empty");
       empty.appendChild(el("span", "empty-emoji", "🔍"));
       empty.appendChild(el("p", "empty-title", "조건에 맞는 콜라보가 없어요"));
-      empty.appendChild(el("p", "empty-body", "검색어를 줄이거나 캐릭터·계정 필터를 '전체'로 바꿔 보세요."));
+      empty.appendChild(el("p", "empty-body", "검색어를 줄이거나 캐릭터·계정·지역 필터를 '전체'로 바꿔 보세요."));
       var reset = el("button", null, "필터 초기화");
       reset.setAttribute("type", "button");
       reset.addEventListener("click", function () {
         state.char = "all";
         state.acct = "all";
+        state.region = "all";
         state.q = "";
         if (els.search) els.search.value = "";
         if (els.searchClear) els.searchClear.hidden = true;
@@ -756,6 +817,7 @@
     els.searchClear = $("search-clear");
     els.tabs = $("tabs");
     els.accounts = $("accounts");
+    els.regions = $("regions");
     els.results = $("results");
     els.status = $("status");
     els.asof = $("asof");
@@ -847,6 +909,7 @@
     filter: filterItems,
     buildCopyText: buildCopyText,
     normalizeStatus: normalizeStatus,
+    regionLabels: REGION_LABELS,
     getLastCopied: function () { return lastCopied; },
     open: function (charKey) { state.char = charKey; render(); }
   };

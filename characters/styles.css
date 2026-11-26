@@ -323,6 +323,12 @@ mark {
 .tabs::-webkit-scrollbar, .accounts::-webkit-scrollbar { display: none; }
 .tabs { margin-top: 8px; }
 .accounts { margin-top: 6px; padding-bottom: 7px; }
+.regions { margin-top: 6px; padding-bottom: 0; }
+.region--jp[aria-pressed="true"] {
+  background: #C2185B;
+  border-color: #C2185B;
+  color: #fff;
+}
 
 .tab, .acct {
   flex: none;
@@ -445,6 +451,7 @@ main:focus { outline: none; }
   backdrop-filter: blur(6px);
 }
 .card-flag--visit { color: var(--ch); border-color: var(--ch-soft); }
+.card-flag--jp { color: #C2185B; border-color: #FFD0DC; background: rgba(255, 240, 245, 0.96); }
 
 .card-body { padding: 13px 15px 15px; }
 
@@ -477,6 +484,11 @@ main:focus { outline: none; }
   font-weight: 700;
 }
 .badge--char { background: var(--ch-soft); color: var(--ch); }
+.badge--jp {
+  background: #FFE7EE;
+  color: #C2185B;
+  border: 1px solid #FFD0DC;
+}
 
 .card-title {
   margin: 8px 0 0;
@@ -565,6 +577,7 @@ main:focus { outline: none; }
   font-variant-numeric: tabular-nums;
 }
 .price-val.is-unknown { color: var(--ink-3); font-weight: 700; }
+.price-val--jpy { color: #C2185B; }
 .price-note {
   font-size: 11px;
   color: var(--ink-3);

@@ -1,19 +1,28 @@
 {
   "meta": {
-    "title": "8대 캐릭터 국내 콜라보 최신 소식",
+    "title": "8대 캐릭터 국내·일본 콜라보 최신 소식",
     "as_of": "2026-11-26",
     "timezone": "Asia/Seoul",
-    "scope": "2026년 국내 콜라보 중 최근(9~11월) 진행·출시 및 연말 예정 건",
-    "total_items": 30,
+    "scope": "2026년 국내 콜라보 30건 + 일본에서만 발매·판매·개최되는 산리오 소식 8건(2026년 11월 말~12월 중심)",
+    "total_items": 38,
     "characters": 8,
     "verification_method": "web_fetch로 실제 페이지 확인 (검색 스니펫만으로 채운 값 없음)",
-    "price_currency": "KRW",
+    "price_currency": "KRW(국내) + JPY(일본)",
     "unconfirmed_marker": "미확인",
     "accounts": {
       "방구석키티": "@everything_to_kitty — 브랜드 협업 뉴스·마케팅 관점",
       "캐릭터모음집": "@characters_zip — 라인업·가격·구성 정보성 카드뉴스",
       "애플트립": "@apple_spot_trip — 팝업·전시·지역 한정 등 방문형 소식"
     },
+    "regions": {
+      "KR": "🇰🇷 국내",
+      "JP": "🇯🇵 일본 한정"
+    },
+    "region_counts": {
+      "JP": 8,
+      "KR": 30
+    },
+    "japan_sources_note": "일본 항목은 sanrio.co.jp·puroland.jp·h-kuji.com·lawson.co.jp 공식 페이지만 web_fetch로 확인 (work/sanrio-japan-2026-11-26.json)",
     "generated_from": "work/character-collabs-2026-11-26.json"
   },
   "characters": [
@@ -21,6 +30,604 @@
       "id": "sanrio",
       "name_ko": "산리오 (헬로키티 중심)",
       "items": [
+        {
+          "id": "sanrio-jp-01",
+          "region": "JP",
+          "collab_name": "Happyくじ 'Sanrio characters Holiday Collection 2026' — 일본 편의점 12/4 발매",
+          "brand": "Happyくじ (산리오 라이선스)",
+          "sales_channels": [
+            "일본 전국 패밀리마트",
+            "로손·로손 스토어100",
+            "미니스톱",
+            "이토요카도",
+            "돈키호테",
+            "TSUTAYA·서점·홈비숍 등"
+          ],
+          "status": "출시 예정 (2026-12-04)",
+          "period": {
+            "start": "2026-12-04",
+            "end": "재고 소진 시",
+            "note": "12/4(금)부터 점포별 순차 발매 · 산리오 공식 공지 2026-11-25 · 점포별 취급·발매일 차이"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/goods/mx-happy-kuji-20261125/",
+            "https://www.h-kuji.com/goods/sanrio-holiday2026/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/mx-happy-kuji-20261125-main-1120x630.jpg",
+            "https://www.h-kuji.com/wp-content/uploads/2026/11/S_Hldy_ImgCut_1105_01.jpg"
+          ],
+          "prices": [
+            {
+              "item": "1회 (세금 포함)",
+              "jpy": 880,
+              "note": "하즈레 없음 · 전 11등급 + 라스트상"
+            }
+          ],
+          "lineup": [
+            "특상 BIG! 쿠로미 누이구루미 (전1종·약 40cm)",
+            "라스트상 BIG! 하로키티 누이구루미 (전1종·약 40cm)",
+            "A상 피규어 (전10종)",
+            "B상 누이구루미 참 (전5종)",
+            "C상 퍼 포셰트 (전2종)",
+            "D상 펄 스트랩 (전2종)",
+            "E상 새틴 파우치 (전4종)",
+            "F상 액세서리 트레이 (전4종)",
+            "G상 리본 참 (전10종)",
+            "H상 러버 컬렉션 (전12종)",
+            "I상 캔배지 세트 (전5종)",
+            "J상 미니 파일&스티커 세트 (전5종)"
+          ],
+          "features": [
+            "2025년에 이은 홀리데이 컬렉션 2탄 — 핑크×화이트×네이비 발레코어 의상",
+            "하로키티·쿠로미·시나모롤·마이스위트피아노·위시미멜 등 10캐릭터",
+            "1회 880엔으로 하즈레 없이 전 11등급 + 라스트상",
+            "쿠지 반쪽 응모 '해피 챌린지' 한정 누이구루미도 예정 (상세 추후 공개)"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "일본 전국 패밀리마트·로손·미니스톱·이토요카도 등 편의점·양판점",
+            "address": "일본 전국 (점포별 취급)",
+            "period": "2026-12-04 ~ 재고 소진 시",
+            "hours": "점포별 상이",
+            "reservation": "불필요"
+          },
+          "recommended_accounts": [
+            "방구석키티",
+            "캐릭터모음집"
+          ],
+          "carousel": {
+            "cover_headline": "12/4 일본 편의점에서…산리오 발레코어 Happyくじ 880엔",
+            "body_points": [
+              "12/4(금)부터 패밀리마트·로손 순차 발매",
+              "특상 쿠로미·라스트상 키티 40cm 누이구루미",
+              "1회 880엔·전 11등급+라스트상"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-25 (mx-happy-kuji-20261125)",
+            "Happyくじ 공식 상품 페이지 (h-kuji.com/goods/sanrio-holiday2026)",
+            "로손 공식 2026-11-24 (lawson.co.jp/lab/entertainment/art/20261124_kujisanrio)"
+          ],
+          "verification_note": "산리오 공식 공지 2026-11-25·Happyくじ 공식 상품 페이지·로손 공식 페이지 3곳에서 발매일·가격·취급점 일치 확인"
+        },
+        {
+          "id": "sanrio-jp-02",
+          "region": "JP",
+          "collab_name": "'키키＆라라 당리쿠지' — 일본 산리오숍·편의점 11/21 발매",
+          "brand": "산리오 당리쿠지",
+          "sales_channels": [
+            "일본 전국 산리오숍",
+            "일본 편의점 등 취급점"
+          ],
+          "status": "판매중 (2026-11-21~)",
+          "period": {
+            "start": "2026-11-21",
+            "end": "재고 소진 시",
+            "note": "점포별 순차 시작 · 산리오 공식 2026-11-12 · 시작일은 점포마다 다름"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/goods/ts-atarikuji-20261112/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/ts-atarikuji-20261112-main-1120x630.png"
+          ],
+          "prices": [
+            {
+              "item": "1회 (세금 포함)",
+              "jpy": 880,
+              "note": "하즈레 없음 · 전 12등급 + 라스트 스페셜상"
+            }
+          ],
+          "lineup": [
+            "① 팬케이크 메이커 (2개)",
+            "② 누이구루미 세트 (4개)",
+            "③ 멀티 케이스 (6개)",
+            "④ 멜라민 플레이트 핑크 (6개)",
+            "⑤ 멜라민 플레이트 블루 (6개)",
+            "⑥ 스퀘어 파우치 (8개)",
+            "⑦ 슬라이드 미러 핑크 (6개)",
+            "⑧ 슬라이드 미러 옐로 (6개)",
+            "⑨ 뚜껑 있는 소품함 (8개)",
+            "⑩ 페이스 타월 핑크 (6개)",
+            "⑪ 페이스 타월 블루 (6개)",
+            "⑫ 미니 토트 (6개)",
+            "라스트 스페셜상 쿠션"
+          ],
+          "features": [
+            "리틀트윈스타즈의 부드러운 세계관과 레트로한 디자인",
+            "하즈레 없는 당리쿠지, 1회 880엔",
+            "1등상이 팬케이크 메이커 — 집에서 쓰는 실용 굿즈 구성"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "일본 전국 산리오숍·편의점 취급점",
+            "address": "일본 전국 (점포별 취급)",
+            "period": "2026-11-21 ~ 재고 소진 시",
+            "hours": "점포별 상이",
+            "reservation": "불필요"
+          },
+          "recommended_accounts": [
+            "캐릭터모음집",
+            "방구석키티"
+          ],
+          "carousel": {
+            "cover_headline": "키키＆라라 당리쿠지 880엔…1등은 팬케이크 메이커",
+            "body_points": [
+              "11/21부터 산리오숍·편의점 순차 발매",
+              "전 12등급 + 라스트 스페셜상 쿠션",
+              "1회 880엔·하즈레 없음"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-12 (ts-atarikuji-20261112)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 발매일·가격·등급별 수량·취급점 확인"
+        },
+        {
+          "id": "sanrio-jp-03",
+          "region": "JP",
+          "collab_name": "'스위트 레이스 케이크' 디자인 시리즈 — 일본 산리오 직영점 11/27 발매",
+          "brand": "산리오 오리지널",
+          "sales_channels": [
+            "일본 산리오 직영점",
+            "백화점 산리오 코너",
+            "산리오 온라인숍"
+          ],
+          "status": "출시 예정 (2026-11-27)",
+          "period": {
+            "start": "2026-11-27",
+            "end": "재고 소진 시",
+            "note": "발매 첫날은 Sanrio+ 골드 이상 우선판매 · 11/27~12/3 구매 수량 제한 · 산리오 카페 점포는 미취급"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/goods/mx-sweet-lace-cake-202611/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/kv-goods-mx-sweet-lace-cake-202611-1-1120x630.jpg"
+          ],
+          "prices": [
+            {
+              "item": "누이구루미＆네크리스 세트 (전4종)",
+              "jpy": 6600
+            },
+            {
+              "item": "마스코트 백 참 (전7종)",
+              "jpy": 2695
+            },
+            {
+              "item": "파우치 참 (전4종)",
+              "jpy": 2200
+            },
+            {
+              "item": "바인더",
+              "jpy": 2794
+            },
+            {
+              "item": "씰 세트",
+              "jpy": 748
+            },
+            {
+              "item": "미러 키홀더",
+              "jpy": 1980
+            },
+            {
+              "item": "토트백",
+              "jpy": 2497
+            },
+            {
+              "item": "시크릿 스트랩 (전8종)",
+              "jpy": 990,
+              "note": "시크릿 타입 — 디자인 선택 불가"
+            }
+          ],
+          "lineup": [
+            "누이구루미＆네크리스 세트 (전4종)",
+            "마스코트 백 참 (전7종)",
+            "파우치 참 (전4종)",
+            "바인더",
+            "씰 세트",
+            "미러 키홀더",
+            "토트백",
+            "시크릿 스트랩 (전8종)"
+          ],
+          "features": [
+            "케이크를 이미지한 화이트·핑크·쇼콜라 컬러와 프릴 장식",
+            "누이구루미+네크리스+케이크형 액세서리 케이스 세트가 6,600엔",
+            "파우치 참·바인더·씰까지 케이크 콘셉트로 통일된 8종"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "일본 산리오 직영점·백화점 산리오 코너",
+            "address": "일본 전국 (점포별 취급)",
+            "period": "2026-11-27 ~ 재고 소진 시",
+            "hours": "점포별 상이 (온라인 10:00~)",
+            "reservation": "불필요 (첫날 우선판매는 Sanrio+ 앱)"
+          },
+          "recommended_accounts": [
+            "캐릭터모음집",
+            "방구석키티"
+          ],
+          "carousel": {
+            "cover_headline": "6,600엔 케이크 누이구루미…산리오 11/27 신작",
+            "body_points": [
+              "11/27 산리오 직영점·온라인숍 발매",
+              "누이구루미＆네크리스 세트 6,600엔",
+              "케이크 모양 파우치·바인더까지 8종"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-18 (mx-sweet-lace-cake-202611)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 품목별 가격·발매일·판매처·수량 제한 확인"
+        },
+        {
+          "id": "sanrio-jp-04",
+          "region": "JP",
+          "collab_name": "돈키호테 한정 '쿠로미·시나모롤' 서브컬처 시리즈 — 겨울 아우터 11/28",
+          "brand": "돈키호테 (산리오 라이선스)",
+          "sales_channels": [
+            "일본 돈키호테 취급점"
+          ],
+          "status": "출시 예정 (2026-11-28)",
+          "period": {
+            "start": "2026-11-28",
+            "end": "재고 소진 시",
+            "note": "돈키호테 한정 · 점포별 입하 상황 차이"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/goods/ku-cn-donki-20261117/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/ku-cn-donki-20261117-main-1-1120x630.png"
+          ],
+          "prices": [
+            {
+              "item": "귀 달린 퍼 아우터 + 레그워머 세트 (레이디스 M/L)",
+              "jpy": 9899
+            }
+          ],
+          "lineup": [
+            "쿠로미 (블랙×퍼플) 아우터+레그워머 — 각 4종",
+            "시나모롤 (라이트블루) 아우터+레그워머 — 각 4종"
+          ],
+          "features": [
+            "돈키호테 한정 판매 시리즈의 겨울 신작",
+            "귀 달린 퍼 아우터와 레그워머를 세트로 구성",
+            "구입 시 오리지널 행거 증정"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "일본 돈키호테 취급점",
+            "address": "일본 전국 (점포별 취급)",
+            "period": "2026-11-28 ~ 재고 소진 시",
+            "hours": "점포별 상이",
+            "reservation": "불필요"
+          },
+          "recommended_accounts": [
+            "방구석키티",
+            "캐릭터모음집"
+          ],
+          "carousel": {
+            "cover_headline": "9,899엔 퍼 아우터…돈키호테 한정 쿠로미·시나모롤",
+            "body_points": [
+              "11/28부터 돈키호테 취급점 발매",
+              "쿠로미·시나모롤 각 4종, M/L",
+              "아우터+레그워머 세트 9,899엔"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-17 (ku-cn-donki-20261117)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 발매일·가격·라인업·취급점 확인. 취급점 전체 목록은 공식 PDF 안내"
+        },
+        {
+          "id": "sanrio-jp-05",
+          "region": "JP",
+          "collab_name": "SANRIO CAFE 하라주쿠 1주년 — 크리스마스 한정 메뉴·특별 장식 (12/1~)",
+          "brand": "SANRIO CAFE 하라주쿠",
+          "sales_channels": [
+            "SANRIO CAFE 하라주쿠점 (웹 예약)",
+            "Sanrio 하라주쿠점 1~2F"
+          ],
+          "status": "진행중 (한정 메뉴 2026-12-01~12-25)",
+          "period": {
+            "start": "2026-12-01",
+            "end": "2026-12-25",
+            "note": "특별 장식은 2027-02-14까지 · 파티 플랜 1일 10세트, 애프터눈티 1일 30세트"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/shop/mx-harajuku-shop-1st-anniversary-20261116/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/mx-harajuku-shop-1st-anniversary-20261116-main-1120x630.jpg"
+          ],
+          "prices": [
+            {
+              "item": "파티 플랜 (논알콜 샴페인 포함) 1인",
+              "jpy": 5000,
+              "note": "4명부터 · 2일 전까지 예약"
+            },
+            {
+              "item": "크리스마스 애프터눈티 세트 1인",
+              "jpy": 7000,
+              "note": "2명부터 · 2일 전까지 예약"
+            },
+            {
+              "item": "좌석료 1인",
+              "jpy": 800,
+              "note": "어린이 포함"
+            }
+          ],
+          "lineup": [
+            "파티 플랜 5,000엔",
+            "크리스마스 애프터눈티 세트 7,000엔",
+            "1주년 한정 오리지널 메뉴",
+            "좌석료 800엔"
+          ],
+          "features": [
+            "하라주쿠점 오픈 1주년 — 12/1부터 'Kawaii Sanrio Factory' 장식",
+            "12/25까지 크리스마스 한정 메뉴, 90분제",
+            "예약은 웹만 가능 — 전날·당일 예약 불가, 당일 취소는 전액 부담"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "SANRIO CAFE 하라주쿠점 3F",
+            "address": "도쿄도 시부야구 진구마에 1-16-4 다케시타도리 스퀘어 3F",
+            "period": "2026-12-01 ~ 2026-12-25 (한정 메뉴)",
+            "hours": "11:00~20:00 (L.O. 19:00)",
+            "reservation": "웹 예약 필수 — 파티 4명~·애프터눈티 2명~·2일 전까지"
+          },
+          "recommended_accounts": [
+            "애플트립",
+            "캐릭터모음집"
+          ],
+          "carousel": {
+            "cover_headline": "도쿄 하라주쿠 1주년…산리오 카페 크리스마스 7,000엔",
+            "body_points": [
+              "12/1~12/25 크리스마스 한정 메뉴",
+              "애프터눈티 7,000엔·좌석료 800엔",
+              "특별 장식은 2027-02-14까지"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-16 (mx-harajuku-shop-1st-anniversary-20261116)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 기간·가격·예약 조건·주소 확인"
+        },
+        {
+          "id": "sanrio-jp-06",
+          "region": "JP",
+          "collab_name": "산리오 퓨로랜드 'Puroland Illumination Christmas' (11/6~12/25)",
+          "brand": "산리오 퓨로랜드",
+          "sales_channels": [
+            "퓨로랜드 공식 e패스포트",
+            "현장 티켓 창구"
+          ],
+          "status": "진행중 (2026-11-06~12-25)",
+          "period": {
+            "start": "2026-11-06",
+            "end": "2026-12-25",
+            "note": "12/3·12/9·12/10 휴관 · 입장은 패스포트+방문예약 필요"
+          },
+          "official_urls": [
+            "https://www.puroland.jp/event-campaign/2026_christmas/",
+            "https://www.puroland.jp/passport/list/"
+          ],
+          "image_urls": [
+            "https://www.puroland.jp/wp-content/uploads/2026/10/2026_christmas_KV-840x630.jpg"
+          ],
+          "prices": [
+            {
+              "item": "데이 패스포트 성인 (18~64세)",
+              "jpy": 3900,
+              "note": "변동가 3,900~6,900엔 · 날짜별 상이"
+            },
+            {
+              "item": "애프터눈 패스포트 성인 (14시~)",
+              "jpy": 2800,
+              "note": "변동가 2,800~4,600엔"
+            }
+          ],
+          "lineup": [
+            "스위트 스파클 일루미네이션 (1F 퓨로빌리지·약 10분)",
+            "쿠마노각코 스탬프 랠리",
+            "원더 리본 라이트 챌린지",
+            "크리스마스 한정 굿즈·푸드"
+          ],
+          "features": [
+            "하로키티·키키＆라라가 음성으로 등장하는 신작 일루미네이션 쇼",
+            "그림책 '쿠마노각코'와 첫 콜라보 — 스탬프 랠리·한정 굿즈",
+            "원더 리본 라이트는 별도 3,850엔"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "산리오 퓨로랜드",
+            "address": "도쿄도 타마시 오치아이 1-31",
+            "period": "2026-11-06 ~ 2026-12-25",
+            "hours": "공식 스케줄 확인 (휴관 12/3·9·10)",
+            "reservation": "패스포트 + 방문예약 필수"
+          },
+          "recommended_accounts": [
+            "애플트립",
+            "방구석키티"
+          ],
+          "carousel": {
+            "cover_headline": "도쿄 근교 퓨로랜드 크리스마스…11/6~12/25",
+            "body_points": [
+              "11/6~12/25 일루미네이션 크리스마스",
+              "데이 패스포트 3,900엔~ (변동가)",
+              "12/3·9·10 휴관·방문예약 필수"
+            ]
+          },
+          "sources": [
+            "산리오 퓨로랜드 공식 이벤트 페이지 (2026_christmas)",
+            "산리오 퓨로랜드 공식 패스포트/티켓 목록"
+          ],
+          "verification_note": "퓨로랜드 공식 이벤트 페이지에서 기간·장소·내용, 공식 티켓 페이지에서 변동가 범위 확인"
+        },
+        {
+          "id": "sanrio-jp-07",
+          "region": "JP",
+          "collab_name": "'Sanrio Hello Stage 루쿠아 사우스점' 오사카 그랜드오픈 (11/24)",
+          "brand": "산리오 헬로 스테이지",
+          "sales_channels": [
+            "산리오 헬로 스테이지 루쿠아 사우스점 (오사카 우메다)"
+          ],
+          "status": "진행중 (2026-11-24 오픈)",
+          "period": {
+            "start": "2026-11-24",
+            "end": "상시 운영",
+            "note": "입점에는 매장 입장 정리권 필요 · 점포 한정 굿즈 1인 각 2개까지"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/shop/mx-lucua-south-open-20261106/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/mx-lucua-south-open-20261106-main1-1120x630.jpg"
+          ],
+          "prices": [
+            {
+              "item": "점포 한정 토트백",
+              "jpy": 2497
+            },
+            {
+              "item": "점포 한정 스티커 세트",
+              "jpy": 693
+            },
+            {
+              "item": "점포 한정 아크릴 키홀더",
+              "jpy": 792
+            },
+            {
+              "item": "점포 한정 플랫 파우치",
+              "jpy": 1342
+            },
+            {
+              "item": "오리지널 페이퍼백",
+              "jpy": 110,
+              "note": "상품 구매 시에만"
+            }
+          ],
+          "lineup": [
+            "점포 한정 토트백·스티커 세트·아크릴 키홀더·플랫 파우치",
+            "2,200엔 이상 구매 시 캐릭터 캔배지 (전80종·랜덤)",
+            "4,400엔 이상 구매 시 오리지널 백"
+          ],
+          "features": [
+            "'Sanrio Hello Stage' 일본 1호점 — 캐릭터와 만나는 체험형 매장",
+            "중국발 신캐릭터 MIAMILO 굿즈 일본 첫 전개",
+            "루쿠아 사우스 11F, 10:00~20:00"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "루쿠아 사우스 11F",
+            "address": "오사카부 오사카시 기타구 우메다 3-1-1",
+            "period": "2026-11-24 ~ 상시",
+            "hours": "10:00~20:00",
+            "reservation": "매장 입장 정리권 필요"
+          },
+          "recommended_accounts": [
+            "애플트립",
+            "캐릭터모음집"
+          ],
+          "carousel": {
+            "cover_headline": "오사카 우메다에 산리오 1호점…11/24 오픈",
+            "body_points": [
+              "11/24 루쿠아 사우스 11F 그랜드오픈",
+              "점포 한정 굿즈 693~2,497엔",
+              "입점은 정리권 필요·10:00~20:00"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-06·11-17 업데이트 (mx-lucua-south-open-20261106)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 오픈일·주소·영업시간·한정 굿즈 가격·입점 방식 확인"
+        },
+        {
+          "id": "sanrio-jp-08",
+          "region": "JP",
+          "collab_name": "#C-pla 한정 '슈가바니즈 후와후와 킨차쿠' 캡슐토이 (11월 하순)",
+          "brand": "#C-pla (산리오 라이선스)",
+          "sales_channels": [
+            "일본 전국 #C-pla 점포"
+          ],
+          "status": "판매중 (2026-11 하순~)",
+          "period": {
+            "start": "2026-11 하순",
+            "end": "재고 소진 시",
+            "note": "지역·점포별 발매일 차이"
+          },
+          "official_urls": [
+            "https://www.sanrio.co.jp/news/goods/si-cpla-capsule-toy-20261117/"
+          ],
+          "image_urls": [
+            "https://www.sanrio.co.jp/wp-content/uploads/2026/11/si-cpla-capsule-toy-20261117-main-1120x630.jpg"
+          ],
+          "prices": [
+            {
+              "item": "1회 (세금 포함)",
+              "jpy": 400
+            }
+          ],
+          "lineup": [
+            "시로우사",
+            "쿠로우사",
+            "코무기우사",
+            "판다우사",
+            "카카오",
+            "바닐라"
+          ],
+          "features": [
+            "#C-pla 캡슐토이 전문점 한정",
+            "리본으로 꾸민 슈가바니즈 킨차쿠 6종",
+            "화장품·소품을 넣어 들고 다닐 수 있는 수납력"
+          ],
+          "offline": {
+            "visitable": true,
+            "venue": "일본 전국 #C-pla 점포",
+            "address": "일본 전국 (점포별 취급)",
+            "period": "2026-11 하순 ~ 재고 소진 시",
+            "hours": "점포별 상이",
+            "reservation": "불필요"
+          },
+          "recommended_accounts": [
+            "캐릭터모음집",
+            "애플트립"
+          ],
+          "carousel": {
+            "cover_headline": "400엔 캡슐…#C-pla 한정 슈가바니즈 킨차쿠",
+            "body_points": [
+              "11월 하순부터 #C-pla 점포 발매",
+              "시로우사·쿠로우사 등 전 6종",
+              "1회 400엔"
+            ]
+          },
+          "sources": [
+            "산리오 공식 뉴스 2026-11-17 (si-cpla-capsule-toy-20261117)"
+          ],
+          "verification_note": "산리오 공식 뉴스에서 라인업·가격·판매처 확인. 발매일은 '11월 하순'으로만 공지"
+        },
         {
           "id": "sanrio-01",
           "collab_name": "스타벅스 코리아 × 헬로키티 '위드 헬로키티' 크리스마스 MD",
@@ -125,7 +732,8 @@
             "신세계그룹 뉴스룸 2026-11-16",
             "스타벅스 공지 '11월19일, 헬로키티 Ph1 MD 출시'(2차 매체 인용)"
           ],
-          "verification_note": "기간·구성은 공식 발표로 확인. 가격은 공지 가격표를 인용한 2차 매체 3곳이 동일. 입체 머그만 신세계몰 기준"
+          "verification_note": "기간·구성은 공식 발표로 확인. 가격은 공지 가격표를 인용한 2차 매체 3곳이 동일. 입체 머그만 신세계몰 기준",
+          "region": "KR"
         },
         {
           "id": "sanrio-02",
@@ -197,7 +805,8 @@
             "씨넷코리아 2026-10-14",
             "캠페인 인사이트 2026-10-14"
           ],
-          "verification_note": "3개 매체 가격 일치. '본체에 키티 그래픽 없음'은 소니스토어 기획전 상품명 표기 기준"
+          "verification_note": "3개 매체 가격 일치. '본체에 키티 그래픽 없음'은 소니스토어 기획전 상품명 표기 기준",
+          "region": "KR"
         },
         {
           "id": "sanrio-03",
@@ -270,7 +879,8 @@
             "무신사 상품 페이지",
             "인천유나이티드 공식몰"
           ],
-          "verification_note": "기간·규모는 공식 보도자료 확인. 153종 전체 가격표는 미공개로 개별 사례만 확인"
+          "verification_note": "기간·규모는 공식 보도자료 확인. 153종 전체 가격표는 미공개로 개별 사례만 확인",
+          "region": "KR"
         },
         {
           "id": "sanrio-04",
@@ -356,7 +966,8 @@
           "sources": [
             "다이어리포인트 2026-11-12"
           ],
-          "verification_note": "가격·판매처·팝업 일정 단일 보도로 확인. 팝업 운영시간은 별도 미기재"
+          "verification_note": "가격·판매처·팝업 일정 단일 보도로 확인. 팝업 운영시간은 별도 미기재",
+          "region": "KR"
         },
         {
           "id": "sanrio-05",
@@ -422,7 +1033,8 @@
             "서울경제 2026-11-13",
             "팝플리 팝업 상세"
           ],
-          "verification_note": "기간 표기가 매체별로 달라 몰 연출(11/13)과 기프트숍(11/25)을 병기"
+          "verification_note": "기간 표기가 매체별로 달라 몰 연출(11/13)과 기프트숍(11/25)을 병기",
+          "region": "KR"
         }
       ]
     },
@@ -499,7 +1111,8 @@
             "연합뉴스 2026-11-19",
             "서울시 공식 관광정보(매장 운영시간)"
           ],
-          "verification_note": "구성·일정 공식 확인. 가격 미공개"
+          "verification_note": "구성·일정 공식 확인. 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "disney-02",
@@ -585,7 +1198,8 @@
             "연합뉴스 2026-08-18",
             "브릿지경제 2026-08-18"
           ],
-          "verification_note": "펠트 바구니 4종 가격 개별 확인(대형 페이지 직접 fetch). 시리즈 구성은 언론 보도 기준"
+          "verification_note": "펠트 바구니 4종 가격 개별 확인(대형 페이지 직접 fetch). 시리즈 구성은 언론 보도 기준",
+          "region": "KR"
         },
         {
           "id": "disney-03",
@@ -646,7 +1260,8 @@
             "오늘팝업 상세",
             "상상마당 공식 전시 페이지"
           ],
-          "verification_note": "기간·주소·운영시간·입장방식 확인. 요금·상품가 미확인"
+          "verification_note": "기간·주소·운영시간·입장방식 확인. 요금·상품가 미확인",
+          "region": "KR"
         }
       ]
     },
@@ -719,7 +1334,8 @@
             "이데일리 2026-11-25",
             "위키트리 2026-11-25"
           ],
-          "verification_note": "출시일·구성 3개 매체 일치. 국내 가격 미공개로 미확인 처리"
+          "verification_note": "출시일·구성 3개 매체 일치. 국내 가격 미공개로 미확인 처리",
+          "region": "KR"
         },
         {
           "id": "pokemon-02",
@@ -800,7 +1416,8 @@
             "금강일보 2026-11-11",
             "bntnews 2026-11-20"
           ],
-          "verification_note": "4종 가격 전부 기사 본문에서 확인, 매장 판매 개시 별도 확인"
+          "verification_note": "4종 가격 전부 기사 본문에서 확인, 매장 판매 개시 별도 확인",
+          "region": "KR"
         },
         {
           "id": "pokemon-03",
@@ -864,7 +1481,8 @@
             "인더뉴스 2026-11-10",
             "스마트경제 2026-11-09"
           ],
-          "verification_note": "두 매체 7,900원 동일 확인"
+          "verification_note": "두 매체 7,900원 동일 확인",
+          "region": "KR"
         },
         {
           "id": "pokemon-04",
@@ -928,7 +1546,8 @@
             "스팟츠",
             "네이버 블로그 현장 후기"
           ],
-          "verification_note": "2개 플랫폼에서 기간·주소·운영시간 일치"
+          "verification_note": "2개 플랫폼에서 기간·주소·운영시간 일치",
+          "region": "KR"
         }
       ]
     },
@@ -999,7 +1618,8 @@
             "오토다이어리 2026-11-25",
             "카매거진 2026-11-25"
           ],
-          "verification_note": "두 매체 가격·구성 일치"
+          "verification_note": "두 매체 가격·구성 일치",
+          "region": "KR"
         },
         {
           "id": "miffy-02",
@@ -1092,7 +1712,8 @@
             "뉴스핌 2026-10-20",
             "다이닝코드 매장 메뉴(가격 실측)"
           ],
-          "verification_note": "제품·예약 일정 공식 확인. 금액은 매장별 상이라 범위로 표기"
+          "verification_note": "제품·예약 일정 공식 확인. 금액은 매장별 상이라 범위로 표기",
+          "region": "KR"
         },
         {
           "id": "miffy-03",
@@ -1150,7 +1771,8 @@
           "sources": [
             "뉴스와이어 2026-10-13"
           ],
-          "verification_note": "구성·한정 수량 확인, 가격 미공개"
+          "verification_note": "구성·한정 수량 확인, 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "miffy-04",
@@ -1209,7 +1831,8 @@
           "sources": [
             "머니투데이 2026-08-27"
           ],
-          "verification_note": "상품 구성 확인. 매장·가격 미기재"
+          "verification_note": "상품 구성 확인. 매장·가격 미기재",
+          "region": "KR"
         }
       ]
     },
@@ -1288,7 +1911,8 @@
             "카카오 보도자료 2026-09-18",
             "무신사 콘텐츠"
           ],
-          "verification_note": "라인업 공식·무신사 교차 확인. 가격 미공개"
+          "verification_note": "라인업 공식·무신사 교차 확인. 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "shinchan-02",
@@ -1348,7 +1972,8 @@
           "sources": [
             "팝가 상세 페이지"
           ],
-          "verification_note": "기간·주소·운영시간·입장 마감 확인. 입장료 미확인"
+          "verification_note": "기간·주소·운영시간·입장 마감 확인. 입장료 미확인",
+          "region": "KR"
         },
         {
           "id": "shinchan-03",
@@ -1407,7 +2032,8 @@
           "sources": [
             "팝가 11월 용산 팝업 정리"
           ],
-          "verification_note": "기간·장소·운영시간 확인. 상품 가격 미공개, 이미지 미확보"
+          "verification_note": "기간·장소·운영시간 확인. 상품 가격 미공개, 이미지 미확보",
+          "region": "KR"
         }
       ]
     },
@@ -1480,7 +2106,8 @@
           "sources": [
             "배스킨라빈스 보도자료 2026-09-28, 2026-10-13"
           ],
-          "verification_note": "공식 보도자료 2건에서 가격·일정 확인. 이미지는 공식 페이지가 공용 공유 이미지만 제공해 미확보"
+          "verification_note": "공식 보도자료 2건에서 가격·일정 확인. 이미지는 공식 페이지가 공용 공유 이미지만 제공해 미확보",
+          "region": "KR"
         },
         {
           "id": "monchhichi-02",
@@ -1544,7 +2171,8 @@
             "럭드 2026-11-16",
             "무신사 기획전"
           ],
-          "verification_note": "구성·판매처 확인. 가격 미표기"
+          "verification_note": "구성·판매처 확인. 가격 미표기",
+          "region": "KR"
         },
         {
           "id": "monchhichi-03",
@@ -1608,7 +2236,8 @@
             "한국경제TV 2026-10-30",
             "올리브영 상품 페이지"
           ],
-          "verification_note": "브랜드 보도 + 올리브영 표시가 확인. 세트 전용 가격 미공개"
+          "verification_note": "브랜드 보도 + 올리브영 표시가 확인. 세트 전용 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "monchhichi-04",
@@ -1682,7 +2311,8 @@
             "올리브영 상품 페이지",
             "넥스트유니온 가격 정리"
           ],
-          "verification_note": "구성 공식 확인, 가격은 올리브영 표시가 + 2차 정리 교차"
+          "verification_note": "구성 공식 확인, 가격은 올리브영 표시가 + 2차 정리 교차",
+          "region": "KR"
         }
       ]
     },
@@ -1753,7 +2383,8 @@
             "산엑스 공식 블로그(한복 한정) 2026-09-18",
             "팝콘D스퀘어 층별 안내"
           ],
-          "verification_note": "주소·오픈일·운영시간·상품 공식 확인. 가격 미공개"
+          "verification_note": "주소·오픈일·운영시간·상품 공식 확인. 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "rilakkuma-02",
@@ -1815,7 +2446,8 @@
             "산엑스 공식 블로그 2026-10-30",
             "IG Port 공식 콜라보 페이지"
           ],
-          "verification_note": "서울 일정·장소 공식 확인. 한국 가격·특전 미확인"
+          "verification_note": "서울 일정·장소 공식 확인. 한국 가격·특전 미확인",
+          "region": "KR"
         },
         {
           "id": "rilakkuma-03",
@@ -1881,7 +2513,8 @@
             "팬플러스 정리",
             "인포나눔(2차 판매)"
           ],
-          "verification_note": "CGV 공식 페이지가 동적이라 직접 확인 불가 → 공지 캡처·2차 정리 교차. 이미지 미확보"
+          "verification_note": "CGV 공식 페이지가 동적이라 직접 확인 불가 → 공지 캡처·2차 정리 교차. 이미지 미확보",
+          "region": "KR"
         },
         {
           "id": "rilakkuma-04",
@@ -1939,7 +2572,8 @@
           "sources": [
             "스파오닷컴 기획전 페이지"
           ],
-          "verification_note": "기획전 존재·테마 확인, 가격 미표기"
+          "verification_note": "기획전 존재·테마 확인, 가격 미표기",
+          "region": "KR"
         }
       ]
     },
@@ -2072,7 +2706,8 @@
             "팝플리 팝업 상세",
             "엠넷플러스머치 가격 정리(2차 블로그)"
           ],
-          "verification_note": "기간·장소·이벤트는 공식 확인. 가격표는 엠넷플러스머치 화면 정리 기준으로, 공식 페이지 품목별 재확인은 실패"
+          "verification_note": "기간·장소·이벤트는 공식 확인. 가격표는 엠넷플러스머치 화면 정리 기준으로, 공식 페이지 품목별 재확인은 실패",
+          "region": "KR"
         },
         {
           "id": "snoopy-02",
@@ -2139,7 +2774,8 @@
             "뉴스버즈 2026-11-14",
             "CJ 뉴스룸"
           ],
-          "verification_note": "협업 사실·출시일·판매처 확인. 가격 미공개"
+          "verification_note": "협업 사실·출시일·판매처 확인. 가격 미공개",
+          "region": "KR"
         },
         {
           "id": "snoopy-03",
@@ -2207,14 +2843,15 @@
             "굿즈루트 매장 정보",
             "2026-10 방문 후기"
           ],
-          "verification_note": "주소·전화·요일별 운영시간 확인. 굿즈 가격 미확인"
+          "verification_note": "주소·전화·요일별 운영시간 확인. 굿즈 가격 미확인",
+          "region": "KR"
         }
       ]
     }
   ],
   "summary": {
     "counts_by_character": {
-      "산리오 (헬로키티 중심)": 5,
+      "산리오 (헬로키티 중심)": 13,
       "디즈니": 3,
       "포켓몬": 4,
       "미피 (Miffy)": 4,
@@ -2224,6 +2861,14 @@
       "스누피 (피너츠 / Peanuts)": 3
     },
     "visitable_items": [
+      "sanrio-jp-01",
+      "sanrio-jp-02",
+      "sanrio-jp-03",
+      "sanrio-jp-04",
+      "sanrio-jp-05",
+      "sanrio-jp-06",
+      "sanrio-jp-07",
+      "sanrio-jp-08",
       "sanrio-01",
       "sanrio-02",
       "sanrio-04",
@@ -2255,24 +2900,28 @@
     "upcoming_december": [
       {
         "date": "2026-12-01",
-        "item": "케이스티파이 × 포켓몬 30주년 (17:00 KST)"
+        "item": "케이스티파이 × 포켓몬 30주년 (17:00 KST)",
+        "item_id": "pokemon-01"
       },
       {
         "date": "2026-12-02",
-        "item": "스타벅스 × 헬로키티 2차 MD 12종"
+        "item": "스타벅스 × 헬로키티 2차 MD 12종",
+        "item_id": "sanrio-01"
       },
       {
         "date": "2026-12-03",
-        "item": "리락쿠마 × 하이큐!! (AK플라자 홍대 SMG CAFE)"
+        "item": "리락쿠마 × 하이큐!! (AK플라자 홍대 SMG CAFE)",
+        "item_id": "rilakkuma-02"
       },
       {
         "date": "2026-12-04",
-        "item": "젤라또 피케 × 산리오 팝업 (신세계 센텀시티)"
+        "item": "젤라또 피케 × 산리오 팝업 (신세계 센텀시티)",
+        "item_id": "sanrio-04"
       }
     ],
     "image_url_coverage": {
-      "confirmed": 27,
-      "total": 30,
+      "confirmed": 35,
+      "total": 38,
       "missing": [
         "shinchan-03",
         "monchhichi-01",
@@ -2284,6 +2933,10 @@
       "스타벅스 헬로키티 입체 머그 가격은 공식 공지에 없어 신세계몰 기준으로 표기",
       "뚜레쥬르 미피 제품은 가맹점 재량 가격이라 범위로 표기",
       "연합뉴스 등 '재판매 및 DB금지' 이미지는 카드 제작 시 브랜드 공식 이미지로 대체 권장"
-    ]
+    ],
+    "counts_by_region": {
+      "JP": 8,
+      "KR": 30
+    }
   }
 }
