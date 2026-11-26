@@ -368,6 +368,15 @@ mark {
   border-color: var(--ink);
   color: var(--bg);
 }
+.filter-label {
+  flex: none;
+  align-self: center;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink-3);
+  padding-right: 2px;
+  letter-spacing: -0.01em;
+}
 .tab[aria-pressed="true"] .count, .acct[aria-pressed="true"] .count { opacity: 0.82; }
 .tab.is-empty { opacity: 0.45; }
 

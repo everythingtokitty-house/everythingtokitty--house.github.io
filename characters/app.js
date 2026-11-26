@@ -463,6 +463,7 @@
   function renderAccounts(tms) {
     if (!els.accounts) return;
     els.accounts.replaceChildren();
+    els.accounts.appendChild(el("span", "filter-label", "계정"));
     ACCT_META.forEach(function (meta) {
       var n = meta.key === "all"
         ? items.filter(function (it) { return matchItem(it, state.char, "all", state.region, tms); }).length
@@ -482,6 +483,7 @@
   function renderRegions(tms) {
     if (!els.regions) return;
     els.regions.replaceChildren();
+    els.regions.appendChild(el("span", "filter-label", "지역"));
     REGION_META.forEach(function (meta) {
       var n = items.filter(function (it) { return matchItem(it, state.char, state.acct, meta.key, tms); }).length;
       var btn = el("button", "acct region" + (meta.key === "JP" ? " region--jp" : ""));
