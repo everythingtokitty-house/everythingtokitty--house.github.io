@@ -78,6 +78,7 @@ TRAIL = ".,;:)]}'\","  # URL 끝에 붙은 문장부호 제거용
 # 🎀 키티·콜라보 탭 — work/character-collabs-YYYY-MM-DD.json 의 산리오(헬로키티 중심) 항목을 옮긴다.
 CHARACTERS_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/"
 KITTY_CHARACTER_ID = "sanrio"
+REGION_LABELS = {"KR": "🇰🇷 국내", "JP": "🇯🇵 일본 한정"}
 PERIOD_LABELS = {
     "promotion": "행사 기간", "start": "시작", "end": "종료",
     "phase1": "1차 출시", "camp_mug": "캠프컵 출시", "phase2": "2차 출시",
@@ -384,11 +385,15 @@ def kitty_schedule(period):
 
 
 def kitty_price(prices):
-    """가격 목록을 '최저~최고원 · n개 품목' 형태의 한 줄과 비고로 요약한다."""
+    """가격 목록을 '최저~최고원 · n개 품목' 형태의 한 줄과 비고로 요약한다.
+
+    일본 한정 항목은 원화로 환산하지 않고 엔화(税込) 그대로 '¥880' 형태로 보여준다.
+    """
     prices = prices or []
     if not prices:
         return "미확인", ""
     values = [p.get("krw") for p in prices if isinstance(p.get("krw"), int)]
+    jpys = [p.get("jpy") for p in prices if isinstance(p.get("jpy"), int)]
     notes = []
     for p in prices:
         note = (p.get("note") or "").strip()
@@ -397,6 +402,14 @@ def kitty_price(prices):
     price_note = " / ".join(notes)
 
     if not values:
+        if jpys:
+            low, high = min(jpys), max(jpys)
+            line = f"¥{high:,}" if low == high else f"¥{low:,}~{high:,}"
+            if len(prices) > 1:
+                line += f" · {len(prices)}개 품목"
+            if len(jpys) < len(prices):
+                line += " · 일부 미확인"
+            return line, price_note
         return "미확인", price_note
     if max(values) == 0:
         return "입장 무료", price_note
@@ -427,6 +440,8 @@ def kitty_item(item):
         "title": item.get("collab_name", ""),
         "brand": item.get("brand", ""),
         "status": item.get("status", ""),
+        "region": item.get("region", "KR"),
+        "regionLabel": REGION_LABELS.get(item.get("region", "KR"), ""),
         "schedule": schedule,
         "priceLine": price_line,
         "priceNote": price_note,
@@ -456,7 +471,7 @@ def load_kitty_collabs(src_dir):
         items.sort(key=lambda it: 1 if it["status"].strip().startswith("종료") else 0)
         return {
             "asOf": meta.get("as_of", ""),
-            "title": "산리오(헬로키티) 콜라보 최신 소식",
+            "title": "산리오(헬로키티) 국내·일본 콜라보 최신 소식",
             "characterName": sanrio.get("name_ko", "산리오"),
             "sourceFile": os.path.relpath(path, src_dir),
             "siteUrl": CHARACTERS_URL,

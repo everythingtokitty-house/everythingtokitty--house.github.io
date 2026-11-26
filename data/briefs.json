@@ -6,7 +6,7 @@
   "items": 60,
   "extras": 44,
   "ideas": 21,
-  "kitty": 5
+  "kitty": 13
  },
  "briefs": [
   {
@@ -2348,17 +2348,275 @@
  ],
  "kittyCollabs": {
   "asOf": "2026-11-26",
-  "title": "산리오(헬로키티) 콜라보 최신 소식",
+  "title": "산리오(헬로키티) 국내·일본 콜라보 최신 소식",
   "characterName": "산리오 (헬로키티 중심)",
   "sourceFile": "character-collabs-2026-11-26.json",
   "siteUrl": "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/",
   "siteTitle": "🎀 8대 캐릭터 콜라보 전체 사이트 보기 →",
   "items": [
    {
+    "id": "sanrio-jp-01",
+    "title": "Happyくじ 'Sanrio characters Holiday Collection 2026' — 일본 편의점 12/4 발매",
+    "brand": "Happyくじ (산리오 라이선스)",
+    "status": "출시 예정 (2026-12-04)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-12-04 ~ 재고 소진 시"
+    ],
+    "priceLine": "¥880",
+    "priceNote": "하즈레 없음 · 전 11등급 + 라스트상",
+    "headline": "12/4 일본 편의점에서…산리오 발레코어 Happyくじ 880엔",
+    "points": [
+     "12/4(금)부터 패밀리마트·로손 순차 발매",
+     "특상 쿠로미·라스트상 키티 40cm 누이구루미",
+     "1회 880엔·전 11등급+라스트상"
+    ],
+    "visit": {
+     "venue": "일본 전국 패밀리마트·로손·미니스톱·이토요카도 등 편의점·양판점",
+     "address": "일본 전국 (점포별 취급)",
+     "period": "2026-12-04 ~ 재고 소진 시",
+     "hours": "점포별 상이"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/goods/mx-happy-kuji-20261125/"
+     },
+     {
+      "label": ".h-kuji.com",
+      "url": "https://www.h-kuji.com/goods/sanrio-holiday2026/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-02",
+    "title": "'키키＆라라 당리쿠지' — 일본 산리오숍·편의점 11/21 발매",
+    "brand": "산리오 당리쿠지",
+    "status": "판매중 (2026-11-21~)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11-21 ~ 재고 소진 시"
+    ],
+    "priceLine": "¥880",
+    "priceNote": "하즈레 없음 · 전 12등급 + 라스트 스페셜상",
+    "headline": "키키＆라라 당리쿠지 880엔…1등은 팬케이크 메이커",
+    "points": [
+     "11/21부터 산리오숍·편의점 순차 발매",
+     "전 12등급 + 라스트 스페셜상 쿠션",
+     "1회 880엔·하즈레 없음"
+    ],
+    "visit": {
+     "venue": "일본 전국 산리오숍·편의점 취급점",
+     "address": "일본 전국 (점포별 취급)",
+     "period": "2026-11-21 ~ 재고 소진 시",
+     "hours": "점포별 상이"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/goods/ts-atarikuji-20261112/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-03",
+    "title": "'스위트 레이스 케이크' 디자인 시리즈 — 일본 산리오 직영점 11/27 발매",
+    "brand": "산리오 오리지널",
+    "status": "출시 예정 (2026-11-27)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11-27 ~ 재고 소진 시"
+    ],
+    "priceLine": "¥748~6,600 · 8개 품목",
+    "priceNote": "시크릿 타입 — 디자인 선택 불가",
+    "headline": "6,600엔 케이크 누이구루미…산리오 11/27 신작",
+    "points": [
+     "11/27 산리오 직영점·온라인숍 발매",
+     "누이구루미＆네크리스 세트 6,600엔",
+     "케이크 모양 파우치·바인더까지 8종"
+    ],
+    "visit": {
+     "venue": "일본 산리오 직영점·백화점 산리오 코너",
+     "address": "일본 전국 (점포별 취급)",
+     "period": "2026-11-27 ~ 재고 소진 시",
+     "hours": "점포별 상이 (온라인 10:00~)"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/goods/mx-sweet-lace-cake-202611/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-04",
+    "title": "돈키호테 한정 '쿠로미·시나모롤' 서브컬처 시리즈 — 겨울 아우터 11/28",
+    "brand": "돈키호테 (산리오 라이선스)",
+    "status": "출시 예정 (2026-11-28)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11-28 ~ 재고 소진 시"
+    ],
+    "priceLine": "¥9,899",
+    "priceNote": "",
+    "headline": "9,899엔 퍼 아우터…돈키호테 한정 쿠로미·시나모롤",
+    "points": [
+     "11/28부터 돈키호테 취급점 발매",
+     "쿠로미·시나모롤 각 4종, M/L",
+     "아우터+레그워머 세트 9,899엔"
+    ],
+    "visit": {
+     "venue": "일본 돈키호테 취급점",
+     "address": "일본 전국 (점포별 취급)",
+     "period": "2026-11-28 ~ 재고 소진 시",
+     "hours": "점포별 상이"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/goods/ku-cn-donki-20261117/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-05",
+    "title": "SANRIO CAFE 하라주쿠 1주년 — 크리스마스 한정 메뉴·특별 장식 (12/1~)",
+    "brand": "SANRIO CAFE 하라주쿠",
+    "status": "진행중 (한정 메뉴 2026-12-01~12-25)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-12-01 ~ 2026-12-25"
+    ],
+    "priceLine": "¥800~7,000 · 3개 품목",
+    "priceNote": "4명부터 · 2일 전까지 예약 / 2명부터 · 2일 전까지 예약 / 어린이 포함",
+    "headline": "도쿄 하라주쿠 1주년…산리오 카페 크리스마스 7,000엔",
+    "points": [
+     "12/1~12/25 크리스마스 한정 메뉴",
+     "애프터눈티 7,000엔·좌석료 800엔",
+     "특별 장식은 2027-02-14까지"
+    ],
+    "visit": {
+     "venue": "SANRIO CAFE 하라주쿠점 3F",
+     "address": "도쿄도 시부야구 진구마에 1-16-4 다케시타도리 스퀘어 3F",
+     "period": "2026-12-01 ~ 2026-12-25 (한정 메뉴)",
+     "hours": "11:00~20:00 (L.O. 19:00)"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/shop/mx-harajuku-shop-1st-anniversary-20261116/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-06",
+    "title": "산리오 퓨로랜드 'Puroland Illumination Christmas' (11/6~12/25)",
+    "brand": "산리오 퓨로랜드",
+    "status": "진행중 (2026-11-06~12-25)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11-06 ~ 2026-12-25"
+    ],
+    "priceLine": "¥2,800~3,900 · 2개 품목",
+    "priceNote": "변동가 3,900~6,900엔 · 날짜별 상이 / 변동가 2,800~4,600엔",
+    "headline": "도쿄 근교 퓨로랜드 크리스마스…11/6~12/25",
+    "points": [
+     "11/6~12/25 일루미네이션 크리스마스",
+     "데이 패스포트 3,900엔~ (변동가)",
+     "12/3·9·10 휴관·방문예약 필수"
+    ],
+    "visit": {
+     "venue": "산리오 퓨로랜드",
+     "address": "도쿄도 타마시 오치아이 1-31",
+     "period": "2026-11-06 ~ 2026-12-25",
+     "hours": "공식 스케줄 확인 (휴관 12/3·9·10)"
+    },
+    "links": [
+     {
+      "label": ".puroland.jp",
+      "url": "https://www.puroland.jp/event-campaign/2026_christmas/"
+     },
+     {
+      "label": ".puroland.jp",
+      "url": "https://www.puroland.jp/passport/list/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-07",
+    "title": "'Sanrio Hello Stage 루쿠아 사우스점' 오사카 그랜드오픈 (11/24)",
+    "brand": "산리오 헬로 스테이지",
+    "status": "진행중 (2026-11-24 오픈)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11-24 ~ 상시 운영"
+    ],
+    "priceLine": "¥110~2,497 · 5개 품목",
+    "priceNote": "상품 구매 시에만",
+    "headline": "오사카 우메다에 산리오 1호점…11/24 오픈",
+    "points": [
+     "11/24 루쿠아 사우스 11F 그랜드오픈",
+     "점포 한정 굿즈 693~2,497엔",
+     "입점은 정리권 필요·10:00~20:00"
+    ],
+    "visit": {
+     "venue": "루쿠아 사우스 11F",
+     "address": "오사카부 오사카시 기타구 우메다 3-1-1",
+     "period": "2026-11-24 ~ 상시",
+     "hours": "10:00~20:00"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/shop/mx-lucua-south-open-20261106/"
+     }
+    ]
+   },
+   {
+    "id": "sanrio-jp-08",
+    "title": "#C-pla 한정 '슈가바니즈 후와후와 킨차쿠' 캡슐토이 (11월 하순)",
+    "brand": "#C-pla (산리오 라이선스)",
+    "status": "판매중 (2026-11 하순~)",
+    "region": "JP",
+    "regionLabel": "🇯🇵 일본 한정",
+    "schedule": [
+     "2026-11 하순 ~ 재고 소진 시"
+    ],
+    "priceLine": "¥400",
+    "priceNote": "",
+    "headline": "400엔 캡슐…#C-pla 한정 슈가바니즈 킨차쿠",
+    "points": [
+     "11월 하순부터 #C-pla 점포 발매",
+     "시로우사·쿠로우사 등 전 6종",
+     "1회 400엔"
+    ],
+    "visit": {
+     "venue": "일본 전국 #C-pla 점포",
+     "address": "일본 전국 (점포별 취급)",
+     "period": "2026-11 하순 ~ 재고 소진 시",
+     "hours": "점포별 상이"
+    },
+    "links": [
+     {
+      "label": ".sanrio.co.jp",
+      "url": "https://www.sanrio.co.jp/news/goods/si-cpla-capsule-toy-20261117/"
+     }
+    ]
+   },
+   {
     "id": "sanrio-01",
     "title": "스타벅스 코리아 × 헬로키티 '위드 헬로키티' 크리스마스 MD",
     "brand": "스타벅스 코리아",
     "status": "진행중",
+    "region": "KR",
+    "regionLabel": "🇰🇷 국내",
     "schedule": [
      "행사 기간 2026-11-19 ~ 2026-12-31",
      "1차 출시 2026-11-19 (10종)",
@@ -2394,6 +2652,8 @@
     "title": "소니코리아 × 헬로키티 한정판 헤드폰 컬렉션",
     "brand": "소니코리아",
     "status": "판매중(한정 수량)",
+    "region": "KR",
+    "regionLabel": "🇰🇷 국내",
     "schedule": [
      "시작 2026-10-14"
     ],
@@ -2426,6 +2686,8 @@
     "title": "젤라또 피케 × 산리오캐릭터즈 2탄 'BABY MOCO' 컬렉션 (+부산 팝업)",
     "brand": "젤라또 피케",
     "status": "판매중 / 팝업 예정",
+    "region": "KR",
+    "regionLabel": "🇰🇷 국내",
     "schedule": [
      "시작 2026-11-12",
      "강남 팝업 2026-11-12 ~ 2026-11-22 (종료)",
@@ -2456,6 +2718,8 @@
     "title": "아이파크몰 용산점 × 산리오캐릭터즈 '물음표 상점: 크리스마스 기프트 숍'",
     "brand": "아이파크몰",
     "status": "진행중",
+    "region": "KR",
+    "regionLabel": "🇰🇷 국내",
     "schedule": [
      "2026-11-13 ~ 2026-12-27"
     ],
@@ -2489,6 +2753,8 @@
     "title": "CJ온스타일 × K리그 × 산리오캐릭터즈 '2026 태닝에디션' 온라인 팝업",
     "brand": "CJ온스타일",
     "status": "종료",
+    "region": "KR",
+    "regionLabel": "🇰🇷 국내",
     "schedule": [
      "2026-11-12 10:00 ~ 2026-11-18"
     ],

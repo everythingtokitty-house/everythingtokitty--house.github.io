@@ -420,7 +420,12 @@
   function kittyCard(item, terms) {
     var article = el("article", "card card--kitty");
     var head = el("div", "card-head");
-    head.appendChild(el("span", "badge badge--kitty", "🎀 " + (item.brand || "산리오")));
+    var tags = el("div", "kitty-tags");
+    tags.appendChild(el("span", "badge badge--kitty", "🎀 " + (item.brand || "산리오")));
+    if (item.region === "JP") {
+      tags.appendChild(el("span", "badge badge--jp", item.regionLabel || "🇯🇵 일본 한정"));
+    }
+    head.appendChild(tags);
     head.appendChild(el("span", "kitty-status " + kittyStatusClass(item.status), item.status));
     article.appendChild(head);
 
@@ -483,12 +488,14 @@
     all.forEach(function (item) {
       if (item.brand && brands.indexOf(item.brand) < 0) brands.push(item.brand);
     });
+    var jpCount = all.filter(function (item) { return item.region === "JP"; }).length;
     var desc = (site.asOf ? site.asOf + " 기준 · " : "") + all.length + "건";
+    if (jpCount) desc += " (🇯🇵 일본 한정 " + jpCount + "건)";
     if (brands.length) desc += " · " + brands.join(" · ");
     hero.appendChild(el("p", "kitty-hero-desc", desc));
     hero.appendChild(kittyCta(site));
     hero.appendChild(el("p", "kitty-hero-note",
-      "스타벅스·소니처럼 매장에서 만나는 굿즈부터 부산 팝업까지, 최근 진행·출시된 헬로키티 콜라보를 모았습니다."));
+      "스타벅스·소니처럼 매장에서 만나는 굿즈부터 부산 팝업, 일본 편의점·산리오숍에서만 파는 🇯🇵 일본 한정 소식까지 모았습니다."));
     view.appendChild(hero);
 
     if (items.length) {

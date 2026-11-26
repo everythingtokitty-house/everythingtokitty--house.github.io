@@ -788,6 +788,19 @@ main:focus { outline: none; }
 /* ---------- 🎀 키티·콜라보 ---------- */
 .card--kitty { --card-accent: var(--kitty); }
 .badge--kitty { background: var(--kitty-soft); color: var(--kitty-ink); }
+.badge--jp {
+  background: #FFE7EE;
+  color: #C2185B;
+  border: 1px solid #FFD0DC;
+}
+.kitty-tags {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+[data-theme="dark"] .badge--jp { background: #4A2030; color: #FFB3C8; border-color: #6E3149; }
 
 .kitty-status {
   flex: none;
