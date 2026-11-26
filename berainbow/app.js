@@ -745,54 +745,306 @@
     }
   }
 
+  /* ---------- 대상 제품 선택 · 프롬프트 실시간 치환 ---------- */
+  var KEY_PROMPT_TARGET = "berainbow.prompt.target.v1";
+  var PROMPT_FIELD_KEYS = ["name", "spec", "price", "target", "keyword"];
+  var PROMPT_VALUE_KEYS = ["name", "spec", "price", "target", "keyword", "options", "shipping", "faq", "theme"];
+  var promptTarget = null;
+
+  function promptData() { return (DATA && DATA.prompt_products) ? DATA.prompt_products : null; }
+  function promptDefaults() {
+    var d = promptData() && promptData().defaults;
+    return d || {};
+  }
+  function presetPromptItems() {
+    var d = promptData();
+    return (d && d.items) ? d.items : [];
+  }
+  function customLabel() {
+    var d = promptData();
+    return (d && d.custom_label) || "직접 입력";
+  }
+  function customNote() {
+    var d = promptData();
+    return (d && d.custom_note) || "";
+  }
+  /* 단가·마진 탭에서 저장한 제품(localStorage)을 같은 목록에 합칩니다. */
+  function savedPromptItems() {
+    return products.map(function (p) {
+      return {
+        id: "saved:" + p.id,
+        group: "saved",
+        label: p.name,
+        chip_label: p.name,
+        chip: false,
+        badge: "저장",
+        name: p.name,
+        spec: "",
+        price: p.price ? won(p.price) : "",
+        target: "",
+        keyword: p.name,
+        options: "",
+        shipping: "",
+        faq: "",
+        theme: "",
+        note: (promptData() && promptData().saved_note) || ""
+      };
+    });
+  }
+  function allPromptItems() { return presetPromptItems().concat(savedPromptItems()); }
+  function findPromptItem(id) {
+    var list = allPromptItems(), i;
+    for (i = 0; i < list.length; i++) { if (list[i].id === id) return list[i]; }
+    return null;
+  }
+  /* 제품 항목 → 프롬프트에 들어갈 값. 빈 값은 기본값으로 메움 */
+  function resolvePromptTarget(src) {
+    var base = src || promptTarget || presetPromptItems()[0] || {};
+    var d = promptDefaults();
+    var out = {};
+    PROMPT_VALUE_KEYS.forEach(function (k) {
+      var v = base[k];
+      out[k] = (v === undefined || v === null || String(v).trim() === "") ? (d[k] || "") : String(v);
+    });
+    out.id = base.id || "custom";
+    out.group = base.group || "custom";
+    out.label = base.label || out.name;
+    out.note = base.note || "";
+    return out;
+  }
+  function promptTemplates() {
+    if (DATA && DATA.prompt_templates && DATA.prompt_templates.length) return DATA.prompt_templates;
+    return (DATA && DATA.prompts) ? DATA.prompts : [];
+  }
+  /* 템플릿의 {name} {spec} {price} {target} {keyword} … 를 현재 제품 값으로 치환 */
+  function buildPrompt(p) {
+    var t = resolvePromptTarget();
+    var tpl = (p && (p.template || p.prompt)) || "";
+    var d = promptDefaults();
+    var values = {
+      name: t.name, spec: t.spec, price: t.price, target: t.target, keyword: t.keyword,
+      options: t.options, shipping: t.shipping, faq: t.faq, theme: t.theme, season: d.season || ""
+    };
+    return String(tpl).replace(/\{(\w+)\}/g, function (whole, key) {
+      return Object.prototype.hasOwnProperty.call(values, key) ? values[key] : whole;
+    });
+  }
+  function persistPromptTarget() {
+    if (!promptTarget) return;
+    if (promptTarget.id === "custom") {
+      var values = {};
+      PROMPT_VALUE_KEYS.forEach(function (k) { values[k] = promptTarget[k]; });
+      save(KEY_PROMPT_TARGET, { id: "custom", values: values });
+    } else {
+      save(KEY_PROMPT_TARGET, { id: promptTarget.id });
+    }
+  }
+  function loadPromptTarget() {
+    var saved = load(KEY_PROMPT_TARGET, null);
+    if (saved && saved.id) {
+      if (saved.id === "custom" && saved.values) return resolvePromptTarget(saved.values);
+      var item = findPromptItem(saved.id);
+      if (item) return resolvePromptTarget(item);
+    }
+    return resolvePromptTarget(null);
+  }
+
+  function setPromptFieldValues() {
+    var t = resolvePromptTarget();
+    PROMPT_FIELD_KEYS.forEach(function (k) {
+      var n = $("prompt-" + k);
+      if (n && n.value !== t[k]) n.value = t[k];
+    });
+    var note = $("prompt-note");
+    if (note) {
+      if (t.note) { note.textContent = t.note; note.hidden = false; }
+      else { note.textContent = ""; note.hidden = true; }
+    }
+    var cur = $("prompt-current");
+    if (cur) cur.textContent = "지금 대상 · " + t.name;
+  }
+
+  function renderPromptChips() {
+    var root = $("prompt-chips");
+    if (!root) return;
+    clear(root);
+    presetPromptItems().forEach(function (it) {
+      if (!it.chip) return;
+      var b = el("button", "pt-chip");
+      b.type = "button";
+      b.setAttribute("data-prompt-chip", it.id);
+      if (promptTarget && promptTarget.id === it.id) b.className = "pt-chip is-active";
+      b.appendChild(el("span", "pt-chip-label", it.chip_label || it.label));
+      b.appendChild(el("span", "pt-chip-badge", it.badge || "프리셋"));
+      b.addEventListener("click", function () { applyPromptItem(it.id); });
+      root.appendChild(b);
+    });
+  }
+
+  function renderPromptSelect() {
+    var sel = $("prompt-product");
+    if (!sel) return;
+    clear(sel);
+    var groups = (promptData() && promptData().groups) || [];
+    var byGroup = {};
+    allPromptItems().forEach(function (it) {
+      var g = it.group || "preset";
+      if (!byGroup[g]) byGroup[g] = [];
+      byGroup[g].push(it);
+    });
+    groups.forEach(function (g) {
+      var list = byGroup[g.id] || [];
+      if (!list.length) return;
+      var og = document.createElement("optgroup");
+      og.setAttribute("label", g.label);
+      list.forEach(function (it) {
+        var o = document.createElement("option");
+        o.value = it.id;
+        o.textContent = it.label + (it.badge ? " · " + it.badge : "");
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    });
+    var custom = document.createElement("option");
+    custom.value = "custom";
+    custom.textContent = customLabel();
+    sel.appendChild(custom);
+    var want = (promptTarget && promptTarget.id) ? promptTarget.id : "custom";
+    sel.value = want;
+    if (sel.value !== want) sel.value = "custom";
+  }
+
+  function applyPromptItem(id) {
+    var item = (id === "custom") ? null : findPromptItem(id);
+    if (id === "custom" || !item) {
+      var cur = resolvePromptTarget();
+      var next = {};
+      PROMPT_VALUE_KEYS.forEach(function (k) { next[k] = cur[k]; });
+      next.id = "custom";
+      next.group = "custom";
+      next.label = customLabel();
+      next.note = customNote();
+      promptTarget = next;
+    } else {
+      promptTarget = resolvePromptTarget(item);
+    }
+    persistPromptTarget();
+    renderPromptChips();
+    renderPromptSelect();
+    setPromptFieldValues();
+    renderPrompts();
+    toast("프롬프트 4종을 '" + promptTarget.name + "' 기준으로 바꿨어요.");
+  }
+
+  /* 단가 탭에서 제품을 저장·삭제하면 대상 목록을 다시 맞춥니다. */
+  function refreshPromptOptions() {
+    if (!DATA || !$("prompt-product") || !promptTarget) return;
+    var missing = (promptTarget.id !== "custom") && !findPromptItem(promptTarget.id);
+    if (missing) {
+      promptTarget = resolvePromptTarget(presetPromptItems()[0] || null);
+      persistPromptTarget();
+      setPromptFieldValues();
+      renderPrompts();
+    }
+    renderPromptChips();
+    renderPromptSelect();
+  }
+
   function renderPrompts() {
     var root = $("prompt-list");
     if (!root) return;
     clear(root);
-    DATA.prompts.forEach(function (p) {
+    promptTemplates().forEach(function (p) {
+      if (!p || !p.id) return;
       var card = el("article", "prompt");
       card.setAttribute("data-prompt", p.id);
       var head = el("div", "prompt-head");
-      head.appendChild(el("h4", "prompt-title", p.title));
-      head.appendChild(el("span", "prompt-use", p.use));
-      head.appendChild(copyButton("프롬프트 복사", function () { return p.prompt; }, "프롬프트를 복사했어요 — GPT에 붙여넣고 실행하세요."));
+      head.appendChild(el("h4", "prompt-title", p.title || p.id));
+      if (p.use) head.appendChild(el("span", "prompt-use", p.use));
+      head.appendChild(copyButton("프롬프트 복사", function () { return buildPrompt(p); }, "프롬프트를 복사했어요 — GPT에 붙여넣고 실행하세요."));
       card.appendChild(head);
+
+      var t = resolvePromptTarget();
+      var tag = el("p", "prompt-target-tag");
+      tag.setAttribute("data-prompt-target", p.id);
+      tag.textContent = "대상 제품 · " + t.name + (t.price ? " · " + t.price : "");
+      card.appendChild(tag);
+
       var pre = document.createElement("pre");
       pre.className = "prompt-body";
-      pre.textContent = p.prompt;
+      pre.setAttribute("data-prompt-body", p.id);
+      pre.textContent = buildPrompt(p);
       card.appendChild(pre);
-      card.appendChild(el("p", "prompt-tip", "💡 " + p.tips));
+      if (p.tips) card.appendChild(el("p", "prompt-tip", "💡 " + p.tips));
       root.appendChild(card);
     });
+  }
 
+  function renderJsonCard() {
     var jc = $("json-card");
-    if (jc) {
-      clear(jc);
-      jc.appendChild(el("h4", "card-title", DATA.json_guide.title));
-      var urlRow = el("div", "json-url-row");
-      var code = document.createElement("code");
-      code.className = "json-url";
-      code.textContent = DATA.json_guide.url;
-      urlRow.appendChild(code);
-      urlRow.appendChild(copyButton("URL 복사", function () { return DATA.json_guide.url; }, "JSON 주소를 복사했어요."));
-      jc.appendChild(urlRow);
+    if (!jc) return;
+    clear(jc);
+    jc.appendChild(el("h4", "card-title", DATA.json_guide.title));
+    var urlRow = el("div", "json-url-row");
+    var code = document.createElement("code");
+    code.className = "json-url";
+    code.textContent = DATA.json_guide.url;
+    urlRow.appendChild(code);
+    urlRow.appendChild(copyButton("URL 복사", function () { return DATA.json_guide.url; }, "JSON 주소를 복사했어요."));
+    jc.appendChild(urlRow);
 
-      var dl = el("dl", "json-fields");
-      DATA.json_guide.fields.forEach(function (f) {
-        dl.appendChild(el("dt", null, f.key));
-        dl.appendChild(el("dd", null, f.desc));
-      });
-      jc.appendChild(dl);
+    var dl = el("dl", "json-fields");
+    DATA.json_guide.fields.forEach(function (f) {
+      dl.appendChild(el("dt", null, f.key));
+      dl.appendChild(el("dd", null, f.desc));
+    });
+    jc.appendChild(dl);
 
-      var exWrap = el("div", "json-example");
-      var exHead = el("div", "json-example-head");
-      exHead.appendChild(el("span", "json-example-label", "GPT에 이렇게 시키면 됩니다"));
-      exHead.appendChild(copyButton("예시 복사", function () { return DATA.json_guide.example; }, "예시 문장을 복사했어요."));
-      exWrap.appendChild(exHead);
-      var quote = el("p", "json-example-text", DATA.json_guide.example);
-      exWrap.appendChild(quote);
-      jc.appendChild(exWrap);
+    var exWrap = el("div", "json-example");
+    var exHead = el("div", "json-example-head");
+    exHead.appendChild(el("span", "json-example-label", "GPT에 이렇게 시키면 됩니다"));
+    exHead.appendChild(copyButton("예시 복사", function () { return DATA.json_guide.example; }, "예시 문장을 복사했어요."));
+    exWrap.appendChild(exHead);
+    var quote = el("p", "json-example-text", DATA.json_guide.example);
+    exWrap.appendChild(quote);
+    jc.appendChild(exWrap);
+  }
+
+  function bindPrompts() {
+    if (!DATA) return;
+    promptTarget = loadPromptTarget();
+    var d = promptData();
+    if ($("prompt-lead")) $("prompt-lead").textContent = (d && d.lead) || "";
+    if ($("prompt-hint")) $("prompt-hint").textContent = (d && d.weekly_note) || "";
+    if ($("prompt-weekly") && d && d.weekly_notice) {
+      $("prompt-weekly").textContent = "🗓 " + d.weekly_notice;
     }
+    var sel = $("prompt-product");
+    if (sel) {
+      sel.addEventListener("change", function () { applyPromptItem(sel.value); });
+    }
+    PROMPT_FIELD_KEYS.forEach(function (k) {
+      var n = $("prompt-" + k);
+      if (!n) return;
+      n.addEventListener("input", function () {
+        if (!promptTarget) promptTarget = resolvePromptTarget(null);
+        promptTarget[k] = n.value;
+        promptTarget.id = "custom";
+        promptTarget.group = "custom";
+        promptTarget.label = customLabel();
+        promptTarget.note = customNote();
+        persistPromptTarget();
+        renderPromptChips();
+        renderPromptSelect();
+        renderPrompts();
+        if ($("prompt-current")) $("prompt-current").textContent = "지금 대상 · " + resolvePromptTarget().name;
+      });
+    });
+    renderPromptChips();
+    renderPromptSelect();
+    setPromptFieldValues();
+    renderPrompts();
+    renderJsonCard();
   }
 
   /* ---------- 단가·마진 계산기 ---------- */
@@ -1111,6 +1363,7 @@
     }));
     save(KEY_PRODUCTS, products);
     renderProducts();
+    refreshPromptOptions();
     toast("제품 목록에 저장했어요 — 표에서 바로 비교됩니다.");
   }
 
@@ -1118,6 +1371,7 @@
     products = products.filter(function (p) { return p.id !== id; });
     save(KEY_PRODUCTS, products);
     renderProducts();
+    refreshPromptOptions();
     toast("목록에서 삭제했어요.");
   }
 
@@ -1236,8 +1490,8 @@
     renderSeo();
     renderBench();
     renderSeasons();
-    renderPrompts();
     bindCalc();
+    bindPrompts();
     bindTabs();
     setTab("today");
 
@@ -1292,7 +1546,12 @@
     setShare: setShare,
     won: won,
     buildReelCopy: buildReelCopy,
-    setTab: setTab
+    setTab: setTab,
+    buildPrompt: buildPrompt,
+    applyPromptItem: applyPromptItem,
+    promptTarget: function () { return resolvePromptTarget(); },
+    savedPromptItems: savedPromptItems,
+    refreshPromptOptions: refreshPromptOptions
   };
 
   if (document.readyState === "loading") {

@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="./styles.css?v=1795660282">
+<link rel="stylesheet" href="./styles.css?v=1795662124">
 </head>
 <body>
 <a class="skip-link" href="#main">본문으로 바로 가기</a>
@@ -206,8 +206,53 @@
     <div class="section-head">
       <p class="eyebrow">Automation</p>
       <h2 class="section-title">GPT 자동화 프롬프트 허브</h2>
-      <p class="section-lead">사실(가격·구성·기간)을 먼저 주고 문장만 만들게 합니다. 금칙어는 프롬프트에 이미 넣어 두었습니다.</p>
+      <p class="section-lead">사실(가격·구성·기간)을 먼저 주고 문장만 만들게 합니다. 제품을 고르면 아래 4개 프롬프트가 그 제품으로 바뀝니다.</p>
     </div>
+
+    <p class="prompt-weekly" id="prompt-weekly"><span aria-hidden="true">🗓</span> 매주 금요일 업데이트 시 스마트스토어 신상품도 목록에 자동 반영</p>
+
+    <div class="prompt-picker" id="prompt-picker">
+      <div class="pt-head">
+        <p class="pt-eyebrow">대상 제품 선택 / 입력</p>
+        <h3 class="pt-title">어떤 제품의 프롬프트를 만들까요?</h3>
+        <p class="pt-lead" id="prompt-lead"></p>
+      </div>
+
+      <div class="pt-chips" id="prompt-chips" role="group" aria-label="대상 제품 빠른 선택"></div>
+
+      <label class="field pt-select-field" for="prompt-product">
+        <span class="field-label">전체 목록에서 고르기 <span class="hint">프리셋 · 스토어 판매 중 · 단가 탭에 저장한 제품 · 직접 입력</span></span>
+        <select id="prompt-product" class="pt-select"></select>
+      </label>
+
+      <div class="pt-fields" id="prompt-fields">
+        <label class="field pt-field pt-field--full" for="prompt-name">
+          <span class="field-label">상품명</span>
+          <span class="field-inputwrap"><input type="text" id="prompt-name" maxlength="80" placeholder="예: 페를레 진주 웨딩 세트" value=""></span>
+        </label>
+        <label class="field pt-field pt-field--full" for="prompt-spec">
+          <span class="field-label">구성·특징</span>
+          <span class="field-inputwrap"><input type="text" id="prompt-spec" maxlength="160" placeholder="예: 목걸이·귀걸이·반지 3종, 4~6mm 크리스털 진주" value=""></span>
+        </label>
+        <label class="field pt-field" for="prompt-price">
+          <span class="field-label">가격(표시가)</span>
+          <span class="field-inputwrap"><input type="text" id="prompt-price" maxlength="80" placeholder="예: 50,000원 (쿠팡 29,000원)" value=""></span>
+        </label>
+        <label class="field pt-field" for="prompt-target">
+          <span class="field-label">타깃</span>
+          <span class="field-inputwrap"><input type="text" id="prompt-target" maxlength="160" placeholder="예: 예비신부·혼주·데일리 선물" value=""></span>
+        </label>
+        <label class="field pt-field pt-field--full" for="prompt-keyword">
+          <span class="field-label">검색 키워드 <span class="hint">프롬프트의 검색어 자리에 그대로 들어갑니다</span></span>
+          <span class="field-inputwrap"><input type="text" id="prompt-keyword" maxlength="60" placeholder="예: 신부 진주 세트" value=""></span>
+        </label>
+      </div>
+
+      <p class="pt-note" id="prompt-note" hidden></p>
+      <p class="pt-hint" id="prompt-hint"></p>
+    </div>
+
+    <h3 class="sub-title">제품별 프롬프트 4종 <span class="hint" id="prompt-current"></span></h3>
     <div class="prompt-list" id="prompt-list"></div>
     <h3 class="sub-title">자동화용 JSON</h3>
     <div class="card json-card" id="json-card"></div>
@@ -322,7 +367,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-<script src="./data/dashboard.js?v=1795660282" defer></script>
-<script src="./app.js?v=1795660282" defer></script>
+<script src="./data/dashboard.js?v=1795662124" defer></script>
+<script src="./app.js?v=1795662124" defer></script>
 </body>
 </html>
