@@ -469,6 +469,13 @@ check("rainbow no briefing cards", ctx.eval("__cards().length"), 0)
 ctx.eval("__tabs()[0].dispatch('click')")
 check("leave rainbow -> dates visible", ctx.eval("document.getElementById('dates').hidden"), False)
 check("leave rainbow -> cards back", ctx.eval("__cards().length"), len(latest_items))
+# rainbow 탭에서 검색을 시작하면 브리핑 탭으로 자동 전환
+ctx.eval("__tabs()[%d].dispatch('click')" % rainbow_idx)
+ctx.eval("var i=document.getElementById('search-input'); i.value='청룡'; i.dispatch('input');")
+check("search from rainbow -> rainbow tab off",
+      ctx.eval("__tabs()[%d].getAttribute('aria-pressed')" % rainbow_idx), "false")
+check("search from rainbow -> results", ctx.eval("__cards().length > 0"), True)
+ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")
 
 if "--dump" in sys.argv:
     ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")

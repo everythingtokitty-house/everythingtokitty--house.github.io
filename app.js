@@ -891,6 +891,8 @@
       window.clearTimeout(timer);
       timer = window.setTimeout(function () {
         state.q = value;
+        // 🌈 비더레인보우 탭에서 검색을 시작하면 브리핑 탭으로 돌려준다
+        if (value && state.cat === "rainbow") state.cat = "all";
         render();
       }, 130);
     });
