@@ -6,13 +6,15 @@
   var KEY_RISK = "berainbow.risk.v1";
   var KEY_COST = "berainbow.cost.v1";
   var KEY_LINK = "berainbow.sellerlink.v1";
+  var KEY_SHARE = "berainbow.share.v1";
 
   var state = {
     tab: "today",
     done: {},
     riskDone: {},
     cost: 0,
-    sellerLink: false
+    sellerLink: false,
+    share: 70
   };
   var DATA = null;
 
@@ -99,10 +101,19 @@
   }
 
   /* ---------- 마진 계산 ---------- */
-  function marginRows(cost, sellerLink) {
+  function sharePct() {
+    var fallback = (DATA && DATA.share) ? Number(DATA.share.default_pct) : 50;
+    var v = Number(state.share);
+    if (!isFinite(v)) v = fallback;
+    return Math.min(100, Math.max(0, v));
+  }
+
+  function marginRows(cost, sellerLink, share) {
     if (!DATA) return [];
     var a = DATA.margin.assumptions;
     var c = Number(cost) || 0;
+    var p = (share === undefined) ? sharePct() : Number(share);
+    if (!isFinite(p)) p = sharePct();
     return DATA.margin.rows.map(function (r) {
       var price = r.price;
       var fee = 0;
@@ -115,10 +126,12 @@
         fee = price * rate * (1 + a.vat) + price * a.npay;
       }
       var net = price - fee - logistics - c;
+      var kind = r.share || (r.channel === "coupang" ? "joint" : "sole");
+      var mine = kind === "joint" ? Math.round(net * p / 100) : Math.round(net);
       return {
         id: r.id, channel: r.channel, label: r.label, stage: r.stage, price: price,
         fee: Math.round(fee), logistics: logistics, net: Math.round(net),
-        rate: price ? net / price : 0
+        rate: price ? net / price : 0, shareKind: kind, mine: mine, minePct: kind === "joint" ? p : 100
       };
     });
   }
@@ -142,6 +155,30 @@
     return "헤드: " + b.head + "\n서브: " + b.sub + "\nCTA: " + b.cta;
   }
 
+  /* ---------- 수익 배분 비율 ---------- */
+  var shareHints = [];
+  function shareInputNodes() {
+    var out = [];
+    ["share-input", "share-strategy-input"].forEach(function (id) {
+      var n = $(id);
+      if (n) out.push(n);
+    });
+    return out;
+  }
+  function setShare(raw) {
+    var v = Number(raw);
+    if (raw === "" || !isFinite(v)) v = (DATA && DATA.share) ? Number(DATA.share.default_pct) : 50;
+    v = Math.min(100, Math.max(0, v));
+    state.share = v;
+    save(KEY_SHARE, v);
+    var active = document.activeElement || null;
+    shareInputNodes().forEach(function (n) { if (n !== active) n.value = String(v); });
+    shareHints.forEach(function (h) {
+      h.textContent = DATA.share.strategy_line.replace("{share}", v);
+    });
+    renderMargin();
+  }
+
   /* ---------- 렌더 ---------- */
   function renderMeta() {
     var m = DATA.meta;
@@ -161,6 +198,7 @@
     } catch (e) { dday = ""; }
     if ($("next-update")) $("next-update").textContent = "다음 업데이트 " + m.next_update_label + dday;
     if ($("json-link")) $("json-link").setAttribute("href", m.json_path);
+    if ($("sheet-link") && m.sheet_url) $("sheet-link").setAttribute("href", m.sheet_url);
     if ($("footer-meta")) {
       $("footer-meta").textContent = m.brand + " " + m.handle + " · " + m.update_badge +
         " · 다음 " + m.next_update_label + " · " + m.owner_note;
@@ -186,6 +224,40 @@
     });
   }
 
+  function renderOps() {
+    var root = $("ops-card");
+    if (!root || !DATA.ops) return;
+    clear(root);
+    var o = DATA.ops;
+
+    var head = el("div", "ops-head");
+    head.appendChild(el("h3", "ops-title", o.title));
+    var link = el("a", "ops-link", "📊 " + o.link_label);
+    link.href = o.url;
+    link.setAttribute("href", o.url);
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.setAttribute("data-ops-link", o.sheet_name);
+    head.appendChild(link);
+    root.appendChild(head);
+    root.appendChild(el("p", "ops-lead", o.lead));
+
+    var tiles = el("div", "ops-tiles");
+    o.tiles.forEach(function (t) {
+      var card = el("article", "ops-tile ops-tile--" + t.tone);
+      card.setAttribute("data-ops", t.id);
+      card.appendChild(el("p", "ops-label", t.label));
+      var val = el("p", "ops-value");
+      val.appendChild(el("span", "ops-count", t.value));
+      if (t.amount) val.appendChild(el("span", "ops-amount", t.amount));
+      card.appendChild(val);
+      card.appendChild(el("p", "ops-sub", t.sub));
+      tiles.appendChild(card);
+    });
+    root.appendChild(tiles);
+    root.appendChild(el("p", "ops-note", o.note));
+  }
+
   function renderStrategy() {
     var root = $("strategy-grid");
     if (!root) return;
@@ -198,6 +270,31 @@
       var ul = el("ul", "strategy-list");
       s.points.forEach(function (p) { ul.appendChild(el("li", null, p)); });
       card.appendChild(ul);
+      if (s.id === "rocket" && DATA.share) {
+        var box = el("div", "share-box");
+        var label = el("label", "field");
+        label.setAttribute("for", "share-strategy-input");
+        label.appendChild(el("span", "field-label", DATA.share.label + " — 쿠팡 공동 운영"));
+        var wrap = el("span", "field-inputwrap");
+        var inp = document.createElement("input");
+        inp.type = "number";
+        inp.id = "share-strategy-input";
+        inp.setAttribute("inputmode", "numeric");
+        inp.min = String(DATA.share.min);
+        inp.max = String(DATA.share.max);
+        inp.step = String(DATA.share.step);
+        inp.value = String(sharePct());
+        wrap.appendChild(inp);
+        wrap.appendChild(el("span", "field-unit", "%"));
+        label.appendChild(wrap);
+        box.appendChild(label);
+        var hint = el("p", "share-hint", DATA.share.strategy_line.replace("{share}", sharePct()));
+        box.appendChild(hint);
+        shareHints.push(hint);
+        card.appendChild(box);
+        inp.addEventListener("input", function () { setShare(inp.value); });
+        inp.addEventListener("change", function () { setShare(inp.value); });
+      }
       root.appendChild(card);
     });
   }
@@ -383,12 +480,52 @@
     }
   }
 
+  function renderCostPresets() {
+    var root = $("cost-presets");
+    if (!root || !DATA || !DATA.margin.presets) return;
+    clear(root);
+    DATA.margin.presets.forEach(function (p) {
+      var isCustom = (p.cost === null || p.cost === undefined);
+      var b = el("button", "preset-btn");
+      b.type = "button";
+      b.setAttribute("data-preset", p.id);
+      b.textContent = isCustom ? p.label : p.label + " " + num(p.cost) + "원";
+      if (p.note) b.setAttribute("title", p.note);
+      if (!isCustom && Number(state.cost) === Number(p.cost)) b.className = "preset-btn is-active";
+      b.addEventListener("click", function () {
+        var input = $("cost-input");
+        if (isCustom) {
+          state.cost = 0;
+          save(KEY_COST, 0);
+          if (input) {
+            input.value = "";
+            try { input.focus(); } catch (e) {}
+          }
+        } else {
+          state.cost = Number(p.cost);
+          save(KEY_COST, state.cost);
+          if (input) input.value = String(state.cost);
+        }
+        renderMargin();
+        renderCostPresets();
+      });
+      root.appendChild(b);
+    });
+    if (DATA.margin.cost_note && !$("cost-note")) {
+      var note = el("p", "cost-note", DATA.margin.cost_note);
+      note.id = "cost-note";
+      root.appendChild(note);
+    }
+  }
+
   function renderMargin() {
     var body = $("margin-body");
     if (!body) return;
     clear(body);
     var cost = Number(state.cost) || 0;
-    marginRows(cost, state.sellerLink).forEach(function (r) {
+    var share = sharePct();
+    var rows = marginRows(cost, state.sellerLink, share);
+    rows.forEach(function (r) {
       var tr = document.createElement("tr");
       tr.setAttribute("data-row", r.id);
       tr.appendChild(el("td", "stage", r.stage));
@@ -400,6 +537,10 @@
       if (r.net < 0) netCell.className = "num net is-negative";
       tr.appendChild(netCell);
       tr.appendChild(el("td", "num rate", pct(r.rate)));
+      var mineCell = el("td", "num mine", won(r.mine));
+      if (r.mine < 0) mineCell.className = "num mine is-negative";
+      mineCell.appendChild(el("span", "mine-tag", r.shareKind === "joint" ? "배분 " + r.minePct + "%" : "단독 100%"));
+      tr.appendChild(mineCell);
       body.appendChild(tr);
     });
 
@@ -410,10 +551,11 @@
     if (foot) {
       var pace = DATA.margin.pace;
       var monthly = Math.round((pace.orders / pace.days) * 30 * 10) / 10;
-      var step1 = marginRows(cost, state.sellerLink).filter(function (r) { return r.id === "cp-1"; })[0];
+      var step1 = marginRows(cost, state.sellerLink, share).filter(function (r) { return r.id === "cp-1"; })[0];
       var msg = pace.note + " · 1단계(39,000원) 적용 시 월 매출 약 " +
         num(Math.round(step1.price * monthly / 1000) * 1000) + "원";
-      if (!cost) msg += " · ⚠️ 원가를 입력하기 전이라 순마진이 실제보다 크게 보입니다.";
+      if (!cost) msg += " · ⚠️ 원가가 0원이라 순마진이 실제보다 크게 보입니다 — 원가를 입력하세요.";
+      msg += " · 쿠팡 행은 순이익의 " + share + "%만 내 정산(공동 운영) — 네이버·인스타그램 유입은 단독 채널로 100%.";
       foot.textContent = msg;
     }
   }
@@ -653,8 +795,379 @@
     }
   }
 
+  /* ---------- 단가·마진 계산기 ---------- */
+  var KEY_PRODUCTS = "berainbow.products.v1";
+  var calc = null;
+  var products = [];
+  var productSeq = 0;
+
+  function calcDefaults() {
+    var d = (DATA && DATA.calc && DATA.calc.defaults) || {};
+    return {
+      name: d.name || "",
+      materials: Number(d.materials) || 0,
+      packaging: Number(d.packaging) || 0,
+      minutes: Number(d.minutes) || 0,
+      hourly: Number(d.hourly) || 0,
+      taxRate: Number(d.tax_rate) || 0,
+      channel: d.channel || "coupang",
+      sellerLink: false,
+      price: Number(d.price) || 0,
+      targetMargin: Number(d.target_margin) || 0
+    };
+  }
+
+  function calcCost(item) {
+    var labor = Math.round((Number(item.minutes) || 0) / 60 * (Number(item.hourly) || 0));
+    return Math.round(Number(item.materials) || 0) + Math.round(Number(item.packaging) || 0) + labor;
+  }
+
+  function calcFeeRate(item) {
+    var a = DATA.margin.assumptions;
+    if (item.channel === "coupang") return a.coupang_fee;
+    var rate = item.sellerLink ? a.naver_link_fee : a.naver_fee;
+    return rate * (1 + a.vat) + a.npay;
+  }
+
+  function calcResult(item, price, share) {
+    var a = DATA.margin.assumptions;
+    var p = Number(price) || 0;
+    var cost = calcCost(item);
+    var feeRate = calcFeeRate(item);
+    var fee = Math.round(p * feeRate);
+    var logistics = item.channel === "coupang" ? a.coupang_logistics : 0;
+    var tax = Math.round(p * (Number(item.taxRate) || 0) / 100);
+    var net = p - fee - logistics - cost - tax;
+    var margin = p ? net / p : 0;
+    var mine = item.channel === "coupang" ? Math.round(net * share / 100) : net;
+    return {
+      price: p, cost: cost, labor: cost - Math.round(Number(item.materials) || 0) - Math.round(Number(item.packaging) || 0),
+      fee: fee, feeRate: feeRate, logistics: logistics, tax: tax, net: net, margin: margin, mine: mine
+    };
+  }
+
+  function roundUp(value, unit) {
+    if (!isFinite(value) || value <= 0) return null;
+    return Math.ceil(value / unit) * unit;
+  }
+
+  function suggestPrices(item) {
+    var a = DATA.margin.assumptions;
+    var cost = calcCost(item);
+    var feeRate = calcFeeRate(item);
+    var taxRate = (Number(item.taxRate) || 0) / 100;
+    var fixed = item.channel === "coupang" ? a.coupang_logistics : 0;
+    function solve(margin) {
+      var den = 1 - feeRate - taxRate - margin;
+      if (den <= 0.001) return null;
+      return roundUp((cost + fixed) / den, 100);
+    }
+    var be = solve(0);
+    var target = solve((Number(item.targetMargin) || 0) / 100);
+    var mult = (DATA.calc && DATA.calc.premium_multiplier) || 1.3;
+    var premium = target ? roundUp(target * mult, 1000) : null;
+    return [
+      { id: "be", step: "①", label: "손익분기 최소 판매가", price: be, note: "이 아래로 내려가면 팔수록 손해" },
+      { id: "target", step: "②", label: "목표 마진율 기준 적정가", price: target, note: "목표 " + (Number(item.targetMargin) || 0) + "% 기준" },
+      { id: "premium", step: "③", label: "프리미엄 추천가", price: premium, note: (DATA.calc && DATA.calc.premium_note) || "" }
+    ];
+  }
+
+  function renderCalcPresets() {
+    var root = $("calc-presets");
+    if (!root || !DATA.calc) return;
+    clear(root);
+    (DATA.calc.product_presets || []).forEach(function (p) {
+      var b = el("button", "preset-btn");
+      b.type = "button";
+      b.setAttribute("data-calc-preset", p.id);
+      b.textContent = p.label;
+      if (p.note) b.setAttribute("title", p.note);
+      if (calc && calc.name === p.label) b.className = "preset-btn is-active";
+      b.addEventListener("click", function () {
+        calc.name = p.label;
+        calc.materials = Number(p.materials) || 0;
+        calc.packaging = Number(p.packaging) || 0;
+        calc.minutes = Number(p.minutes) || 0;
+        setCalcInputs();
+        renderCalcPresets();
+        renderCalc();
+      });
+      root.appendChild(b);
+    });
+  }
+
+  function renderCalcChannels() {
+    var root = $("calc-channels");
+    if (!root || !DATA.calc) return;
+    clear(root);
+    (DATA.calc.channels || []).forEach(function (c) {
+      var lab = el("label", "chan-option");
+      lab.setAttribute("data-calc-channel", c.id);
+      var input = document.createElement("input");
+      input.type = "radio";
+      input.name = "calc-channel";
+      input.id = "calc-ch-" + c.id;
+      input.value = c.id;
+      input.checked = calc && calc.channel === c.id;
+      lab.appendChild(input);
+      var body = el("span", "chan-option-body");
+      body.appendChild(el("span", "chan-option-label", c.label));
+      body.appendChild(el("span", "chan-option-desc", c.desc));
+      lab.appendChild(body);
+      input.addEventListener("change", function () {
+        if (!input.checked) return;
+        calc.channel = c.id;
+        syncSellerToggle();
+        renderCalc();
+      });
+      root.appendChild(lab);
+    });
+  }
+
+  function renderPriceQuick() {
+    var root = $("calc-price-quick");
+    if (!root || !DATA.calc) return;
+    clear(root);
+    (DATA.calc.price_options || []).forEach(function (v) {
+      var b = el("button", "preset-btn");
+      b.type = "button";
+      b.setAttribute("data-price-option", String(v));
+      b.textContent = num(v) + "원";
+      if (calc && Number(calc.price) === v) b.className = "preset-btn is-active";
+      b.addEventListener("click", function () {
+        calc.price = v;
+        var input = $("calc-price");
+        if (input) input.value = String(v);
+        renderPriceQuick();
+        renderCalc();
+      });
+      root.appendChild(b);
+    });
+  }
+
+  function syncSellerToggle() {
+    var input = $("calc-seller-link");
+    var wrap = $("calc-seller-wrap");
+    var naver = calc && calc.channel === "naver";
+    if (input) {
+      input.disabled = !naver;
+      input.checked = naver ? !!calc.sellerLink : false;
+    }
+    if (wrap) wrap.className = naver ? "switch" : "switch is-muted";
+  }
+
+  function renderCalc() {
+    if (!DATA || !DATA.calc || !calc) return;
+    var root = $("calc-results");
+    if (!root) return;
+    if ($("calc-lead")) $("calc-lead").textContent = DATA.calc.lead;
+    if ($("calc-tax-note")) $("calc-tax-note").textContent = DATA.calc.tax_note;
+    if ($("calc-save-note")) $("calc-save-note").textContent = DATA.calc.save_note;
+
+    var share = sharePct();
+    var r = calcResult(calc, calc.price, share);
+    clear(root);
+
+    function tile(id, label, value, sub, tone) {
+      var card = el("div", "unit-tile unit-tile--" + (tone || "plain"));
+      card.setAttribute("data-calc", id);
+      card.appendChild(el("p", "unit-tile-label", label));
+      card.appendChild(el("p", "unit-tile-value", value));
+      if (sub) card.appendChild(el("p", "unit-tile-sub", sub));
+      root.appendChild(card);
+    }
+
+    tile("cost", "총 제작원가", won(r.cost),
+      "재료 " + num(calc.materials) + " + 포장 " + num(calc.packaging) + " + 인건비 " + num(r.labor) +
+      " (" + num(calc.minutes) + "분 × " + num(calc.hourly) + "원/h)");
+    tile("fee", "플랫폼 수수료 · 물류비", "−" + num(r.fee + r.logistics),
+      "수수료 " + num(r.fee) + " (" + pct(r.feeRate) + ")" +
+      (r.logistics ? " + 물류 " + num(r.logistics) : " · 물류 없음"), "warn");
+    tile("tax", "예상 세금 (" + (Number(calc.taxRate) || 0) + "%)", "−" + num(r.tax),
+      "판매가 " + won(r.price) + " 기준 예비치");
+    tile("net", "최종 순마진 · 마진율", won(r.net) + " · " + pct(r.margin),
+      r.net < 0 ? "이 가격으로는 손해입니다" : "판매가 " + won(r.price) + " 기준", r.net < 0 ? "warn" : "good");
+    tile("mine", "내 실수령 정산액", won(r.mine),
+      calc.channel === "coupang"
+        ? "쿠팡은 은별 " + share + " : 공동 " + (100 - share) + " 배분 — 순이익의 " + share + "%"
+        : "네이버 단독 채널 — 순이익 100%가 내 몫", "gold");
+
+    var sug = $("calc-suggest");
+    if (sug) {
+      clear(sug);
+      suggestPrices(calc).forEach(function (s) {
+        var card = el("article", "suggest-card");
+        card.setAttribute("data-suggest", s.id);
+        card.appendChild(el("span", "suggest-step", s.step));
+        card.appendChild(el("p", "suggest-label", s.label));
+        card.appendChild(el("p", "suggest-price", s.price ? won(s.price) : "계산 불가"));
+        card.appendChild(el("p", "suggest-note", s.price ? s.note : "목표 마진율이 수수료·세금 합보다 큽니다 — 목표를 낮춰 보세요."));
+        sug.appendChild(card);
+      });
+    }
+  }
+
+  function setCalcInputs() {
+    var map = [
+      ["calc-name", calc.name],
+      ["calc-materials", calc.materials],
+      ["calc-packaging", calc.packaging],
+      ["calc-minutes", calc.minutes],
+      ["calc-hourly", calc.hourly],
+      ["calc-tax", calc.taxRate],
+      ["calc-price", calc.price],
+      ["calc-target-margin", calc.targetMargin]
+    ];
+    map.forEach(function (pair) {
+      var n = $(pair[0]);
+      if (n && n.value !== String(pair[1])) n.value = String(pair[1]);
+    });
+    syncSellerToggle();
+  }
+
+  function normalizeProduct(item) {
+    return {
+      id: item.id || ("p" + Date.now() + "-" + (++productSeq)),
+      name: item.name || "이름 없는 제품",
+      materials: Number(item.materials) || 0,
+      packaging: Number(item.packaging) || 0,
+      minutes: Number(item.minutes) || 0,
+      hourly: Number(item.hourly) || 0,
+      taxRate: (item.taxRate !== undefined) ? Number(item.taxRate) || 0 : Number(item.tax_rate) || 0,
+      channel: item.channel === "naver" ? "naver" : "coupang",
+      sellerLink: (item.sellerLink !== undefined) ? !!item.sellerLink : !!item.seller_link,
+      price: Number(item.price) || 0,
+      targetMargin: (item.targetMargin !== undefined) ? Number(item.targetMargin) || 0 : Number(item.target_margin) || 0
+    };
+  }
+
+  function loadProducts() {
+    var saved = load(KEY_PRODUCTS, null);
+    if (saved === null || saved === undefined) {
+      var seed = (DATA.calc && DATA.calc.sample_product) ? [normalizeProduct(DATA.calc.sample_product)] : [];
+      save(KEY_PRODUCTS, seed);
+      return seed;
+    }
+    if (!saved || !saved.length) return [];
+    return saved.map(normalizeProduct);
+  }
+
+  function productRow(item) {
+    var r = calcResult(item, item.price, sharePct());
+    var tr = document.createElement("tr");
+    tr.setAttribute("data-product", item.id);
+    tr.appendChild(el("td", "pname", item.name));
+    tr.appendChild(el("td", "num", won(r.cost)));
+    tr.appendChild(el("td", "chan chan--" + (item.channel === "coupang" ? "coupang" : "naver"),
+      item.channel === "coupang" ? "쿠팡" : "네이버"));
+    tr.appendChild(el("td", "num", won(r.price)));
+    var netCell = el("td", "num net", won(r.net));
+    if (r.net < 0) netCell.className = "num net is-negative";
+    tr.appendChild(netCell);
+    tr.appendChild(el("td", "num rate", pct(r.margin)));
+    tr.appendChild(el("td", "num mine", won(r.mine)));
+    var delCell = el("td");
+    var del = el("button", "del-btn", "삭제");
+    del.type = "button";
+    del.setAttribute("data-delete", item.id);
+    del.addEventListener("click", function () { deleteProduct(item.id); });
+    delCell.appendChild(del);
+    tr.appendChild(delCell);
+    return tr;
+  }
+
+  function renderProducts() {
+    var body = $("product-body");
+    if (!body) return;
+    clear(body);
+    if ($("calc-count")) $("calc-count").textContent = products.length + "개";
+    if (!products.length) {
+      var tr = document.createElement("tr");
+      var td = el("td", "empty-cell", DATA.calc.empty_note);
+      td.setAttribute("colspan", "8");
+      tr.appendChild(td);
+      body.appendChild(tr);
+      return;
+    }
+    products.forEach(function (item) { body.appendChild(productRow(item)); });
+  }
+
+  function saveProduct() {
+    if (!calc) return;
+    productSeq += 1;
+    products.push(normalizeProduct({
+      id: "p" + Date.now() + "-" + productSeq,
+      name: (calc.name || "이름 없는 제품").slice(0, 40),
+      materials: Number(calc.materials) || 0,
+      packaging: Number(calc.packaging) || 0,
+      minutes: Number(calc.minutes) || 0,
+      hourly: Number(calc.hourly) || 0,
+      taxRate: Number(calc.taxRate) || 0,
+      channel: calc.channel,
+      sellerLink: !!calc.sellerLink,
+      price: Number(calc.price) || 0,
+      targetMargin: Number(calc.targetMargin) || 0
+    }));
+    save(KEY_PRODUCTS, products);
+    renderProducts();
+    toast("제품 목록에 저장했어요 — 표에서 바로 비교됩니다.");
+  }
+
+  function deleteProduct(id) {
+    products = products.filter(function (p) { return p.id !== id; });
+    save(KEY_PRODUCTS, products);
+    renderProducts();
+    toast("목록에서 삭제했어요.");
+  }
+
+  function bindCalc() {
+    if (!DATA || !DATA.calc) return;
+    calc = calcDefaults();
+    renderCalcPresets();
+    renderCalcChannels();
+    renderPriceQuick();
+    setCalcInputs();
+
+    var fields = [
+      ["calc-name", "name", true],
+      ["calc-materials", "materials"],
+      ["calc-packaging", "packaging"],
+      ["calc-minutes", "minutes"],
+      ["calc-hourly", "hourly"],
+      ["calc-tax", "taxRate"],
+      ["calc-price", "price"],
+      ["calc-target-margin", "targetMargin"]
+    ];
+    fields.forEach(function (f) {
+      var n = $(f[0]);
+      if (!n) return;
+      n.addEventListener("input", function () {
+        calc[f[1]] = f[2] ? n.value : (Number(n.value) || 0);
+        if (f[1] === "name") renderCalcPresets();
+        if (f[1] === "price") renderPriceQuick();
+        renderCalc();
+      });
+    });
+
+    var seller = $("calc-seller-link");
+    if (seller) {
+      seller.addEventListener("change", function () {
+        calc.sellerLink = !!seller.checked;
+        renderCalc();
+      });
+    }
+
+    var saveBtn = $("calc-save");
+    if (saveBtn) saveBtn.addEventListener("click", saveProduct);
+
+    products = loadProducts();
+    renderProducts();
+    renderCalc();
+  }
+
   /* ---------- 탭 ---------- */
-  var TAB_IDS = ["today", "seo", "bench", "season", "gpt"];
+  var TAB_IDS = ["today", "seo", "bench", "season", "gpt", "calc"];
   function setTab(key, scroll) {
     if (TAB_IDS.indexOf(key) < 0) key = "today";
     state.tab = key;
@@ -697,12 +1210,23 @@
     DATA = data;
     state.done = load(KEY_TASK, {});
     state.riskDone = load(KEY_RISK, {});
-    state.cost = load(KEY_COST, 0) || 0;
+    state.cost = (function () {
+      var saved = load(KEY_COST, null);
+      if (saved === null || saved === undefined || saved === "") {
+        return (DATA.margin && DATA.margin.default_cost !== undefined) ? Number(DATA.margin.default_cost) : 0;
+      }
+      return Number(saved) || 0;
+    })();
+    var savedShare = load(KEY_SHARE, null);
+    state.share = (savedShare === null || savedShare === undefined || savedShare === "")
+      ? (DATA.share ? Number(DATA.share.default_pct) : 50)
+      : Number(savedShare);
     var linkSaved = load(KEY_LINK, false);
     state.sellerLink = !!linkSaved;
 
     renderMeta();
     renderKpis();
+    renderOps();
     renderStrategy();
     renderDiag();
     renderTasks();
@@ -713,18 +1237,21 @@
     renderBench();
     renderSeasons();
     renderPrompts();
+    bindCalc();
     bindTabs();
     setTab("today");
 
     var costInput = $("cost-input");
     if (costInput) {
-      if (state.cost) costInput.value = String(state.cost);
+      costInput.value = state.cost ? String(state.cost) : "";
       costInput.addEventListener("input", function () {
         state.cost = Number(costInput.value) || 0;
         save(KEY_COST, state.cost);
         renderMargin();
+        renderCostPresets();
       });
     }
+    renderCostPresets();
     var seller = $("seller-link");
     if (seller) {
       seller.checked = state.sellerLink;
@@ -733,6 +1260,12 @@
         save(KEY_LINK, state.sellerLink);
         renderMargin();
       });
+    }
+    var shareInput = $("share-input");
+    if (shareInput) {
+      shareInput.value = String(sharePct());
+      shareInput.addEventListener("input", function () { setShare(shareInput.value); });
+      shareInput.addEventListener("change", function () { setShare(shareInput.value); });
     }
   }
 
@@ -755,6 +1288,8 @@
     getData: function () { return DATA; },
     getState: function () { return state; },
     marginRows: marginRows,
+    sharePct: sharePct,
+    setShare: setShare,
     won: won,
     buildReelCopy: buildReelCopy,
     setTab: setTab

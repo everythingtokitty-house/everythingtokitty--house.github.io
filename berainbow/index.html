@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="./styles.css?v=1795656761">
+<link rel="stylesheet" href="./styles.css?v=1795658851">
 </head>
 <body>
 <a class="skip-link" href="#main">본문으로 바로 가기</a>
@@ -40,6 +40,9 @@
     <a class="hlink" href="https://www.instagram.com/be_rain_bow__/" target="_blank" rel="noopener">
       <span aria-hidden="true">📷</span> 인스타그램 @be_rain_bow__
     </a>
+    <a class="hlink hlink--sheet" id="sheet-link" href="https://docs.google.com/spreadsheets/d/1Gqdr0oy4apwlCrFj9Q3CQZgfEgEeyhQhc_QTUsbcyGc/edit" target="_blank" rel="noopener">
+      <span aria-hidden="true">📊</span> 주문·리뷰 구글시트
+    </a>
     <a class="hlink hlink--json" id="json-link" href="./data/dashboard.json">
       <span aria-hidden="true">🤖</span> 자동화용 JSON
     </a>
@@ -63,6 +66,9 @@
     <button class="tab" id="tab-gpt" role="tab" data-tab="gpt" aria-selected="false" aria-controls="panel-gpt" tabindex="-1">
       <span class="tab-ico" aria-hidden="true">🤖</span><span class="tab-label">GPT 프롬프트<span class="tab-sub">복사해서 실행</span></span>
     </button>
+    <button class="tab" id="tab-calc" role="tab" data-tab="calc" aria-selected="false" aria-controls="panel-calc" tabindex="-1">
+      <span class="tab-ico" aria-hidden="true">🧮</span><span class="tab-label">단가·마진<span class="tab-sub">적정 판매가</span></span>
+    </button>
   </div>
 </nav>
 
@@ -78,6 +84,8 @@
     </div>
 
     <div class="kpi-grid" id="kpi-grid"></div>
+
+    <div class="ops-card" id="ops-card"></div>
 
     <h3 class="sub-title">확정 전략</h3>
     <div class="strategy-grid" id="strategy-grid"></div>
@@ -105,20 +113,25 @@
       <div class="calc-controls">
         <label class="field" for="cost-input">
           <span class="field-label">개당 원가 (재료 + 포장)</span>
-          <span class="field-inputwrap"><input type="number" id="cost-input" inputmode="numeric" min="0" step="500" placeholder="예: 12000" value=""> <span class="field-unit">원</span></span>
+          <span class="field-inputwrap"><input type="number" id="cost-input" inputmode="numeric" min="0" step="100" placeholder="예: 3200" value=""> <span class="field-unit">원</span></span>
         </label>
+        <div class="cost-presets" id="cost-presets" role="group" aria-label="원가 프리셋"></div>
         <label class="switch">
           <input type="checkbox" id="seller-link">
           <span class="switch-box" aria-hidden="true"></span>
           <span class="switch-text">네이버 셀러 마케팅 링크 유입<em>수수료 2.73% → 0.91% (VAT 별도)</em></span>
         </label>
+        <label class="field" for="share-input">
+          <span class="field-label">내 수익 배분 비율 (쿠팡 공동 운영)</span>
+          <span class="field-inputwrap"><input type="number" id="share-input" inputmode="numeric" min="0" max="100" step="5" value="70"> <span class="field-unit">%</span></span>
+        </label>
         <p class="calc-note" id="margin-note"></p>
       </div>
       <div class="table-wrap">
         <table class="margin-table" id="margin-table">
-          <caption class="visually-hidden">채널·가격별 순마진</caption>
+          <caption class="visually-hidden">채널·가격별 순마진과 내 수령 정산액</caption>
           <thead>
-            <tr><th scope="col">단계</th><th scope="col">채널</th><th scope="col" class="num">판매가</th><th scope="col" class="num">수수료</th><th scope="col" class="num">물류</th><th scope="col" class="num">순마진</th><th scope="col" class="num">마진율</th></tr>
+            <tr><th scope="col">단계</th><th scope="col">채널</th><th scope="col" class="num">판매가</th><th scope="col" class="num">수수료</th><th scope="col" class="num">물류</th><th scope="col" class="num">순마진</th><th scope="col" class="num">마진율</th><th scope="col" class="num">내 정산</th></tr>
           </thead>
           <tbody id="margin-body"></tbody>
         </table>
@@ -159,8 +172,8 @@
     <ul class="check-list" id="seo-checklist"></ul>
 
     <aside class="inline-warn">
-      <strong>⚠️ 헬로키티 상품을 쿠팡에 올리기 전에</strong>
-      <p>정품 라이선스·유통증명이 없으면 로켓그로스 입고가 반려되고, 지재권 신고로 스토어 전체가 정지될 수 있습니다. <button type="button" class="linkish" data-goto="today" data-goto-anchor="risk-card">리스크 카드에서 확인 →</button></p>
+      <strong>⚠️ 헬로키티 상품은 쿠팡에 올리지 않습니다</strong>
+      <p>쿠팡(로켓그로스)은 악세사리 전용 채널입니다 — 키티 도매 굿즈는 네이버 스마트스토어에서만 판매하고, 등록 전에 정품 라이선스·수입증명 서류와 '헬로키티 모음' 카테고리 매핑을 확인하세요. <button type="button" class="linkish" data-goto="today" data-goto-anchor="risk-card">리스크 카드에서 확인 →</button></p>
     </aside>
   </section>
 
@@ -200,6 +213,96 @@
     <div class="card json-card" id="json-card"></div>
   </section>
 
+  <!-- 6. 단가 · 마진 계산기 -->
+  <section class="panel" id="panel-calc" role="tabpanel" aria-labelledby="tab-calc" data-panel="calc" hidden>
+    <div class="section-head">
+      <p class="eyebrow" id="calc-kicker">Unit &amp; Margin</p>
+      <h2 class="section-title" id="calc-title">🧮 단가 · 마진 계산기</h2>
+      <p class="section-lead" id="calc-lead"></p>
+    </div>
+
+    <div class="unit-grid">
+      <div class="unit-inputs">
+        <div class="preset-row" id="calc-presets" role="group" aria-label="제품 프리셋"></div>
+        <label class="field" for="calc-name">
+          <span class="field-label">제품명</span>
+          <span class="field-inputwrap"><input type="text" id="calc-name" maxlength="40" placeholder="예: 페를레 웨딩 세트" value="페를레 웨딩 세트"></span>
+        </label>
+        <div class="unit-row">
+          <label class="field" for="calc-materials">
+            <span class="field-label">재료비</span>
+            <span class="field-inputwrap"><input type="number" id="calc-materials" inputmode="numeric" min="0" step="100" value="3200"> <span class="field-unit">원</span></span>
+          </label>
+          <label class="field" for="calc-packaging">
+            <span class="field-label">포장비</span>
+            <span class="field-inputwrap"><input type="number" id="calc-packaging" inputmode="numeric" min="0" step="100" value="1000"> <span class="field-unit">원</span></span>
+          </label>
+        </div>
+        <div class="unit-row">
+          <label class="field" for="calc-minutes">
+            <span class="field-label">제작시간</span>
+            <span class="field-inputwrap"><input type="number" id="calc-minutes" inputmode="numeric" min="0" step="5" value="15"> <span class="field-unit">분</span></span>
+          </label>
+          <label class="field" for="calc-hourly">
+            <span class="field-label">기준 시급</span>
+            <span class="field-inputwrap"><input type="number" id="calc-hourly" inputmode="numeric" min="0" step="500" value="12000"> <span class="field-unit">원/시간</span></span>
+          </label>
+        </div>
+        <div class="unit-row">
+          <label class="field" for="calc-tax">
+            <span class="field-label">예상 세금율</span>
+            <span class="field-inputwrap"><input type="number" id="calc-tax" inputmode="decimal" min="0" max="30" step="0.1" value="3.3"> <span class="field-unit">%</span></span>
+          </label>
+          <label class="field" for="calc-target-margin">
+            <span class="field-label">목표 순마진율</span>
+            <span class="field-inputwrap"><input type="number" id="calc-target-margin" inputmode="numeric" min="0" max="90" step="5" value="50"> <span class="field-unit">%</span></span>
+          </label>
+        </div>
+
+        <fieldset class="chan-field">
+          <legend class="field-label">판매 채널</legend>
+          <div class="chan-options" id="calc-channels"></div>
+        </fieldset>
+
+        <label class="switch" id="calc-seller-wrap">
+          <input type="checkbox" id="calc-seller-link">
+          <span class="switch-box" aria-hidden="true"></span>
+          <span class="switch-text">네이버 셀러 마케팅 링크 유입<em>수수료 2.73% → 0.91% (VAT 별도) · 네이버 선택 시에만 적용</em></span>
+        </label>
+
+        <div class="unit-row">
+          <label class="field" for="calc-price">
+            <span class="field-label">테스트 판매가</span>
+            <span class="field-inputwrap"><input type="number" id="calc-price" inputmode="numeric" min="0" step="1000" value="29000"> <span class="field-unit">원</span></span>
+          </label>
+        </div>
+        <div class="price-quick" id="calc-price-quick" role="group" aria-label="판매가 빠른 선택"></div>
+        <p class="unit-note" id="calc-tax-note"></p>
+      </div>
+
+      <div class="unit-results" id="calc-results"></div>
+    </div>
+
+    <h3 class="sub-title">적정 판매가 추천 3단계</h3>
+    <div class="suggest-grid" id="calc-suggest"></div>
+
+    <div class="save-row">
+      <button type="button" class="save-btn" id="calc-save">목록에 저장</button>
+      <p class="save-note" id="calc-save-note"></p>
+    </div>
+
+    <h3 class="sub-title">제품별 저장 목록 <span class="hint" id="calc-count"></span></h3>
+    <div class="table-wrap">
+      <table class="product-table" id="product-table">
+        <caption class="visually-hidden">저장한 제품별 단가·순마진 비교</caption>
+        <thead>
+          <tr><th scope="col">제품명</th><th scope="col" class="num">총원가</th><th scope="col">채널</th><th scope="col" class="num">판매가</th><th scope="col" class="num">순마진</th><th scope="col" class="num">마진율</th><th scope="col" class="num">내 실수령</th><th scope="col">삭제</th></tr>
+        </thead>
+        <tbody id="product-body"></tbody>
+      </table>
+    </div>
+  </section>
+
   <noscript>
     <p class="noscript">이 페이지는 데이터를 불러와 그립니다. 자바스크립트를 켜거나
       <a href="./data/dashboard.json">dashboard.json</a>을 직접 열어 보세요.</p>
@@ -220,6 +323,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="./data/dashboard.js" defer></script>
-<script src="./app.js?v=1795656761" defer></script>
+<script src="./app.js?v=1795658851" defer></script>
 </body>
 </html>
