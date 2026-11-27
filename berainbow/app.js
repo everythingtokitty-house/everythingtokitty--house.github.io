@@ -366,7 +366,7 @@
         updateTaskProgress();
       });
 
-      if (t.id === "t6") {
+      if (t.id === "t6" || t.goto === "risk-card") {
         var jump = el("button", "linkish", "리스크 카드 보기 →");
         jump.type = "button";
         jump.setAttribute("data-goto-anchor", "risk-card");
@@ -1432,7 +1432,7 @@
       r.net < 0 ? "이 가격으로는 손해입니다" : "판매가 " + won(r.price) + " 기준", r.net < 0 ? "warn" : "good");
     tile("mine", "내 실수령 정산액", won(r.mine),
       calc.channel === "coupang"
-        ? "쿠팡은 은별 " + share + " : 공동 " + (100 - share) + " 배분 — 순이익의 " + share + "%"
+        ? "쿠팡은 은빈 " + share + " : 공동 " + (100 - share) + " 배분 — 순이익의 " + share + "%"
         : "네이버 단독 채널 — 순이익 100%가 내 몫", "gold");
 
     var sug = $("calc-suggest");
