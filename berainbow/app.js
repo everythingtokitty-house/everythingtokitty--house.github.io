@@ -366,7 +366,7 @@
         updateTaskProgress();
       });
 
-      if (t.id === "t6" || t.goto === "risk-card") {
+      if (t.goto === "risk-card") {
         var jump = el("button", "linkish", "리스크 카드 보기 →");
         jump.type = "button";
         jump.setAttribute("data-goto-anchor", "risk-card");
