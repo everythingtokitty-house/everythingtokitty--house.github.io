@@ -6,7 +6,8 @@
   "items": 69,
   "extras": 61,
   "ideas": 25,
-  "kitty": 13
+  "kitty": 13,
+  "todos": 5
  },
  "briefs": [
   {
@@ -3348,6 +3349,50 @@
       "url": "https://cjnews.cj.net/cj%EC%98%A8%EC%8A%A4%ED%83%80%EC%9D%BC-k%EB%A6%AC%EA%B7%B8x%EC%82%B0%EB%A6%AC%EC%98%A4%EC%BA%90%EB%A6%AD%ED%84%B0%EC%A6%88-%EC%98%A8%EB%9D%BC%EC%9D%B8-%ED%8C%9D%EC%97%85/"
      }
     ]
+   }
+  ]
+ },
+ "todos": {
+  "date": "2026-11-27",
+  "weekday": "금",
+  "generatedAt": "2026-11-27T08:00:00+09:00",
+  "note": "오늘 08:00 브리핑 기준 · 마감이 임박한 순서로 5건",
+  "sourceFile": "morning-todos-2026-11-27.json",
+  "items": [
+   {
+    "id": "kr-student-loan-20261127",
+    "badge": "긴급·연체",
+    "tone": "urgent",
+    "title": "한국장학재단 학자금 연체 4건(총 139,488원) 가상계좌 상환",
+    "detail": "11/24 시작(13,530원) + 11/27 신규 3건(125,958원) · 오후 5시 자동이체 종료로 앱/웹 직접 납부 필요"
+   },
+   {
+    "id": "naver-clip-npay-20261127",
+    "badge": "오늘 마감",
+    "tone": "due",
+    "title": "네이버 클립 Npay 2만 원 약관 동의·지급 확인",
+    "detail": "ed444927@naver.com 계정 네이버페이 가입·약관 동의 오늘(11/27) 마감"
+   },
+   {
+    "id": "medicube-reply-20261127",
+    "badge": "협업 회신",
+    "tone": "reply",
+    "title": "메디큐브 에이지알(이해인 담당자) 답장 완료하기",
+    "detail": "임시보관함 초안 확인 후 통장·신분증 사본 첨부 및 이전 부스터글로우 닉네임 제한 해결법 회신"
+   },
+   {
+    "id": "crudo-leather-reels-20261127",
+    "badge": "주말 촬영",
+    "tone": "content",
+    "title": "크루도 레더 릴스 2편 촬영·업로드",
+    "detail": "수령 후 14일 내 게시 · @crudoleather 태그/공동작업자 · 코드 everythingtokitty_15 표기"
+   },
+   {
+    "id": "berainbow-shipment-20261127",
+    "badge": "스토어",
+    "tone": "store",
+    "title": "비더레인보우 11/19 미출고 2건(박가현·이효진) 운송장 처리",
+    "detail": "출고예정일(11/20) 경과 · 송장 등록해야 구매확정 및 리뷰 확보 가능"
    }
   ]
  }

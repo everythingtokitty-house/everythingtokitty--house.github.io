@@ -481,6 +481,100 @@ def load_kitty_collabs(src_dir):
     return None
 
 
+# ✅ 오늘의 핵심 업무 TOP 5 — work/morning-todos-YYYY-MM-DD.json (또는 morning-todos-latest.json)
+# 항목이 없는 날에도 기존 빌드는 그대로 동작해야 하므로, 읽지 못하면 todos 키를 넣지 않는다.
+TODOS_DATE_RE = re.compile(r"morning-todos-(\d{4}-\d{2}-\d{2})\.json$")
+TODOS_TONE_BY_BADGE = {
+    "긴급": "urgent", "긴급·연체": "urgent", "연체": "urgent",
+    "오늘 마감": "due", "마감": "due",
+    "협업 회신": "reply", "회신": "reply",
+    "주말 촬영": "content", "콘텐츠": "content", "촬영": "content",
+    "스토어": "store", "출고": "store",
+}
+TODOS_TONES = {"urgent", "due", "reply", "content", "store", "etc"}
+TODOS_MAX = 5
+
+
+def todos_tone(item):
+    tone = str(item.get("tone") or "").strip()
+    if tone in TODOS_TONES:
+        return tone
+    return TODOS_TONE_BY_BADGE.get(str(item.get("badge") or "").strip(), "etc")
+
+
+def pick_todos_path(src_dir, latest_date):
+    """오늘 날짜 파일 → morning-todos-latest.json → 오늘 이전 날짜 중 최신 파일 순으로 고른다."""
+    exact = os.path.join(src_dir, f"morning-todos-{latest_date}.json")
+    if os.path.isfile(exact):
+        return exact
+    alias = os.path.join(src_dir, "morning-todos-latest.json")
+    if os.path.isfile(alias):
+        return alias
+    dated = []
+    for path in glob.glob(os.path.join(src_dir, "morning-todos-*.json")):
+        m = TODOS_DATE_RE.search(path)
+        if m and m.group(1) <= latest_date:
+            dated.append((m.group(1), path))
+    if not dated:
+        return None
+    return sorted(dated)[-1][1]
+
+
+def load_todos(src_dir, latest_date):
+    """오늘의 핵심 업무(최대 5건)를 사이트 데이터로 만든다. 없거나 형식이 깨지면 None."""
+    path = pick_todos_path(src_dir, latest_date)
+    if not path:
+        return None
+    try:
+        payload = json.load(open(path, encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as err:
+        print(f"경고: 오늘 업무 원본을 읽지 못했습니다 {path} ({err})", file=sys.stderr)
+        return None
+    if not isinstance(payload, dict):
+        print(f"경고: 오늘 업무 원본 형식이 올바르지 않습니다 {path}", file=sys.stderr)
+        return None
+
+    m = TODOS_DATE_RE.search(path)
+    date = str(payload.get("date") or (m.group(1) if m else "")).strip()
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date):
+        date = latest_date
+
+    raw_items = payload.get("items") or []
+    items, seen = [], set()
+    for raw in raw_items:
+        if not isinstance(raw, dict):
+            continue
+        title = tidy(str(raw.get("title") or ""))
+        if not title:
+            continue
+        item_id = str(raw.get("id") or f"t{len(items) + 1}").strip()
+        if item_id in seen:
+            item_id = f"{item_id}-{len(items) + 1}"
+        seen.add(item_id)
+        badge = str(raw.get("badge") or "할 일").strip()
+        items.append({
+            "id": item_id,
+            "badge": badge,
+            "tone": todos_tone(raw),
+            "title": title,
+            "detail": tidy(str(raw.get("detail") or "")),
+        })
+        if len(items) >= TODOS_MAX:
+            break
+    if not items:
+        print(f"경고: 오늘 업무 항목이 비어 있습니다 {path}", file=sys.stderr)
+        return None
+
+    return {
+        "date": date,
+        "weekday": str(payload.get("weekday") or "").strip(),
+        "generatedAt": str(payload.get("generatedAt") or "").strip(),
+        "note": tidy(str(payload.get("note") or "")),
+        "sourceFile": os.path.relpath(path, src_dir),
+        "items": items,
+    }
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     ap = argparse.ArgumentParser()
@@ -516,6 +610,14 @@ def main():
         print("경고: character-collabs-*.json 에서 산리오 항목을 찾지 못해 키티·콜라보 탭 데이터를 넣지 않았습니다",
               file=sys.stderr)
 
+    todos = load_todos(args.src_dir, latest)
+    if todos:
+        payload["todos"] = todos
+        payload["counts"]["todos"] = len(todos["items"])
+    else:
+        print("알림: 오늘 업무(morning-todos-*.json)가 없어 업무 패널 없이 빌드합니다")
+        payload["counts"]["todos"] = 0
+
     os.makedirs(args.out_dir, exist_ok=True)
     json_path = os.path.join(args.out_dir, "briefs.json")
     with open(json_path, "w", encoding="utf-8") as fh:
@@ -538,6 +640,8 @@ def main():
     print(f"합계: {payload['counts']}")
     if kitty:
         print(f"🎀 키티·콜라보: {len(kitty['items'])}건 ({kitty['sourceFile']}, {kitty['asOf']} 기준)")
+    if todos:
+        print(f"✅ 오늘 업무: {len(todos['items'])}건 ({todos['sourceFile']}, {todos['date']} 기준)")
     print(f"저장: {json_path}")
 
 

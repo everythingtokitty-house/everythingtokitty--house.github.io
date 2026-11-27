@@ -180,6 +180,71 @@ if kitty:
 elif COLLAB_SOURCES:
     fail("kittyCollabs 없음 — character-collabs 원본은 있는데 키티·콜라보 탭 데이터가 없습니다")
 
+# ---- ✅ 오늘 업무 패널 (원본 work/morning-todos-*.json 대조) ----
+TODOS_SOURCES = sorted(glob.glob(os.path.join(ROOT, "work", "morning-todos-*.json")))
+TODOS_TONES = {"urgent", "due", "reply", "content", "store", "etc"}
+todos = data.get("todos")
+
+
+def check_todos(todos):
+    for key in ("date", "items", "sourceFile"):
+        if not todos.get(key):
+            fail(f"todos: 키가 없거나 비었음 ({key})")
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", str(todos.get("date", ""))):
+        fail(f"todos: 날짜 형식 오류 {todos.get('date')!r}")
+    items = todos.get("items") or []
+    if not 1 <= len(items) <= 5:
+        fail(f"todos: 항목 수가 1~5건이 아님 ({len(items)}건)")
+    seen = set()
+    for item in items:
+        iid = item.get("id", "?")
+        for key in ("id", "badge", "tone", "title", "detail"):
+            if not str(item.get(key) or "").strip():
+                fail(f"todos {iid}: 필드 없음/비었음 ({key})")
+        if item.get("tone") not in TODOS_TONES:
+            fail(f"todos {iid}: 톤 값이 올바르지 않음 {item.get('tone')!r}")
+        if iid in seen:
+            fail(f"todos: 중복 id {iid}")
+        seen.add(iid)
+    if data["counts"].get("todos", 0) != len(items):
+        fail(f"counts.todos({data['counts'].get('todos')}) != 실제({len(items)})")
+
+    src_path = os.path.join(ROOT, "work", todos.get("sourceFile") or "")
+    if not os.path.isfile(src_path):
+        if not TODOS_SOURCES:
+            fail("todos: 대조할 morning-todos 원본이 없음")
+            return
+        src_path = TODOS_SOURCES[-1]
+    try:
+        src = json.load(open(src_path, encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as err:
+        fail(f"todos: 원본을 읽지 못함 {os.path.basename(src_path)} ({err})")
+        return
+    src_items = {it.get("id"): it for it in src.get("items") or []}
+    built = {it.get("id"): it for it in items}
+    if set(src_items) != set(built):
+        fail(f"todos: 원본과 항목 id가 다름 (원본 {len(src_items)} / 빌드 {len(built)})")
+    for iid, source in src_items.items():
+        item = built.get(iid)
+        if not item:
+            continue
+        for field in ("title", "badge"):
+            if str(source.get(field) or "").strip() != item[field]:
+                fail(f"todos {iid}: {field} 불일치")
+        if str(source.get("detail") or "").strip().replace("\n", " ") != item["detail"]:
+            fail(f"todos {iid}: detail 불일치")
+    print(f"✅ 오늘 업무 {len(items)}건 · 원본 {os.path.basename(src_path)} 대조 완료")
+
+
+if todos:
+    check_todos(todos)
+else:
+    todays = [p for p in TODOS_SOURCES
+              if re.search(r"morning-todos-(\d{4}-\d{2}-\d{2})\.json$", p)
+              and re.search(r"morning-todos-(\d{4}-\d{2}-\d{2})\.json$", p).group(1) == data["latestDate"]]
+    if todays:
+        fail(f"todos 없음 — 원본({os.path.basename(todays[0])})은 있는데 업무 패널 데이터가 없습니다")
+
 # URL 형식
 for url in sorted(all_urls | kitty_urls):
     p = urlparse(url)

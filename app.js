@@ -6,6 +6,7 @@
   "use strict";
 
   var CATS = [
+    { key: "todos", label: "오늘 업무", emoji: "✅" },
     { key: "all", label: "전체", emoji: "" },
     { key: "trend", label: "국내 화제", emoji: "🔥" },
     { key: "marketing", label: "마케터 뉴스", emoji: "📊" },
@@ -13,7 +14,8 @@
     { key: "kitty", label: "키티·콜라보", emoji: "🎀" },
     { key: "rainbow", label: "비더레인보우", emoji: "🌈" }
   ];
-  var CAT_BY_KEY = { trend: CATS[1], marketing: CATS[2], ai: CATS[3], kitty: CATS[4], rainbow: CATS[5] };
+  var CAT_BY_KEY = {};
+  CATS.forEach(function (cat) { CAT_BY_KEY[cat.key] = cat; });
   var CHARACTERS_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/characters/";
   var RAINBOW_URL = "https://everythingtokitty-house.github.io/everythingtokitty--house.github.io/berainbow/";
   var RAINBOW_POINTS = [
@@ -23,12 +25,17 @@
   ];
   var WEEKDAYS = { 월: "월요일", 화: "화요일", 수: "수요일", 목: "목요일", 금: "금요일", 토: "토요일", 일: "일요일" };
   var THEME_KEY = "morning-brief-theme";
+  var TODOS_KEY = "morningBrief.todos.v1";
   var CLAMP_LENGTH = 480;
 
   var els = {};
   var data = null;
   var state = { date: "all", cat: "all", q: "" };
   var expandedIds = Object.create(null);
+  var todoState = {};
+  var todoDate = "";
+  var todoUi = { section: null, list: null, progressText: null, fill: null, track: null };
+  var todoTabCount = null;
 
   /* ---------- helpers ---------- */
   function $(sel) { return document.querySelector(sel); }
@@ -632,19 +639,248 @@
     return sec;
   }
 
+  /* ---------- ✅ 오늘의 핵심 업무 TOP 5 ---------- */
+  function todoItems() {
+    return (data && data.todos && data.todos.items) ? data.todos.items : [];
+  }
+
+  function loadTodoState() {
+    todoState = {};
+    try {
+      var raw = localStorage.getItem(TODOS_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) todoState = parsed;
+      }
+    } catch (e) { todoState = {}; }
+  }
+
+  function saveTodoState() {
+    try { localStorage.setItem(TODOS_KEY, JSON.stringify(todoState)); } catch (e) { /* 저장 불가(사생활 보호 모드 등) */ }
+  }
+
+  function todoDay() {
+    if (!todoState[todoDate] || typeof todoState[todoDate] !== "object") {
+      todoState[todoDate] = { done: [], custom: [] };
+    }
+    var day = todoState[todoDate];
+    if (!Array.isArray(day.done)) day.done = [];
+    if (!Array.isArray(day.custom)) day.custom = [];
+    return day;
+  }
+
+  function todoRows() {
+    var rows = [];
+    todoItems().forEach(function (item) {
+      rows.push({ id: item.id, badge: item.badge, tone: item.tone, title: item.title,
+        detail: item.detail, custom: false });
+    });
+    todoDay().custom.forEach(function (item) {
+      rows.push({ id: item.id, badge: item.badge || "직접 추가", tone: "custom", title: item.title,
+        detail: item.detail || "", custom: true });
+    });
+    return rows;
+  }
+
+  function todoCounts() {
+    var rows = todoRows();
+    var ids = Object.create(null);
+    rows.forEach(function (row) { ids[row.id] = true; });
+    var done = todoDay().done.filter(function (id) { return ids[id]; }).length;
+    return { total: rows.length, done: done, open: rows.length - done };
+  }
+
+  function refreshTodoTab() {
+    if (todoTabCount) todoTabCount.textContent = String(todoCounts().open);
+  }
+
+  function updateTodoProgress() {
+    var c = todoCounts();
+    var complete = c.total > 0 && c.done === c.total;
+    var pct = c.total ? Math.round((c.done / c.total) * 100) : 0;
+    if (todoUi.progressText) {
+      todoUi.progressText.textContent = c.done + " / " + c.total + " 완료" + (complete ? " 🎉" : "");
+      todoUi.progressText.classList.toggle("is-complete", complete);
+    }
+    if (todoUi.fill) todoUi.fill.setAttribute("style", "width:" + pct + "%");
+    if (todoUi.track) {
+      todoUi.track.setAttribute("aria-valuenow", String(c.done));
+      todoUi.track.setAttribute("aria-valuemax", String(c.total));
+    }
+    if (todoUi.section) todoUi.section.classList.toggle("is-complete", complete);
+    refreshTodoTab();
+  }
+
+  function fillTodoList() {
+    if (!todoUi.list) return;
+    var day = todoDay();
+    todoUi.list.textContent = "";
+    todoRows().forEach(function (row) {
+      var done = day.done.indexOf(row.id) >= 0;
+      var li = el("li", "todo-item" + (done ? " is-done" : "") + (row.custom ? " todo-item--custom" : ""));
+      li.setAttribute("data-id", row.id);
+
+      var label = el("label", "todo-check");
+      var box = document.createElement("input");
+      box.type = "checkbox";
+      box.className = "todo-box";
+      box.checked = done;
+      box.setAttribute("aria-label", row.title + " 완료");
+      box.addEventListener("change", function () { toggleTodo(row.id, box.checked); });
+      label.appendChild(box);
+      label.appendChild(el("span", "todo-tick", "✓"));
+      li.appendChild(label);
+
+      var body = el("div", "todo-body");
+      body.appendChild(el("span", "todo-badge tone-" + (row.tone || "etc"), row.badge));
+      body.appendChild(el("p", "todo-title", row.title));
+      if (row.detail) body.appendChild(el("p", "todo-detail", row.detail));
+      li.appendChild(body);
+
+      if (row.custom) {
+        var del = el("button", "todo-del", "✕");
+        del.type = "button";
+        del.setAttribute("aria-label", row.title + " 삭제");
+        del.addEventListener("click", function () { removeCustomTodo(row.id); });
+        li.appendChild(del);
+      }
+      todoUi.list.appendChild(li);
+    });
+    updateTodoProgress();
+  }
+
+  function toggleTodo(id, done) {
+    var day = todoDay();
+    var at = day.done.indexOf(id);
+    if (done && at < 0) day.done.push(id);
+    if (!done && at >= 0) day.done.splice(at, 1);
+    saveTodoState();
+    var li = todoUi.list ? todoUi.list.querySelector('[data-id="' + id + '"]') : null;
+    if (li) li.classList.toggle("is-done", Boolean(done));
+    updateTodoProgress();
+  }
+
+  function addCustomTodo(text) {
+    var value = String(text || "").trim();
+    if (!value) return false;
+    todoDay().custom.push({
+      id: "c-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 6),
+      badge: "직접 추가",
+      title: value.slice(0, 120),
+      detail: ""
+    });
+    saveTodoState();
+    fillTodoList();
+    return true;
+  }
+
+  function removeCustomTodo(id) {
+    var day = todoDay();
+    day.custom = day.custom.filter(function (item) { return item.id !== id; });
+    day.done = day.done.filter(function (done) { return done !== id; });
+    saveTodoState();
+    fillTodoList();
+  }
+
+  function todosSection(full) {
+    if (!todoItems().length) return null;
+    var todo = data.todos;
+    var section = el("section", "todos" + (full ? " todos--full" : ""));
+    section.id = "todos-panel";
+    section.setAttribute("aria-labelledby", "todos-title");
+
+    var head = el("div", "todos-head");
+    head.appendChild(el("p", "todos-kicker", "✅ 은빈 님 전용 업무 페이지"));
+    var title = el("h2", "todos-title", "오늘의 핵심 업무 TOP 5");
+    title.id = "todos-title";
+    head.appendChild(title);
+    head.appendChild(el("p", "todos-meta",
+      "제안 " + formatDate(todo.date) + (todo.weekday ? " (" + todo.weekday + ")" : "") +
+      (todo.note ? " · " + todo.note : " · 긴급한 순서")));
+    section.appendChild(head);
+
+    var progress = el("div", "todo-progress");
+    var progressText = el("span", "todo-progress-text", "0 / 0 완료");
+    progressText.setAttribute("role", "status");
+    progressText.setAttribute("aria-live", "polite");
+    progress.appendChild(progressText);
+    var track = el("div", "todo-bar");
+    track.setAttribute("role", "progressbar");
+    track.setAttribute("aria-label", "오늘 업무 진행률");
+    track.setAttribute("aria-valuemin", "0");
+    track.setAttribute("aria-valuemax", "0");
+    track.setAttribute("aria-valuenow", "0");
+    var fill = el("span", "todo-bar-fill");
+    fill.setAttribute("style", "width:0%");
+    track.appendChild(fill);
+    progress.appendChild(track);
+    section.appendChild(progress);
+
+    var list = el("ul", "todo-list");
+    section.appendChild(list);
+
+    var form = el("form", "todo-add");
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "todo-add-input";
+    input.maxLength = 120;
+    input.setAttribute("placeholder", "+ 직접 할 일 추가 — 예: 올리브영 리뷰 3건");
+    input.setAttribute("aria-label", "직접 추가할 오늘의 할 일");
+    form.appendChild(input);
+    var addBtn = el("button", "todo-add-btn", "추가");
+    addBtn.type = "submit";
+    form.appendChild(addBtn);
+    form.addEventListener("submit", function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (addCustomTodo(input.value)) input.value = "";
+      input.focus();
+    });
+    section.appendChild(form);
+    section.appendChild(el("p", "todo-note",
+      "체크와 직접 추가한 항목은 이 기기 브라우저에 날짜별로 저장됩니다. 5건은 매일 아침 브리핑과 함께 새로 제안됩니다."));
+
+    if (full) {
+      var foot = el("div", "todos-foot");
+      var back = el("button", null, "오늘 브리핑 전체 보기 →");
+      back.type = "button";
+      back.addEventListener("click", function () {
+        state.cat = "all";
+        render();
+        scrollToResults();
+      });
+      foot.appendChild(back);
+      section.appendChild(foot);
+    }
+
+    todoUi.section = section;
+    todoUi.list = list;
+    todoUi.progressText = progressText;
+    todoUi.fill = fill;
+    todoUi.track = track;
+    fillTodoList();
+    return section;
+  }
+
   /* ---------- chrome (tabs / dates / status) ---------- */
   function renderTabs(counts) {
     els.tabs.textContent = "";
+    todoTabCount = null;
     var hasKitty = Boolean(data && data.kittyCollabs && (data.kittyCollabs.items || []).length);
+    var hasTodos = todoItems().length > 0;
     CATS.forEach(function (cat) {
       if (cat.key === "kitty" && !hasKitty) return;
+      if (cat.key === "todos" && !hasTodos) return;
       var btn = el("button", "tab");
       btn.type = "button";
       btn.setAttribute("aria-pressed", String(state.cat === cat.key));
+      btn.setAttribute("data-cat", cat.key);
       btn.appendChild(el("span", null, (cat.emoji ? cat.emoji + " " : "") + cat.label));
       // 🌈 비더레인보우는 링크 탭이라 개수 대신 화살표를 붙임
-      if (cat.key === "rainbow") btn.appendChild(el("span", "count", "↗"));
-      else btn.appendChild(el("span", "count", String(counts[cat.key] || 0)));
+      var countNode;
+      if (cat.key === "rainbow") countNode = el("span", "count", "↗");
+      else countNode = el("span", "count", String(counts[cat.key] || 0));
+      btn.appendChild(countNode);
+      if (cat.key === "todos") todoTabCount = countNode;
       btn.addEventListener("click", function () {
         if (state.cat === cat.key) return;
         state.cat = cat.key;
@@ -653,6 +889,7 @@
       });
       els.tabs.appendChild(btn);
     });
+    refreshTodoTab();
   }
 
   function renderDates(terms) {
@@ -803,8 +1040,17 @@
     kittyItems.forEach(function (item) {
       if (matchKitty(item, terms)) counts.kitty += 1;
     });
+    counts.todos = todoItems().length ? todoCounts().open : 0;
 
     renderTabs(counts);
+    if (state.cat === "todos" && todoItems().length) {
+      els.dates.hidden = true;
+      els.results.textContent = "";
+      els.status.textContent = "✅ 은빈 님 전용 업무 · 오늘의 핵심 업무 " + todoItems().length + "건";
+      els.results.appendChild(todosSection(true));
+      return;
+    }
+    if (state.cat === "todos") state.cat = "all";
     if (state.cat === "rainbow") {
       els.dates.hidden = true;
       els.results.textContent = "";
@@ -842,6 +1088,10 @@
     }
 
     var shown = 0;
+    if (state.cat === "all" && !terms.length) {
+      var todosTop = todosSection(false);
+      if (todosTop) els.results.appendChild(todosTop);
+    }
     days.forEach(function (day) {
       var sec = daySection(day, terms);
       if (sec) {
@@ -876,6 +1126,8 @@
     loadData().then(function (json) {
       data = json;
       data.briefs.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+      todoDate = (data.todos && data.todos.date) || "";
+      loadTodoState();
       state.date = data.latestDate || (data.briefs[0] && data.briefs[0].date) || "all";
       els.results.textContent = "";
       els.footerMeta.textContent = data.counts.days + "일치 · 이슈 " + data.counts.items +
@@ -898,8 +1150,8 @@
       window.clearTimeout(timer);
       timer = window.setTimeout(function () {
         state.q = value;
-        // 🌈 비더레인보우 탭에서 검색을 시작하면 브리핑 탭으로 돌려준다
-        if (value && state.cat === "rainbow") state.cat = "all";
+        // 🌈 비더레인보우·✅ 오늘 업무 탭에서 검색을 시작하면 브리핑 탭으로 돌려준다
+        if (value && (state.cat === "rainbow" || state.cat === "todos")) state.cat = "all";
         render();
       }, 130);
     });

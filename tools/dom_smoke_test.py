@@ -39,6 +39,7 @@ DOM_STUB = r"""
     this.hidden = false;
     this.type = "";
     this.value = "";
+    this.checked = false;
     this.open = false;
     this.parentNode = null;
   }
@@ -102,6 +103,8 @@ DOM_STUB = r"""
   };
   Node.prototype.getBoundingClientRect = function () { return { top: 0, bottom: 96, left: 0, width: 390 }; };
   Node.prototype.scrollIntoView = function () {};
+  Node.prototype.focus = function () {};
+  Node.prototype.blur = function () {};
   Node.prototype.querySelector = function (sel) {
     var m = /^\[([\w-]+)="(.*)"\]$/.exec(sel);
     function walk(node) {
@@ -172,7 +175,8 @@ DOM_STUB = r"""
   globalThis.localStorage = {
     _d: {},
     getItem: function (k) { return this._d[k] || null; },
-    setItem: function (k, v) { this._d[k] = String(v); }
+    setItem: function (k, v) { this._d[k] = String(v); },
+    removeItem: function (k) { delete this._d[k]; }
   };
   globalThis.setTimeout = globalThis.window.setTimeout;
   globalThis.clearTimeout = globalThis.window.clearTimeout;
@@ -221,11 +225,16 @@ globalThis.__byClass = function (cls) {
 """
 
 
-def new_context(fetch_mode):
+def new_context(fetch_mode, data_obj=None, storage=None):
     ctx = quickjs.Context()
     ctx.eval(DOM_STUB)
     ctx.eval(HELPERS)
-    payload = json.dumps(DATA, ensure_ascii=False)
+    if storage:
+        for key, value in storage.items():
+            ctx.eval("localStorage.setItem(%s, %s);" % (
+                json.dumps(key, ensure_ascii=False),
+                json.dumps(json.dumps(value, ensure_ascii=False), ensure_ascii=False)))
+    payload = json.dumps(data_obj if data_obj is not None else DATA, ensure_ascii=False)
     if fetch_mode == "ok":
         ctx.eval("globalThis.fetch = function(){ return Promise.resolve({ ok:true, json:function(){ return Promise.resolve(%s); } }); };" % payload)
     elif fetch_mode == "fallback":
@@ -254,20 +263,34 @@ def plain(text):
     return str(text or "").replace("**", "")
 
 
+def tab_i(ctx, label):
+    """라벨로 탭 위치를 찾는다(업무 탭이 맨 앞에 붙어도 기존 검사가 깨지지 않게)."""
+    idx = ctx.eval("__tabs().findIndex(function(t){ return __text(t).indexOf(%s) >= 0; })"
+                   % json.dumps(label, ensure_ascii=False))
+    if idx < 0:
+        raise SystemExit("탭을 찾지 못했습니다: " + label)
+    return idx
+
+
 # ---- 기대값은 실제 데이터에서 계산한다 ----
 BRIEFS = DATA["briefs"]                      # 최신순
 LATEST_DATE = DATA["latestDate"]
 LATEST = next(b for b in BRIEFS if b["date"] == LATEST_DATE)
 KITTY = DATA.get("kittyCollabs") or {"items": []}
 KITTY_ITEMS = KITTY.get("items") or []
+TODOS = DATA.get("todos")
+TODOS_ITEMS = (TODOS or {}).get("items") or []
 
 
 def fmt_date(date):
     return date[5:].replace("-", ".")
 
 
-def tab_text(counts, kitty_count):
-    expected = "전체%d|🔥 국내 화제%d|📊 마케터 뉴스%d|🤖 AI 정보%d" % (
+def tab_text(counts, kitty_count, todos_open):
+    expected = ""
+    if TODOS:
+        expected += "✅ 오늘 업무%d|" % todos_open
+    expected += "전체%d|🔥 국내 화제%d|📊 마케터 뉴스%d|🤖 AI 정보%d" % (
         counts["all"], counts["trend"], counts["marketing"], counts["ai"])
     if KITTY_ITEMS:
         expected += "|🎀 키티·콜라보%d" % kitty_count
@@ -305,7 +328,7 @@ check("tab counts (선택 날짜 기준)", ctx.eval("__tabs().map(function(t){re
                 "trend": count_cat([LATEST], "trend"),
                 "marketing": count_cat([LATEST], "marketing"),
                 "ai": count_cat([LATEST], "ai")},
-               len(KITTY_ITEMS)))
+               len(KITTY_ITEMS), len(TODOS_ITEMS)))
 check("date chips", ctx.eval("__dateChips().length"), len(BRIEFS) + 1)
 check("first card title",
       ctx.eval("__text(__find(__cards()[0], function(n){return __hasClass(n,'card-title')})[0])"),
@@ -317,7 +340,7 @@ check("insight box present", ctx.eval("__byClass('insight').length"),
 check("why box present", ctx.eval("__byClass('why').length"),
       sum(1 for i in latest_items if i.get("whyHot")))
 check("clamped summary", ctx.eval("__byClass('is-clamped').length > 0"), True)
-check("kitty tab shown", ctx.eval("__tabs().length"), 6 if KITTY_ITEMS else 5)
+check("kitty tab shown", ctx.eval("__tabs().length"), (6 if KITTY_ITEMS else 5) + (1 if TODOS_ITEMS else 0))
 
 print("[2] '전체 날짜' 클릭 · 카테고리 필터")
 ALL_ITEMS = sum(len(b["items"]) for b in BRIEFS)
@@ -328,20 +351,20 @@ check("tab counts (전체 날짜)", ctx.eval("__tabs().map(function(t){return __
                 "trend": count_cat(BRIEFS, "trend"),
                 "marketing": count_cat(BRIEFS, "marketing"),
                 "ai": count_cat(BRIEFS, "ai")},
-               len(KITTY_ITEMS)))
+               len(KITTY_ITEMS), len(TODOS_ITEMS)))
 check("all dates status", ctx.eval("__textOf('status')"),
       f"{len(BRIEFS)}일 전체 · 전체 카테고리 · 이슈 {ALL_ITEMS}건")
 check("day sections", ctx.eval("__byClass('day').length"), len(BRIEFS))
-ctx.eval("__tabs()[3].dispatch('click')")
+ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "AI 정보"))
 check("AI tab cards", ctx.eval("__cards().length"), count_cat(BRIEFS, "ai"))
 check("AI tab status", ctx.eval("__textOf('status')"),
       f"{len(BRIEFS)}일 전체 · 🤖 AI 정보 · 이슈 {count_cat(BRIEFS, 'ai')}건")
 check("AI tab hides extras/ideas", ctx.eval("__byClass('extras').length + __byClass('ideas').length"), 0)
-ctx.eval("__tabs()[1].dispatch('click')")
+ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "국내 화제"))
 check("trend tab cards", ctx.eval("__cards().length"), count_cat(BRIEFS, "trend"))
 
 print("[3] 검색 · 날짜 자동 확장")
-ctx.eval("__tabs()[0].dispatch('click')")
+ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "전체"))
 ctx.eval("__dateChips()[1].dispatch('click')")  # 최신 날짜
 check("back to latest", ctx.eval("__cards().length"), len(latest_items))
 
@@ -416,7 +439,7 @@ check("error status", ctx3.eval("__textOf('status')"), "데이터 없음")
 
 print("[6] 🎀 키티·콜라보 탭")
 if KITTY_ITEMS:
-    ctx.eval("__tabs()[4].dispatch('click')")
+    ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "키티·콜라보"))
     check("kitty cards", ctx.eval("__cards().length"), len(KITTY_ITEMS))
     check("dates hidden", ctx.eval("document.getElementById('dates').hidden"), True)
     check("kitty status", ctx.eval("__textOf('status')"),
@@ -439,7 +462,7 @@ if KITTY_ITEMS:
     check("kitty search keeps CTA", ctx.eval("__byClass('kitty-cta').length"), 2)
 
     ctx.eval("var i=document.getElementById('search-input'); i.value=''; i.dispatch('input');")
-    ctx.eval("__tabs()[0].dispatch('click')")
+    ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "전체"))
     check("back to brief tab", ctx.eval("__cards().length"), len(latest_items))
     check("dates visible again", ctx.eval("document.getElementById('dates').hidden"), False)
 else:
@@ -466,7 +489,7 @@ check("rainbow CTA new tab",
       ctx.eval("__byClass('rainbow-cta')[0].getAttribute('target') === '_blank' && "
                "__byClass('rainbow-cta')[0].getAttribute('rel').indexOf('noopener') === 0"), True)
 check("rainbow no briefing cards", ctx.eval("__cards().length"), 0)
-ctx.eval("__tabs()[0].dispatch('click')")
+ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "전체"))
 check("leave rainbow -> dates visible", ctx.eval("document.getElementById('dates').hidden"), False)
 check("leave rainbow -> cards back", ctx.eval("__cards().length"), len(latest_items))
 # rainbow 탭에서 검색을 시작하면 브리핑 탭으로 자동 전환
@@ -483,9 +506,128 @@ if "--dump" in sys.argv:
     print("\n=== 최신 날짜 렌더 텍스트 (앞부분) ===")
     print(ctx.eval("__textOf('results')")[:3000])
     if KITTY_ITEMS:
-        ctx.eval("__tabs()[4].dispatch('click')")
+        ctx.eval("__tabs()[%d].dispatch('click')" % tab_i(ctx, "키티·콜라보"))
         print("\n=== 키티·콜라보 렌더 텍스트 ===")
         print(ctx.eval("__textOf('results')")[:4000])
+
+print("[8] ✅ 오늘 업무 TOP 5 — 체크·진행률·직접 추가·저장")
+TODOS_KEY = "morningBrief.todos.v1"
+if TODOS_ITEMS:
+    n = len(TODOS_ITEMS)
+    tctx = new_context("ok")
+    check("todos tab first", tab_i(tctx, "오늘 업무"), 0)
+    check("todos tab label", tctx.eval("__text(__tabs()[0])"), "✅ 오늘 업무%d" % n)
+    check("panel on main view", tctx.eval("__byClass('todos').length"), 1)
+    check("panel id", tctx.eval("__byClass('todos')[0].id"), "todos-panel")
+    check("panel kicker", tctx.eval("__text(__byClass('todos-kicker')[0])"), "✅ 은빈 님 전용 업무 페이지")
+    check("panel title", tctx.eval("__text(__byClass('todos-title')[0])"), "오늘의 핵심 업무 TOP 5")
+    check("panel meta has date",
+          TODOS["date"][5:].replace("-", ".") in tctx.eval("__text(__byClass('todos-meta')[0])"), True)
+    check("panel items", tctx.eval("__byClass('todo-item').length"), n)
+    check("item titles", tctx.eval("__byClass('todo-title').map(function(n){return __text(n)}).join('|')"),
+          "|".join(plain(i["title"]) for i in TODOS_ITEMS))
+    check("item details", tctx.eval("__byClass('todo-detail').map(function(n){return __text(n)}).join('|')"),
+          "|".join(plain(i["detail"]) for i in TODOS_ITEMS))
+    check("item badges", tctx.eval("__byClass('todo-badge').map(function(n){return __text(n)}).join('|')"),
+          "|".join(i["badge"] for i in TODOS_ITEMS))
+    check("badge tones", tctx.eval("__byClass('todo-badge').map(function(n){return n.getAttribute('class')}).join('|')"),
+          "|".join("todo-badge tone-" + i["tone"] for i in TODOS_ITEMS))
+    check("checkbox per item", tctx.eval("__byClass('todo-box').length"), n)
+    check("checkboxes start empty",
+          tctx.eval("__byClass('todo-box').every(function(b){return b.type==='checkbox' && b.checked===false;})"), True)
+    check("progress starts 0", tctx.eval("__text(__byClass('todo-progress-text')[0])"), "0 / %d 완료" % n)
+    check("bar starts 0%", tctx.eval("__byClass('todo-bar-fill')[0].getAttribute('style')"), "width:0%")
+    check("bar aria max", tctx.eval("__byClass('todo-bar')[0].getAttribute('aria-valuemax')"), str(n))
+    check("add input present", tctx.eval("__byClass('todo-add-input').length"), 1)
+    check("add button present", tctx.eval("__text(__byClass('todo-add-btn')[0])"), "추가")
+
+    tctx.eval("var b=__byClass('todo-box')[0]; b.checked=true; b.dispatch('change');")
+    check("check -> is-done", tctx.eval("__hasClass(__byClass('todo-item')[0],'is-done')"), True)
+    check("check -> progress", tctx.eval("__text(__byClass('todo-progress-text')[0])"), "1 / %d 완료" % n)
+    check("check -> bar width", tctx.eval("__byClass('todo-bar-fill')[0].getAttribute('style')"),
+          "width:%d%%" % round(100 / n))
+    check("check -> tab count", tctx.eval("__text(__tabs()[0])"), "✅ 오늘 업무%d" % (n - 1))
+    saved = json.loads(tctx.eval("localStorage.getItem(%s)" % json.dumps(TODOS_KEY)))
+    check("saved under date key", list(saved.keys()), [TODOS["date"]])
+    check("saved done ids", ",".join(saved[TODOS["date"]]["done"]), TODOS_ITEMS[0]["id"])
+    check("saved custom empty", saved[TODOS["date"]]["custom"], [])
+
+    tctx.eval("__tabs()[%d].dispatch('click')" % tab_i(tctx, "국내 화제"))
+    check("panel hidden on trend tab", tctx.eval("__byClass('todos').length"), 0)
+    check("trend cards intact", tctx.eval("__cards().length"), count_cat([LATEST], "trend"))
+    check("dates visible on trend tab", tctx.eval("document.getElementById('dates').hidden"), False)
+    tctx.eval("__tabs()[0].dispatch('click')")
+    check("todos tab status", tctx.eval("__textOf('status')"),
+          "✅ 은빈 님 전용 업무 · 오늘의 핵심 업무 %d건" % n)
+    check("todos tab hides dates", tctx.eval("document.getElementById('dates').hidden"), True)
+    check("todos tab has back link", tctx.eval("__byClass('todos-foot').length"), 1)
+    check("todos tab pressed", tctx.eval("__tabs()[0].getAttribute('aria-pressed')"), "true")
+    check("check kept after tab switch", tctx.eval("__hasClass(__byClass('todo-item')[0],'is-done')"), True)
+    check("progress kept after tab switch", tctx.eval("__text(__byClass('todo-progress-text')[0])"), "1 / %d 완료" % n)
+
+    add_js = ("var i=__byClass('todo-add-input')[0]; i.value='올리브영 리뷰 3건'; "
+              "__byClass('todo-add')[0].dispatch('submit', {preventDefault:function(){}});")
+    tctx.eval(add_js)
+    check("custom added", tctx.eval("__byClass('todo-item').length"), n + 1)
+    check("custom badge", tctx.eval("__text(__byClass('todo-badge')[%d])" % n), "직접 추가")
+    check("custom title", tctx.eval("__text(__byClass('todo-title')[%d])" % n), "올리브영 리뷰 3건")
+    check("custom delete button", tctx.eval("__byClass('todo-del').length"), 1)
+    check("custom progress total", tctx.eval("__text(__byClass('todo-progress-text')[0])"), "1 / %d 완료" % (n + 1))
+    check("input cleared", tctx.eval("__byClass('todo-add-input')[0].value"), "")
+    saved = json.loads(tctx.eval("localStorage.getItem(%s)" % json.dumps(TODOS_KEY)))
+    check("custom saved", [c["title"] for c in saved[TODOS["date"]]["custom"]], ["올리브영 리뷰 3건"])
+
+    tctx.eval("var i=__byClass('todo-add-input')[0]; i.value='   '; "
+              "__byClass('todo-add')[0].dispatch('submit', {preventDefault:function(){}});")
+    check("blank input ignored", tctx.eval("__byClass('todo-item').length"), n + 1)
+
+    tctx.eval("__byClass('todo-del')[0].dispatch('click')")
+    check("custom removed", tctx.eval("__byClass('todo-item').length"), n)
+    saved = json.loads(tctx.eval("localStorage.getItem(%s)" % json.dumps(TODOS_KEY)))
+    check("custom removed from storage", saved[TODOS["date"]]["custom"], [])
+
+    xss = "<img src=x onerror=alert(1)>"
+    tctx.eval("var i=__byClass('todo-add-input')[0]; i.value=%s; "
+              "__byClass('todo-add')[0].dispatch('submit', {preventDefault:function(){}});"
+              % json.dumps(xss, ensure_ascii=False))
+    check("custom xss no img node",
+          tctx.eval("__find(document.getElementById('results'), function(n){return n.tagName==='IMG'}).length"), 0)
+    check("custom xss kept as text", tctx.eval("__textOf('results').indexOf('onerror=alert(1)') >= 0"), True)
+    tctx.eval("__byClass('todo-del')[0].dispatch('click')")
+    check("xss row removed", tctx.eval("__byClass('todo-item').length"), n)
+
+    tctx.eval("__byClass('todo-box').forEach(function(b){ if(!b.checked){ b.checked=true; b.dispatch('change'); } });")
+    check("all done progress", tctx.eval("__text(__byClass('todo-progress-text')[0])"), "%d / %d 완료 🎉" % (n, n))
+    check("all done section class", tctx.eval("__hasClass(__byClass('todos')[0],'is-complete')"), True)
+    check("all done tab count", tctx.eval("__text(__tabs()[0])"), "✅ 오늘 업무0")
+    saved = json.loads(tctx.eval("localStorage.getItem(%s)" % json.dumps(TODOS_KEY)))
+
+    # 새로 열어도 저장값이 살아 있는지(저장소를 미리 채운 컨텍스트)
+    reloaded = new_context("ok", storage={TODOS_KEY: saved})
+    check("reload keeps progress",
+          reloaded.eval("__text(__byClass('todo-progress-text')[0])"), "%d / %d 완료 🎉" % (n, n))
+    check("reload keeps done style",
+          reloaded.eval("__byClass('todo-item').every(function(li){return __hasClass(li,'is-done');})"), True)
+    # 다른 날짜에 저장된 값은 오늘 업무에 섞이지 않는다
+    other = new_context("ok", storage={TODOS_KEY: {"2020-01-01": {"done": [TODOS_ITEMS[0]["id"]],
+                                                                  "custom": [{"id": "c-old", "badge": "직접 추가",
+                                                                               "title": "지난날 할 일", "detail": ""}]}}})
+    check("other date ignored (progress)", other.eval("__text(__byClass('todo-progress-text')[0])"), "0 / %d 완료" % n)
+    check("other date ignored (rows)", other.eval("__byClass('todo-item').length"), n)
+
+    # 오늘 업무 데이터가 없으면 패널·탭 없이 기존 화면 그대로
+    no_todos = json.loads(json.dumps(DATA))
+    no_todos.pop("todos", None)
+    no_todos["counts"].pop("todos", None)
+    plain_ctx = new_context("ok", data_obj=no_todos)
+    check("no todos -> no tab", plain_ctx.eval("__tabs().length"), (6 if KITTY_ITEMS else 5))
+    check("no todos -> first tab 전체", plain_ctx.eval("__text(__tabs()[0]).indexOf('전체') >= 0"), True)
+    check("no todos -> no panel", plain_ctx.eval("__byClass('todos').length"), 0)
+    check("no todos -> cards intact", plain_ctx.eval("__cards().length"), len(latest_items))
+    check("no todos -> no storage write",
+          plain_ctx.eval("localStorage.getItem(%s)" % json.dumps(TODOS_KEY)), None)
+else:
+    print("  - todos 데이터가 없어 건너뜀")
 
 print()
 if all(results):
