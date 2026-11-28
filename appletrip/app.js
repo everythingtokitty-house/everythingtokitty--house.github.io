@@ -359,7 +359,7 @@
               '">🗺️ 파는 매장 ' +
               shopsSelling.length +
               "곳 보기</button>"
-            : '<span class="badge badge-city">일본 전국 편의점·양판점</span>';
+            : '<span class="badge badge-city">판매처는 공식 안내 참고</span>';
 
         return (
           '<article class="item-card">' +
