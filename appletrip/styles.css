@@ -304,6 +304,7 @@ body {
   font-weight: 600;
   color: var(--pink-strong);
 }
+.active-item-banner[hidden] { display: none; }
 .banner-clear {
   border: none; background: #fff; color: var(--pink-strong);
   font-weight: 700; font-size: 12px; padding: 5px 10px;

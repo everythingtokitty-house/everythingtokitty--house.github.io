@@ -120,8 +120,8 @@
       return;
     }
     state.map = window.L.map("map", { zoomControl: true }).setView([35.6762, 139.6503], 11);
-    window.L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OpenStreetMap &copy; CARTO",
+    window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
       maxZoom: 19
     }).addTo(state.map);
   }
