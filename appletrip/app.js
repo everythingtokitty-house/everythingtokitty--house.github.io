@@ -6,12 +6,27 @@
     tokyo: { label: "도쿄역 기준", lat: 35.681236, lng: 139.767125 },
     osaka: { label: "난바·신사이바시 기준", lat: 34.6687, lng: 135.5013 },
     kyoto: { label: "교토 가와라마치 기준", lat: 35.0037, lng: 135.7685 },
-    fukuoka: { label: "하카타역 기준", lat: 33.5897, lng: 130.4207 }
+    fukuoka: { label: "하카타역 기준", lat: 33.5897, lng: 130.4207 },
+    nagoya: { label: "나고야역 기준", lat: 35.1709, lng: 136.8815 },
+    hokkaido: { label: "삿포로역 기준", lat: 43.0687, lng: 141.3508 },
+    okinawa: { label: "나하 국제거리 기준", lat: 26.2169, lng: 127.6892 },
+    kanto: { label: "요코하마역 기준", lat: 35.4662, lng: 139.6227 }
+  };
+
+  const CATS = {
+    sanrio: { label: "산리오 샵", emoji: "🎀", color: "#e8557f" },
+    house: { label: "산리오 하우스", emoji: "🏠", color: "#8a5a44" },
+    cafe: { label: "카페·푸드", emoji: "☕", color: "#e08a2e" },
+    outlet: { label: "아울렛", emoji: "🏷️", color: "#2f8f86" },
+    kiddy: { label: "키디랜드", emoji: "🧸", color: "#4a7fd8" },
+    park: { label: "테마파크", emoji: "🎡", color: "#7a54c9" },
+    donki: { label: "돈키호테", emoji: "🐧", color: "#1f5fa8" }
   };
 
   const state = {
     data: null,
     mode: "map",
+    cat: "all",
     city: "all",
     query: "",
     onlyExclusive: false,
@@ -19,7 +34,7 @@
     selectedItemId: null,
     selectedShopId: null,
     itemCategory: "all",
-    userPoint: null, // { lat, lng, label, isGps }
+    userPoint: null,
     map: null,
     markers: new Map(),
     userMarker: null
@@ -29,7 +44,7 @@
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
   function esc(str) {
-    return String(str || "")
+    return String(str == null ? "" : str)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
@@ -53,6 +68,16 @@
     if (km < 1) return Math.round(km * 1000) + "m";
     if (km < 10) return km.toFixed(1) + "km";
     return Math.round(km) + "km";
+  }
+
+  function catOf(id) {
+    return CATS[id] || { label: "매장", emoji: "📍", color: "#e8557f" };
+  }
+
+  function catChip(catId) {
+    const c = catOf(catId);
+    return '<span class="cat-chip" style="--cat-color:' + c.color + '">' +
+      '<span aria-hidden="true">' + c.emoji + "</span> " + esc(c.label) + "</span>";
   }
 
   function showToast(msg) {
@@ -79,6 +104,7 @@
     const q = state.query.trim().toLowerCase();
 
     let list = state.data.shops.filter((s) => {
+      if (state.cat !== "all" && s.cat !== state.cat) return false;
       if (state.city !== "all" && s.city !== state.city) return false;
       if (state.onlyExclusive && !s.exclusive_note) return false;
       if (state.onlyTaxFree && s.tax_free !== true) return false;
@@ -93,7 +119,8 @@
           .join(" ");
         const hay = [
           s.name_ko, s.name_ja, s.city_label, s.address, s.station,
-          s.badge, s.exclusive_note || "", s.tips || "", itemNames
+          s.badge, s.exclusive_note || "", s.tips || "", itemNames,
+          (catOf(s.cat).label || "")
         ].join(" ").toLowerCase();
         if (!hay.includes(q)) return false;
       }
@@ -119,11 +146,25 @@
       }
       return;
     }
-    state.map = window.L.map("map", { zoomControl: true }).setView([35.6762, 139.6503], 11);
+    state.map = window.L.map("map", { zoomControl: true, worldCopyJump: true })
+      .setView([36.2048, 138.2529], 5);
     window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors",
       maxZoom: 19
     }).addTo(state.map);
+  }
+
+  function markerIcon(shop, selected) {
+    const c = catOf(shop.cat);
+    const cls = ["kitty-pin", "cat-" + shop.cat, shop.exclusive_note ? "is-exclusive" : "",
+      selected ? "is-selected" : ""].filter(Boolean).join(" ");
+    return window.L.divIcon({
+      className: "",
+      html: '<div class="' + cls + '"><span>' + c.emoji + "</span></div>",
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -30]
+    });
   }
 
   function syncMap(shops) {
@@ -134,30 +175,21 @@
 
     const bounds = [];
     for (const s of shops) {
-      const hasEx = Boolean(s.exclusive_note);
-      const isSel = state.selectedShopId === s.id;
-      const cls = ["kitty-pin", hasEx ? "is-exclusive" : "", isSel ? "is-selected" : ""]
-        .filter(Boolean)
-        .join(" ");
-      const icon = window.L.divIcon({
-        className: "",
-        html: '<div class="' + cls + '"><span>🎀</span></div>',
-        iconSize: [34, 34],
-        iconAnchor: [17, 34],
-        popupAnchor: [0, -32]
-      });
-
       const distText = s._distKm != null ? "<br><b>거리:</b> " + formatDistance(s._distKm) : "";
-      const exText = s.exclusive_note ? '<br><span style="color:#b45309;">✨ 매장 한정판 있음</span>' : "";
+      const exText = s.exclusive_note ? '<br><span style="color:#b45309;">✨ 매장 한정·특화</span>' : "";
       const popupHtml =
-        '<div style="min-width:180px;font-family:inherit;">' +
+        '<div style="min-width:190px;font-family:inherit;">' +
         "<b>" + esc(s.name_ko) + "</b>" +
+        '<div style="font-size:11.5px;color:#e8557f;font-weight:700;margin-top:2px;">' +
+        catOf(s.cat).emoji + " " + esc(catOf(s.cat).label) + "</div>" +
         '<div style="font-size:12px;color:#555;margin-top:2px;">' + esc(s.station) + distText + exText + "</div>" +
         '<div style="margin-top:8px;display:flex;gap:6px;">' +
         '<a href="' + esc(s.maps_url) + '" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:#e8557f;text-decoration:none;">구글맵 열기 →</a>' +
         "</div></div>";
 
-      const marker = window.L.marker([s.lat, s.lng], { icon }).addTo(state.map);
+      const marker = window.L.marker([s.lat, s.lng], {
+        icon: markerIcon(s, state.selectedShopId === s.id)
+      }).addTo(state.map);
       marker.bindPopup(popupHtml);
       marker.on("click", () => selectShop(s.id, false));
       state.markers.set(s.id, marker);
@@ -180,7 +212,7 @@
     }
 
     if (bounds.length > 0 && !state.selectedShopId) {
-      state.map.fitBounds(bounds, { padding: [34, 34], maxZoom: 14 });
+      state.map.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 });
     }
   }
 
@@ -214,7 +246,6 @@
       ? state.userPoint.label + " 가까운 순"
       : "추천 순";
 
-    // Active item banner
     const banner = $("#active-item-banner");
     if (state.selectedItemId && itemMap.has(state.selectedItemId)) {
       banner.hidden = false;
@@ -246,7 +277,7 @@
 
         const ids = s.seasonal_item_ids || [];
         const previewPills = ids
-          .slice(0, 3)
+          .slice(0, 2)
           .map((id) => {
             const it = itemMap.get(id);
             if (!it) return "";
@@ -255,24 +286,23 @@
               '<button type="button" class="item-pill" data-open-item="' +
               esc(id) +
               '">' +
-              esc(shortName) +
+              esc(shortName.length > 22 ? shortName.slice(0, 22) + "…" : shortName) +
               "</button>"
             );
           })
           .join("");
         const morePill =
-          ids.length > 3
-            ? '<span class="item-pill is-more">+' + (ids.length - 3) + "개 더</span>"
+          ids.length > 2
+            ? '<span class="item-pill is-more">+' + (ids.length - 2) + "개</span>"
             : "";
 
         return (
-          '<article class="shop-card' +
+          '<article class="shop-card cat-' + esc(s.cat) +
           (state.selectedShopId === s.id ? " is-selected" : "") +
-          '" data-shop-id="' +
-          esc(s.id) +
-          '">' +
+          '" data-shop-id="' + esc(s.id) + '">' +
           '<div class="card-top">' +
-          '<div><div class="card-badges">' +
+          "<div>" +
+          '<div class="card-badges">' + catChip(s.cat) +
           '<span class="badge badge-city">' + esc(s.city_label) + "</span>" +
           '<span class="badge badge-special">' + esc(s.badge) + "</span>" +
           taxBadge +
@@ -282,7 +312,7 @@
           distBadge +
           "</div>" +
           '<ul class="shop-info">' +
-          "<li>🚇 " + esc(s.station) + "</li>" +
+          "<li>🚉 " + esc(s.station) + "</li>" +
           "<li>🕒 " + esc(s.hours) + "</li>" +
           "</ul>" +
           exBox +
@@ -300,9 +330,12 @@
   }
 
   function classifyItem(it) {
-    const avail = it.availability || "";
-    if (it.id === "item-12" || it.category.includes("쿠지")) return "kuji";
-    if (avail.includes("단독") || avail.includes("키디랜드") || avail.includes("한정")) return "exclusive";
+    const a = it.availability || "";
+    const c = it.category || "";
+    if (c.includes("산리오 하우스") || a.includes("sanrio house")) return "house";
+    if (a.includes("돈키호테")) return "donki";
+    if (c.includes("쿠지") || a.includes("편의점")) return "kuji";
+    if (a.includes("단독") || a.includes("한정") || a.includes("키디랜드")) return "exclusive";
     return "common";
   }
 
@@ -349,6 +382,14 @@
         );
       })
       .join("");
+
+    // 카테고리별 개수 갱신
+    const counts = { all: state.data.seasonal_items.length, common: 0, house: 0, donki: 0, exclusive: 0, kuji: 0 };
+    state.data.seasonal_items.forEach((it) => { counts[classifyItem(it)] += 1; });
+    $$("#item-cat-tabs [data-icat-count]").forEach((el) => {
+      const k = el.dataset.icatCount;
+      el.textContent = counts[k] != null ? counts[k] : "";
+    });
   }
 
   function openShopModal(shopId) {
@@ -375,7 +416,7 @@
       .join("");
 
     $("#modal-body").innerHTML =
-      '<div class="card-badges">' +
+      '<div class="card-badges">' + catChip(s.cat) +
       '<span class="badge badge-city">' + esc(s.city_label) + "</span>" +
       '<span class="badge badge-special">' + esc(s.badge) + "</span>" +
       (s.tax_free === true ? '<span class="badge badge-taxfree">Tax-Free 확인</span>' : "") +
@@ -383,7 +424,7 @@
       '<h2 class="modal-title" id="modal-title">' + esc(s.name_ko) + "</h2>" +
       '<p class="modal-sub">' + esc(s.name_ja) + "</p>" +
       '<ul class="modal-list">' +
-      "<li><b>주소:</b> " + esc(s.address) + "</li>" +
+      "<li><b>주소:</b> " + esc(s.address) + (s.address_ko ? "<br><span style=\"color:#787986;\">" + esc(s.address_ko) + "</span>" : "") + "</li>" +
       "<li><b>가까운 역:</b> " + esc(s.station) + "</li>" +
       "<li><b>영업시간:</b> " + esc(s.hours) + "</li>" +
       "</ul>" +
@@ -433,6 +474,10 @@
       switchMode("map");
       state.selectedItemId = itemId;
       state.selectedShopId = null;
+      state.cat = "all";
+      state.city = "all";
+      $$("#cat-tabs .cat-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === "all"));
+      $$("#city-tabs .city-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.city === "all"));
       renderShops();
     };
   }
@@ -486,7 +531,7 @@
         renderShops();
       },
       () => {
-        st.textContent = "위치 권한이 꺼져 있어요. 아래 여행지 기준점(도쿄·오사카·교토·후쿠오카)을 눌러보세요!";
+        st.textContent = "위치 권한이 꺼져 있어요. 위 여행지 기준점(도쿄·오사카·교토·후쿠오카 등)을 눌러보세요!";
       },
       { enableHighAccuracy: true, timeout: 7000 }
     );
@@ -540,6 +585,15 @@
       renderShops();
     });
 
+    $$("#cat-tabs .cat-tab").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        state.cat = btn.dataset.cat;
+        state.selectedShopId = null;
+        $$("#cat-tabs .cat-tab").forEach((b) => b.classList.toggle("is-active", b === btn));
+        renderShops();
+      })
+    );
+
     $$("#city-tabs .city-tab").forEach((btn) =>
       btn.addEventListener("click", () => {
         state.city = btn.dataset.city;
@@ -559,6 +613,7 @@
     });
 
     $("#reset-filters-btn").addEventListener("click", () => {
+      state.cat = "all";
       state.city = "all";
       state.query = "";
       state.onlyExclusive = false;
@@ -569,9 +624,8 @@
       $("#search-clear").hidden = true;
       $("#filter-exclusive").classList.remove("is-active");
       $("#filter-taxfree").classList.remove("is-active");
-      $$("#city-tabs .city-tab").forEach((b) =>
-        b.classList.toggle("is-active", b.dataset.city === "all")
-      );
+      $$("#cat-tabs .cat-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === "all"));
+      $$("#city-tabs .city-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.city === "all"));
       renderShops();
     });
 
@@ -605,8 +659,10 @@
       const btn = e.target.closest("[data-filter-item]");
       if (!btn) return;
       state.selectedItemId = btn.dataset.filterItem;
+      state.cat = "all";
       state.city = "all";
       state.selectedShopId = null;
+      $$("#cat-tabs .cat-tab").forEach((b) => b.classList.toggle("is-active", b.dataset.cat === "all"));
       $$("#city-tabs .city-tab").forEach((b) =>
         b.classList.toggle("is-active", b.dataset.city === "all")
       );
@@ -636,6 +692,14 @@
     $("#item-total-badge").textContent = data.seasonal_items.length;
     $("#season-pill").textContent = "❄️ " + data.season_label;
     $("#footer-updated").textContent = data.updated_at;
+
+    // 유형별 개수
+    const counts = { all: data.shops.length };
+    data.shops.forEach((s) => { counts[s.cat] = (counts[s.cat] || 0) + 1; });
+    $$("#cat-tabs [data-cat-count]").forEach((el) => {
+      const k = el.dataset.catCount;
+      el.textContent = counts[k] || 0;
+    });
 
     initMap();
     bindEvents();

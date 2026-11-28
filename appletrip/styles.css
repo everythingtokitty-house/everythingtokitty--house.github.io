@@ -673,3 +673,93 @@ body {
   .season-pill { display: none; }
   .brand-title { font-size: 16.5px; }
 }
+
+/* ===== 2026-11-28 매장 유형 필터 · 다지역 확장 ===== */
+.cat-tabs {
+  margin-top: 12px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+.cat-tab {
+  appearance: none;
+  border: 1.5px solid var(--line-strong);
+  background: #fff;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.cat-tab .cat-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-3);
+  background: var(--bg-soft);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+.cat-tab.is-active {
+  background: var(--pink-soft);
+  border-color: var(--pink);
+  color: var(--pink-strong);
+}
+.cat-tab.is-active .cat-count {
+  background: #fff;
+  color: var(--pink-strong);
+}
+
+.cat-chip {
+  --cat-color: var(--pink);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--cat-color);
+  background: #fff;
+  border: 1.5px solid var(--cat-color);
+  border-radius: 999px;
+  padding: 2px 9px;
+  line-height: 1.5;
+}
+
+/* 유형별 마커 색 */
+.kitty-pin.cat-sanrio { background: #e8557f; }
+.kitty-pin.cat-house { background: #8a5a44; }
+.kitty-pin.cat-cafe { background: #e08a2e; }
+.kitty-pin.cat-outlet { background: #2f8f86; }
+.kitty-pin.cat-kiddy { background: #4a7fd8; }
+.kitty-pin.cat-park { background: #7a54c9; }
+.kitty-pin.cat-donki { background: #1f5fa8; }
+.kitty-pin.is-exclusive { box-shadow: 0 0 0 3px #fde68a, 0 3px 8px rgba(0,0,0,.25); }
+.kitty-pin.is-selected { background: var(--ink); transform: rotate(-45deg) scale(1.18); z-index: 999; }
+.kitty-pin { width: 32px; height: 32px; }
+.kitty-pin span { font-size: 14px; }
+
+/* 범례 점 색 */
+.dot-sanrio { background: #e8557f; }
+.dot-house { background: #8a5a44; }
+.dot-cafe { background: #e08a2e; }
+.dot-outlet { background: #2f8f86; }
+.dot-donki { background: #1f5fa8; }
+.dot-park { background: #7a54c9; }
+.map-legend { row-gap: 6px; font-size: 11.5px; }
+
+/* 유형별 카드 좌측 라인 */
+.shop-card { border-left: 4px solid transparent; }
+.shop-card.cat-sanrio { border-left-color: #e8557f; }
+.shop-card.cat-house { border-left-color: #8a5a44; }
+.shop-card.cat-cafe { border-left-color: #e08a2e; }
+.shop-card.cat-outlet { border-left-color: #2f8f86; }
+.shop-card.cat-kiddy { border-left-color: #4a7fd8; }
+.shop-card.cat-park { border-left-color: #7a54c9; }
+.shop-card.cat-donki { border-left-color: #1f5fa8; }
